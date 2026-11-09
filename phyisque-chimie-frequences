@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapitre 3 : Fréquences | PhysiChem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Thème Sombre (Labo) */
+            --bg: #0b1120;
+            --bg-grid: rgba(56, 189, 248, 0.05);
+            --card: #1e293b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary: #38bdf8;
+            --secondary: #10b981;
+            --border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --math-bg: rgba(251, 191, 36, 0.1);
+            --math-text: #fcd34d;
+            --error-bg: rgba(248, 113, 113, 0.15);
+            --error-text: #f87171;
+            --success-bg: rgba(74, 222, 128, 0.15);
+            --success-text: #4ade80;
+            --icon-opacity: 0.1;
+        }
+
+        [data-theme="light"] {
+            /* Thème Clair (Cahier) */
+            --bg: #f8fafc;
+            --bg-grid: rgba(14, 165, 233, 0.08);
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #0284c7;
+            --secondary: #059669;
+            --border: rgba(0, 0, 0, 0.1);
+            --input-bg: #f1f5f9;
+            --math-bg: #fef3c7;
+            --math-text: #b45309;
+            --error-bg: #fee2e2;
+            --error-text: #b91c1c;
+            --success-bg: #dcfce7;
+            --success-text: #15803d;
+            --icon-opacity: 0.05;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        /* Background Animé */
+        .bg-animations {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .bg-animations::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .floating-icon { position: absolute; font-size: 3rem; opacity: var(--icon-opacity); animation: float 15s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(10deg); } 100% { transform: translateY(0) rotate(0deg); } }
+        .icon-1 { top: 10%; left: 10%; animation-duration: 20s; }
+        .icon-2 { top: 70%; left: 80%; animation-duration: 25s; font-size: 4rem; }
+        .icon-3 { top: 40%; left: 85%; animation-duration: 18s; }
+        .icon-4 { top: 80%; left: 15%; animation-duration: 22s; font-size: 5rem; }
+
+        body {
+            background-color: var(--bg); color: var(--text); min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 2rem 1rem; transition: background-color 0.3s, color 0.3s;
+        }
+
+        header { 
+            text-align: center; margin-bottom: 2rem; width: 100%; max-width: 800px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+        .title-group { text-align: left; }
+        h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 10px;}
+        .subtitle { color: var(--muted); font-size: 1rem; font-weight: 600; }
+        
+        .btn-icon {
+            background: var(--card); border: 1px solid var(--border); color: var(--text);
+            padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+        .btn-icon:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px);}
+
+        .nav-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; background: var(--card); padding: 0.5rem; border-radius: 50px; border: 1px solid var(--border); z-index: 10;}
+        .tab-btn { background: transparent; border: none; color: var(--muted); padding: 0.8rem 2rem; font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);}
+
+        .container { width: 100%; max-width: 800px; display: none; z-index: 10;}
+        .container.active { display: block; animation: fadeIn 0.4s ease; }
+
+        .card { background: var(--card); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { color: var(--text); margin: 1.2rem 0 0.5rem 0; }
+        p, ul { color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+        ul { margin-left: 1.5rem; }
+        
+        .formula-box { background: var(--input-bg); padding: 1rem; border-left: 4px solid var(--secondary); border-radius: 0 8px 8px 0; font-family: 'Fira Code', monospace; font-size: 1.2rem; color: var(--text); margin: 1rem 0; display: inline-block;}
+
+        /* Barre d'outils */
+        .exo-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;}
+        .btn-refresh { background: var(--secondary); color: #fff; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
+        .btn-refresh:hover { transform: translateY(-2px); filter: brightness(1.1);}
+
+        /* Exercices List */
+        .exercise-card { margin-bottom: 3rem; border-top: 4px solid var(--primary); }
+        .exo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .exo-number { background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;}
+        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text); }
+        
+        /* Graphique */
+        .graph-wrapper { background: #fff; border-radius: 10px; padding: 10px; margin-bottom: 20px; display: flex; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        canvas { display: block; max-width: 100%; height: auto; border-radius: 5px; }
+
+        /* Inputs */
+        .answer-zone { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        input[type="number"] { padding: 12px 20px; border-radius: 8px; border: 2px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 1.2rem; width: 160px; text-align: center; outline: none; transition: 0.3s;}
+        input[type="number"]:focus { border-color: var(--primary); }
+        .unit-label { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+
+        .qcm-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .qcm-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 15px; border-radius: 8px; font-size: 1rem; cursor: pointer; text-align: left; transition: 0.2s; }
+        .qcm-btn:hover:not(:disabled) { border-color: var(--primary); }
+        .qcm-btn.correct { background: var(--success-bg); border-color: var(--success-text); color: var(--success-text); font-weight: 600;}
+        .qcm-btn.incorrect { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+        .qcm-btn:disabled { cursor: not-allowed; opacity: 0.8;}
+
+        .btn { padding: 12px 25px; border-radius: 8px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; background: var(--primary); color: #fff; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* Correction */
+        .feedback { display: none; margin-top: 25px; padding: 20px; border-radius: 12px; font-size: 1rem; line-height: 1.7; border-left: 5px solid transparent; animation: slideDown 0.3s ease; }
+        .feedback.show { display: block; }
+        .feedback.success { background: var(--success-bg); border-color: var(--success-text); color: var(--success-text); }
+        .feedback.error { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+        
+        .math-box { background: var(--math-bg); color: var(--math-text); font-family: 'Fira Code', monospace; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 1rem; border: 1px dashed var(--math-text); white-space: pre-wrap; line-height: 1.6; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 15px; text-align: center; }
+            .title-group { text-align: center; }
+            .nav-tabs { width: 100%; }
+            .tab-btn { flex: 1; padding: 0.8rem 1rem; text-align: center; }
+            .qcm-zone { grid-template-columns: 1fr; }
+            .answer-zone { flex-direction: column; align-items: stretch; }
+            input[type="number"] { width: 100%; }
+            .unit-label { text-align: center; }
+            .exo-toolbar { flex-direction: column; }
+            .btn-refresh { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animations">
+        <div class="floating-icon icon-1">⚛️</div>
+        <div class="floating-icon icon-2">🧪</div>
+        <div class="floating-icon icon-3">⚡</div>
+        <div class="floating-icon icon-4">🔬</div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <h1>⚛️ Chapitre 3 : Fréquences</h1>
+            <p class="subtitle">Motif élémentaire et Période</p>
+        </div>
+        <div class="header-controls">
+            <button class="btn-icon" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('cours')">📚 Fiche de Cours</button>
+        <button class="tab-btn" onclick="switchTab('exos')">🧪 Exercices</button>
+    </div>
+
+    <!-- COURS -->
+    <div id="cours" class="container active">
+        <div class="card">
+            <h2>L'Essentiel</h2>
+            <h3>1. Signal Périodique</h3>
+            <p>Un signal est périodique si son motif se répète à l'identique au cours du temps. Le <strong>motif élémentaire</strong> est la plus petite partie qui se répète.</p>
+            
+            <h3>2. La Période (T)</h3>
+            <p>Durée d'un seul motif. Elle se lit sur le graphique (ex: entre deux pics).</p>
+            <ul>
+                <li>Unité : <strong>secondes (s)</strong></li>
+                <li>1 ms = 0,001 s</li>
+                <li>1 µs = 0,000 001 s</li>
+            </ul>
+
+            <h3>3. La Fréquence (f)</h3>
+            <p>Nombre de motifs par seconde. Unité : <strong>Hertz (Hz)</strong>.</p>
+            <div class="formula-box">f = 1 / T</div>
+            <p>⚠️ <strong>Règle d'or :</strong> Dans la formule, <strong>T doit toujours être en secondes (s)</strong>. Si on te donne des ms ou des µs, convertis d'abord !</p>
+        </div>
+    </div>
+
+    <!-- EXERCICES -->
+    <div id="exos" class="container">
+        <div class="exo-toolbar">
+            <h2 style="border:none; margin:0; color:var(--text)">Feuille d'exercices</h2>
+            <button class="btn-refresh" onclick="generateAllExercises()">🔄 Renouveler</button>
+        </div>
+        <div id="exercises-list"></div>
+    </div>
+
+    <script>
+        // --- GESTION THÈME ---
+        const root = document.documentElement;
+        const themeBtn = document.getElementById('theme-icon');
+        function toggleTheme() {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme'); themeBtn.textContent = '🌙';
+            } else {
+                root.setAttribute('data-theme', 'light'); themeBtn.textContent = '☀️';
+            }
+        }
+
+        // --- GESTION ONGLETS ---
+        let exosGenerated = false;
+        
+        function switchTab(id) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+            
+            if(id === 'exos' && !exosGenerated) { generateAllExercises(); exosGenerated = true; }
+        }
+
+        // ==========================================
+        // --- MOTEUR GRAPHIQUE ---
+        // ==========================================
+        function drawGraph(canvasId, shape, periodInGridUnits, scalePerSquare, unitStr, maxGridUnits = 12) {
+            const canvas = document.getElementById(canvasId);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width; const h = canvas.height;
+            
+            ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+            const stepX = w / maxGridUnits; const stepY = h / 6; const midY = h / 2;
+
+            // Quadrillage
+            ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+            for(let i=0; i<=maxGridUnits; i++) { ctx.beginPath(); ctx.moveTo(i*stepX, 0); ctx.lineTo(i*stepX, h); ctx.stroke(); }
+            for(let j=0; j<=6; j++) { ctx.beginPath(); ctx.moveTo(0, j*stepY); ctx.lineTo(w, j*stepY); ctx.stroke(); }
+
+            // Axes
+            ctx.strokeStyle = '#000000'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, h); ctx.stroke();
+
+            // Valeurs sur l'axe
+            ctx.fillStyle = '#000000'; ctx.font = 'bold 13px Arial'; ctx.textAlign = 'center';
+            for(let i=2; i<=maxGridUnits; i+=2) {
+                ctx.fillText((i * scalePerSquare).toString(), i*stepX, midY + 20);
+            }
+            ctx.fillText("0", 10, midY + 20);
+            ctx.textAlign = 'right'; ctx.font = 'bold 14px Arial';
+            ctx.fillText(unitStr, w - 10, midY + 20);
+            ctx.font = 'italic 14px Arial'; ctx.fillText("Temps", w - 10, midY + 40);
+
+            // Tracé de la courbe
+            ctx.beginPath(); ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+            let periodPx = periodInGridUnits * stepX; let amplitude = h / 3;
+
+            for (let x = 0; x < w; x++) {
+                let y = midY; let t = x / periodPx;
+                switch(shape) {
+                    case 'sine': y = midY - Math.sin(t * 2 * Math.PI) * amplitude; break;
+                    case 'square': y = midY - (Math.sin(t * 2 * Math.PI) >= 0 ? amplitude : -amplitude); break;
+                    case 'triangle': y = midY - (2 * amplitude / Math.PI) * Math.asin(Math.sin(t * 2 * Math.PI)); break;
+                    case 'sawtooth': y = midY - ((t % 1) * 2 - 1) * amplitude; break;
+                    case 'absolute': y = midY - Math.abs(Math.sin(t * 2 * Math.PI)) * amplitude; break;
+                    case 'complex': y = midY - (Math.sin(t * 2 * Math.PI) + 0.5*Math.sin(t * 4 * Math.PI)) * (amplitude * 0.8); break;
+                    case 'chaos': y = midY - (Math.sin(x/10) + Math.sin(x/23) + Math.sin(x/41)) * (amplitude/2); break;
+                }
+                if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        // ==========================================
+        // --- LOGIQUE EXERCICES (SANS RÉPÉTITION) ---
+        // ==========================================
+        let exercisesData = [];
+
+        function generateAllExercises() {
+            const container = document.getElementById('exercises-list');
+            container.innerHTML = ""; 
+            exercisesData = []; 
+
+            const periodValuesMs = [2, 4, 5, 10]; 
+            const freqValuesHz = [50, 100, 200, 250, 500, 1000];
+
+            // Mélange des types (1 à 6)
+            let typesDisponibles = [1, 2, 3, 4, 5, 6];
+            for (let i = typesDisponibles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [typesDisponibles[i], typesDisponibles[j]] = [typesDisponibles[j], typesDisponibles[i]];
+            }
+
+            for(let i = 0; i < 5; i++) {
+                const type = typesDisponibles[i]; 
+                const cardId = `exo-card-${i}`;
+                const canvasId = `canvas-${i}`;
+                
+                let exo = { id: cardId, isQcm: false, correctAns: null, explanation: "", unitDisplay: "" };
+
+                if (type === 1) {
+                    let isPeriodic = Math.random() > 0.3;
+                    exo.title = `Exercice ${i+1} : Analyse de signal`;
+                    exo.question = "Observe ce graphique.<br>Ce signal est-il périodique ?";
+                    exo.isQcm = true;
+                    exo.shape = isPeriodic ? ['sine', 'square', 'triangle', 'sawtooth', 'absolute', 'complex'][Math.floor(Math.random()*6)] : 'chaos';
+                    exo.correctAns = isPeriodic ? "Oui" : "Non";
+                    exo.unitDisplay = "s"; exo.scale = 1; exo.periodGrid = 4;
+                    exo.explanation = isPeriodic ? "<strong>Justification :</strong> Le motif (la forme de la vague) se répète exactement à l'identique au cours du temps. Il y a donc une période T." : "<strong>Justification :</strong> Le signal est chaotique, il n'a pas de forme régulière qui se répète. C'est un bruit.";
+                    exo.options = ["Oui, il est périodique", "Non, il n'est pas périodique"];
+                } 
+                else if (type === 2) {
+                    let unit = Math.random() > 0.5 ? "ms" : "µs";
+                    let scale = (unit === "ms") ? [1, 2, 5][Math.floor(Math.random()*3)] : [20, 50, 100][Math.floor(Math.random()*3)];
+                    let periodSquares = [3, 4, 5][Math.floor(Math.random()*3)];
+                    let actualT = periodSquares * scale;
+                    exo.title = `Exercice ${i+1} : Lecture de la Période (T)`;
+                    exo.question = `Détermine la période T de ce signal.<br><span style="font-size:0.9rem; color:var(--primary)">Compte les carreaux pour un motif complet.</span>`;
+                    exo.shape = ['sine', 'square', 'triangle'][Math.floor(Math.random()*3)];
+                    exo.periodGrid = periodSquares; exo.scale = scale; exo.unitDisplay = unit; exo.correctAns = actualT;
+                    exo.explanation = `<strong>Méthode :</strong> On regarde le temps que met un motif à se répéter.<br>Ici, un motif occupe <strong>${periodSquares} carreaux</strong>.<br>Or 1 carreau = ${scale} ${unit}.<br>Donc T = ${periodSquares} × ${scale} = <strong>${actualT} ${unit}</strong>.`;
+                } 
+                else if (type === 3) {
+                    let isMs = Math.random() > 0.5;
+                    let T = isMs ? periodValuesMs[Math.floor(Math.random()*periodValuesMs.length)] : periodValuesMs[Math.floor(Math.random()*periodValuesMs.length)] * 100;
+                    let ans = isMs ? 1 / (T / 1000) : 1 / (T / 1000000);
+                    exo.title = `Exercice ${i+1} : Calcul de Fréquence`;
+                    exo.question = `Un signal a une période <strong>T = ${T} ${isMs ? 'ms' : 'µs'}</strong>.<br>Calcule sa fréquence f.`;
+                    exo.unitDisplay = "Hz"; exo.correctAns = ans;
+                    let T_s = isMs ? `${T} ms = ${T/1000} s` : `${T} µs = ${T/1000000} s`;
+                    exo.explanation = `<strong>Calcul :</strong> La formule est f = 1 / T.<br>⚠️ Conversion : ${T_s}.<br>Calcul : f = 1 / ${isMs ? T/1000 : T/1000000} = <strong>${ans} Hz</strong>.`;
+                } 
+                else if (type === 4) {
+                    let unit = Math.random() > 0.5 ? "ms" : "µs";
+                    let scale = (unit === "ms") ? [1, 2, 4, 5][Math.floor(Math.random()*4)] : [50, 100, 200, 250][Math.floor(Math.random()*4)];
+                    let periodSquares = [4, 5][Math.floor(Math.random()*2)];
+                    let actualT = periodSquares * scale;
+                    let T_s = unit === "ms" ? actualT / 1000 : actualT / 1000000;
+                    let ans = 1 / T_s;
+                    exo.title = `Exercice ${i+1} : De la courbe à la fréquence`;
+                    exo.question = `Calcule la fréquence de ce signal.<br><span style="font-size:0.9rem; color:var(--primary)">Lis d'abord T sur l'axe, puis utilise f = 1/T.</span>`;
+                    exo.shape = ['sine', 'square', 'complex'][Math.floor(Math.random()*3)];
+                    exo.periodGrid = periodSquares; exo.scale = scale; exo.unitDisplay = "Hz"; exo.graphUnit = unit; exo.correctAns = ans;
+                    exo.explanation = `<strong>Étapes :</strong><br>1. Lecture graphique : T = ${periodSquares} carreaux × ${scale} = <strong>${actualT} ${unit}</strong>.<br>2. Conversion : T = ${T_s} s.<br>3. Calcul : f = 1 / ${T_s} = <strong>${ans} Hz</strong>.`;
+                } 
+                else if (type === 5) {
+                    let f = freqValuesHz[Math.floor(Math.random()*freqValuesHz.length)];
+                    let T_s = 1 / f; let ans = T_s * 1000;
+                    exo.title = `Exercice ${i+1} : De la fréquence à la période`;
+                    exo.question = `Un signal a une fréquence <strong>f = ${f} Hz</strong>.<br>Quelle est sa période T en <strong>millisecondes (ms)</strong> ?`;
+                    exo.unitDisplay = "ms"; exo.correctAns = ans;
+                    exo.explanation = `<strong>Calcul :</strong> On sait que f = 1/T, donc T = 1/f.<br>T = 1 / ${f} = ${T_s} s.<br>On demande des ms. On multiplie par 1000 : ${T_s} × 1000 = <strong>${ans} ms</strong>.`;
+                } 
+                else {
+                    exo.title = `Exercice ${i+1} : Question de cours`;
+                    exo.question = "Le motif élémentaire d'un signal périodique, c'est...";
+                    exo.isQcm = true;
+                    exo.correctAns = "La plus petite partie du signal qui se répète";
+                    exo.explanation = "C'est le motif de base qu'on pourrait dessiner en boucle pour reconstituer tout le signal.";
+                    exo.options = ["La plus petite partie du signal qui se répète", "La hauteur maximale de la vague", "Le temps total de l'enregistrement", "Le nombre de pics"].sort(() => Math.random() - 0.5);
+                }
+
+                exercisesData.push(exo);
+
+                // HTML
+                let html = `
+                <div class="card exercise-card" id="${cardId}">
+                    <div class="exo-header">
+                        <h2 style="border:none; margin:0; color:var(--text)">${exo.title}</h2>
+                        <span class="exo-number">Exo ${i+1}</span>
+                    </div>
+                    <div class="question-text">${exo.question}</div>
+                `;
+                
+                if(exo.shape) html += `<div class="graph-wrapper"><canvas id="${canvasId}" width="700" height="300"></canvas></div>`;
+
+                if(exo.isQcm) {
+                    html += `<div class="qcm-zone" id="qcm-${cardId}">`;
+                    exo.options.forEach((opt) => {
+                        html += `<button class="qcm-btn" onclick="checkQcm(${i}, '${opt}', this)">${opt}</button>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `
+                    <div class="answer-zone">
+                        <input type="number" id="input-${cardId}" step="any" placeholder="Ta réponse">
+                        <span class="unit-label">${exo.unitDisplay}</span>
+                        <button class="btn" onclick="checkInput(${i}, 'input-${cardId}')">Vérifier</button>
+                    </div>
+                    `;
+                }
+
+                html += `<div class="feedback" id="feedback-${cardId}"></div></div>`;
+                container.innerHTML += html;
+            }
+
+            // Dessin
+            exercisesData.forEach((exo, i) => {
+                if(exo.shape) {
+                    let u = exo.graphUnit || exo.unitDisplay;
+                    drawGraph(`canvas-${i}`, exo.shape, exo.periodGrid, exo.scale, u, 15);
+                }
+            });
+        }
+
+        function checkQcm(index, btnText, btnElement) {
+            let exo = exercisesData[index];
+            let fb = document.getElementById(`feedback-${exo.id}`);
+            document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => b.disabled = true);
+
+            let isCorrect = (btnText === exo.correctAns) || (exo.correctAns === "Oui" && btnText.includes("Oui")) || (exo.correctAns === "Non" && btnText.includes("Non"));
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                fb.innerHTML = `✅ <strong>Bonne réponse !</strong><br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback success show";
+            } else {
+                btnElement.classList.add('incorrect');
+                document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => {
+                    if(b.textContent.includes(exo.correctAns) || (exo.correctAns === "Oui" && b.textContent.includes("Oui")) || (exo.correctAns === "Non" && b.textContent.includes("Non"))) b.classList.add('correct');
+                });
+                fb.innerHTML = `❌ <strong>Raté.</strong> La bonne réponse était : ${exo.correctAns}.<br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback error show";
+            }
+        }
+
+        function checkInput(index, inputId) {
+            let exo = exercisesData[index];
+            let input = document.getElementById(inputId);
+            let val = parseFloat(input.value);
+            let fb = document.getElementById(`feedback-${exo.id}`);
+
+            if (isNaN(val)) { fb.innerHTML = "Merci d'entrer un nombre valide."; fb.className = "feedback error show"; return; }
+            let tol = (exo.unitDisplay === "Hz") ? 0.1 : 0.01;
+
+            if (Math.abs(val - exo.correctAns) <= tol) {
+                fb.innerHTML = `✅ <strong>Parfait !</strong><br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback success show";
+                input.disabled = true;
+            } else {
+                let erreurClassique = "";
+                if (exo.unitDisplay === "Hz" && (val === 1 / exo.correctAns || (val < exo.correctAns / 100 && val > 0))) {
+                    erreurClassique = `<br><br>💡 <em>Indice : Tu as peut-être oublié de convertir les ms/µs en secondes avant de faire 1/T !</em>`;
+                }
+                fb.innerHTML = `❌ <strong>Raté.</strong> Ta réponse : ${val} ${exo.unitDisplay}.<br>La bonne réponse était <strong>${exo.correctAns} ${exo.unitDisplay}</strong>.${erreurClassique}<br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback error show";
+            }
+        }
+    </script>
+</body>
+</html>

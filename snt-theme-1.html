@@ -3,527 +3,378 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SNT 2de — Débit, paquets & volume réel</title>
+<title>SNT // Débit · Paquets · Volume réel</title>
 <style>
-  :root{
-    --bg:#0a0f1e;
-    --bg2:#0e1527;
-    --card:#141c33;
-    --card2:#1a2340;
-    --line:#28324f;
-    --txt:#e8edf9;
-    --muted:#93a0c0;
-    --accent:#4f8cff;
-    --accent2:#22d3ee;
-    --ok:#22c55e;
-    --bad:#ef4444;
-    --warn:#f59e0b;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-    background:
-      radial-gradient(1100px 600px at 15% -10%, #1b2a55 0%, transparent 60%),
-      radial-gradient(900px 500px at 90% 0%, #12314a 0%, transparent 55%),
-      var(--bg);
-    color:var(--txt);
-    line-height:1.6;
-    min-height:100vh;
-    padding-bottom:80px;
-  }
+:root{
+  --bg:#03060d; --bg2:#060b16; --panel:#0a1220; --panel2:#0e1828;
+  --line:#17263f; --line2:#1f3252;
+  --txt:#d4e1f4; --muted:#6b7f9e; --dim:#45566f;
+  --neon:#00ffa3; --cyan:#00d9ff; --ok:#00ffa3; --bad:#ff4d6a; --warn:#ffb347;
+  --mono:'JetBrains Mono','Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans); background:var(--bg);
+  background-image:
+    linear-gradient(rgba(0,255,163,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,163,0.025) 1px,transparent 1px);
+  background-size:44px 44px; color:var(--txt); line-height:1.55;
+  min-height:100vh; padding-bottom:60px; position:relative;
+}
+body::before{
+  content:''; position:fixed; inset:0;
+  background:radial-gradient(900px 500px at 50% -10%,rgba(0,217,255,0.08),transparent 60%);
+  pointer-events:none; z-index:0;
+}
+main{position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:0 18px}
 
-  /* ---------- HEADER ---------- */
-  header{
-    position:sticky; top:0; z-index:50;
-    backdrop-filter:blur(12px);
-    background:rgba(10,15,30,.82);
-    border-bottom:1px solid var(--line);
-  }
-  .bar{
-    max-width:1050px;margin:0 auto;padding:12px 20px;
-    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  }
-  .logo{
-    font-weight:800;letter-spacing:.5px;font-size:1.05rem;
-    display:flex;align-items:center;gap:9px;
-  }
-  .logo .dot{
-    width:11px;height:11px;border-radius:50%;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    box-shadow:0 0 14px var(--accent);
-  }
-  nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;align-items:center}
-  nav a{
-    color:var(--muted);text-decoration:none;font-size:.86rem;
-    padding:6px 12px;border-radius:8px;transition:.2s;
-  }
-  nav a:hover{color:#fff;background:var(--card2)}
-  .score{
-    font-size:.82rem;font-weight:700;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    border:1px solid var(--line);border-radius:999px;
-    padding:5px 14px;white-space:nowrap;
-  }
-  .reroll{
-    font-size:.8rem;font-weight:700;cursor:pointer;
-    background:rgba(79,140,255,.12);color:var(--accent2);
-    border:1px solid var(--line);border-radius:999px;
-    padding:6px 14px;transition:.2s;font-family:inherit;
-  }
-  .reroll:hover{background:rgba(79,140,255,.25);border-color:var(--accent)}
+/* HEADER */
+header{position:sticky; top:0; z-index:50; background:rgba(3,6,13,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+.bar{max-width:1000px; margin:0 auto; padding:12px 18px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+.logo{font-family:var(--mono); font-weight:700; font-size:0.95rem; display:flex; align-items:center; gap:9px; color:var(--neon); text-shadow:0 0 12px rgba(0,255,163,0.5);}
+.logo .prompt{color:var(--cyan); font-weight:400}
+.logo .cursor{display:inline-block; width:9px; height:16px; background:var(--neon); animation:blink 1.1s steps(2) infinite;}
+@keyframes blink{50%{opacity:0}}
+nav{display:flex; gap:4px; flex-wrap:wrap; margin-left:auto}
+nav a{color:var(--muted); text-decoration:none; font-family:var(--mono); font-size:0.78rem; padding:6px 11px; border-radius:6px; transition:.15s;}
+nav a:hover{color:var(--neon); background:var(--panel2)}
+.score{font-family:var(--mono); font-size:0.78rem; font-weight:700; color:var(--neon); border:1px solid var(--line2); border-radius:6px; padding:5px 12px; background:rgba(0,255,163,0.05); transition:.3s;}
+.score.pulse{animation:pulse .6s ease}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,163,0.3)}50%{box-shadow:0 0 0 6px rgba(0,255,163,0)}}
+.reroll{font-family:var(--mono); font-size:0.75rem; font-weight:700; cursor:pointer; background:rgba(0,217,255,0.08); color:var(--cyan); border:1px solid var(--line2); border-radius:6px; padding:6px 12px; transition:.15s;}
+.reroll:hover{background:rgba(0,217,255,0.18); border-color:var(--cyan)}
 
-  /* ---------- LAYOUT ---------- */
-  main{max-width:1050px;margin:0 auto;padding:0 20px}
-  section{padding-top:46px}
-  h2{
-    font-size:1.45rem;margin-bottom:6px;
-    display:flex;align-items:center;gap:10px;
-  }
-  h2 .num{
-    font-size:.72rem;font-weight:800;letter-spacing:1px;
-    background:var(--accent);color:#fff;border-radius:6px;
-    padding:2px 8px;
-  }
-  .sub{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+/* HERO */
+.hero{padding:52px 0 10px; text-align:center;}
+.hero .kicker{font-family:var(--mono); font-size:0.72rem; letter-spacing:2px; color:var(--cyan); text-transform:uppercase; margin-bottom:16px;}
+.hero .kicker::before{content:'> '; color:var(--neon)}
+.hero h1{font-family:var(--mono); font-size:clamp(1.7rem,5vw,2.6rem); line-height:1.15; margin-bottom:14px; color:#fff;}
+.hero h1 .hl{color:var(--neon); text-shadow:0 0 24px rgba(0,255,163,0.4)}
+.hero p{color:var(--muted); max-width:560px; margin:0 auto 24px; font-size:0.92rem}
+.cta{display:inline-block; text-decoration:none; font-family:var(--mono); font-weight:700; font-size:0.85rem; color:#03060d; background:var(--neon); padding:11px 24px; border-radius:8px; box-shadow:0 0 24px rgba(0,255,163,0.35); transition:.2s;}
+.cta:hover{transform:translateY(-2px); box-shadow:0 0 32px rgba(0,255,163,0.55)}
 
-  /* ---------- HERO ---------- */
-  .hero{padding:56px 0 10px;text-align:center}
-  .hero h1{
-    font-size:clamp(1.8rem,5vw,2.7rem);line-height:1.2;
-    background:linear-gradient(120deg,#fff 20%,var(--accent2) 60%,var(--accent) 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    margin-bottom:14px;
-  }
-  .hero p{color:var(--muted);max-width:620px;margin:0 auto 26px}
-  .pill{
-    display:inline-block;font-size:.75rem;letter-spacing:1.4px;
-    text-transform:uppercase;color:var(--accent2);
-    border:1px solid var(--line);border-radius:999px;
-    padding:4px 14px;margin-bottom:18px;background:rgba(34,211,238,.06);
-  }
-  .cta{
-    display:inline-block;text-decoration:none;color:#06101f;font-weight:800;
-    background:linear-gradient(135deg,var(--accent2),var(--accent));
-    padding:12px 26px;border-radius:12px;font-size:.95rem;
-    box-shadow:0 8px 26px rgba(79,140,255,.32);transition:.2s;
-  }
-  .cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(79,140,255,.45)}
+/* SECTIONS */
+section{padding-top:48px}
+h2{font-family:var(--mono); font-size:1.2rem; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:10px; color:#fff;}
+h2 .num{font-size:0.65rem; letter-spacing:1px; color:var(--neon); background:rgba(0,255,163,0.08); border:1px solid rgba(0,255,163,0.3); border-radius:4px; padding:2px 7px;}
+.sub{color:var(--muted); font-size:0.82rem; margin-bottom:22px; font-family:var(--mono)}
 
-  /* ---------- ESSENTIEL ---------- */
-  .grid{display:grid;gap:16px}
-  .g3{grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
-  .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-  .card{
-    background:linear-gradient(160deg,var(--card),var(--bg2));
-    border:1px solid var(--line);border-radius:16px;padding:20px;
-    transition:.25s;
-  }
-  .card:hover{border-color:#3a4a75;transform:translateY(-2px)}
-  .card h3{
-    font-size:.95rem;margin-bottom:10px;color:var(--accent2);
-    display:flex;align-items:center;gap:8px;
-  }
-  .card p, .card li{font-size:.9rem;color:#c6d0e8}
-  .card ul{list-style:none;padding-left:0}
-  .card ul li{padding-left:18px;position:relative;margin-bottom:5px}
-  .card ul li::before{
-    content:"▸";position:absolute;left:0;color:var(--accent);
-  }
-  code, .mono{
-    font-family:'Consolas','Courier New',monospace;
-    background:#0b1225;border:1px solid var(--line);
-    padding:2px 7px;border-radius:6px;font-size:.86em;color:#8ee7ff;
-  }
-  .formula{
-    text-align:center;font-family:'Consolas','Courier New',monospace;
-    font-size:1.05rem;color:#8ee7ff;background:#0b1225;
-    border:1px dashed #2f3d63;border-radius:10px;padding:12px;margin-top:10px;
-    letter-spacing:.5px;
-  }
-  .warnbox{
-    border-left:3px solid var(--warn);
-    background:rgba(245,158,11,.08);
-    border-radius:0 12px 12px 0;padding:14px 18px;
-    font-size:.88rem;color:#ffd89b;margin-top:16px;
-  }
+/* ESSENTIEL */
+.ess-grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+.ess{background:linear-gradient(160deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:12px; padding:18px; transition:.2s;}
+.ess:hover{border-color:var(--line2); box-shadow:0 0 24px rgba(0,255,163,0.06)}
+.ess .label{font-family:var(--mono); font-size:0.68rem; letter-spacing:1.2px; color:var(--muted); text-transform:uppercase; margin-bottom:10px;}
+.ess .formula-big{font-family:var(--mono); font-size:1.25rem; font-weight:700; color:var(--neon); text-shadow:0 0 16px rgba(0,255,163,0.3); text-align:center; padding:10px 0;}
+.ess .formula-big .op{color:var(--cyan); margin:0 4px}
+.ess .formula-big .var{color:#fff}
+.ess .note{font-size:0.76rem; color:var(--muted); text-align:center; font-family:var(--mono);}
+.ess.big{grid-column:1 / -1}
+.ess.big .formula-big{font-size:1.6rem; padding:18px 0}
 
-  /* ---------- EXERCICES ---------- */
-  .exo{
-    background:linear-gradient(165deg,var(--card),var(--bg2));
-    border:1px solid var(--line);border-radius:18px;
-    padding:24px;margin-bottom:26px;
-  }
-  .exo-head{
-    display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;
-    padding-bottom:14px;border-bottom:1px solid var(--line);
-  }
-  .badge{
-    flex:none;width:42px;height:42px;border-radius:12px;
-    display:grid;place-items:center;font-weight:800;font-size:1.05rem;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    color:#06101f;
-  }
-  .exo-head h3{font-size:1.12rem;line-height:1.35}
-  .exo-head .tag{font-size:.76rem;color:var(--muted);font-weight:500}
-  .enonce{
-    font-size:.92rem;color:#c6d0e8;background:rgba(255,255,255,.02);
-    border:1px solid var(--line);border-radius:12px;
-    padding:16px;margin-bottom:20px;
-  }
-  .enonce ul{list-style:none;margin:10px 0 0;padding:0}
-  .enonce ul li{
-    padding-left:20px;position:relative;margin-bottom:4px;font-size:.9rem;
-  }
-  .enonce ul li::before{content:"•";position:absolute;left:6px;color:var(--accent2)}
+/* EXOS */
+.exo{background:linear-gradient(165deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:22px; position:relative;}
+.exo::before{content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--neon),transparent); opacity:0.4; border-radius:14px 14px 0 0;}
+.exo-head{display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; padding-bottom:14px; border-bottom:1px dashed var(--line2);}
+.badge{flex:none; width:40px; height:40px; border-radius:8px; display:grid; place-items:center; font-family:var(--mono); font-weight:800; font-size:1rem; background:rgba(0,255,163,0.1); color:var(--neon); border:1px solid rgba(0,255,163,0.35);}
+.exo-head h3{font-family:var(--mono); font-size:1rem; line-height:1.35; color:#fff}
+.exo-head .tag{font-family:var(--mono); font-size:0.72rem; color:var(--muted); margin-top:2px}
 
-  .q{margin-bottom:16px}
-  .q > label{
-    display:block;font-size:.9rem;font-weight:600;margin-bottom:7px;color:#dbe4f7;
-  }
-  .input-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .input-row input{
-    flex:1;min-width:150px;
-    background:#0b1225;border:1.5px solid var(--line);
-    color:var(--txt);border-radius:10px;padding:10px 13px;
-    font-size:.92rem;font-family:'Consolas','Courier New',monospace;
-    transition:.2s;outline:none;
-  }
-  .input-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.15)}
-  .input-row input.good{border-color:var(--ok);background:rgba(34,197,94,.08)}
-  .input-row input.bad{border-color:var(--bad);background:rgba(239,68,68,.08)}
-  .unit{font-size:.82rem;color:var(--muted);white-space:nowrap}
-  .btn{
-    border:1px solid var(--line);background:var(--card2);color:var(--txt);
-    border-radius:10px;padding:10px 16px;font-size:.85rem;font-weight:600;
-    cursor:pointer;transition:.2s;font-family:inherit;
-  }
-  .btn:hover{background:#22305a;border-color:#3d4f80}
-  .btn.primary{
-    background:linear-gradient(135deg,var(--accent),#3a6fe0);
-    border-color:transparent;color:#fff;
-  }
-  .btn.primary:hover{filter:brightness(1.12)}
-  .feedback{
-    font-size:.83rem;margin-top:7px;font-weight:600;
-    min-height:0;display:none;
-  }
-  .feedback.show{display:block}
-  .feedback.ok{color:var(--ok)}
-  .feedback.bad{color:var(--bad)}
+.enonce{font-size:0.88rem; color:#b8c6de; background:rgba(0,217,255,0.03); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:18px;}
+.enonce strong{color:var(--neon); font-family:var(--mono)}
+.enonce ul{list-style:none; margin:10px 0 0; padding:0}
+.enonce ul li{padding-left:20px; position:relative; margin-bottom:3px; font-size:0.86rem;}
+.enonce ul li::before{content:'▸'; position:absolute; left:4px; color:var(--cyan)}
 
-  .solution{
-    display:none;margin-top:16px;
-    border:1px solid #2b4a3a;background:rgba(34,197,94,.05);
-    border-radius:12px;padding:16px 18px;
-  }
-  .solution.show{display:block;animation:fade .3s ease}
-  @keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-  .solution h4{
-    font-size:.82rem;text-transform:uppercase;letter-spacing:1.2px;
-    color:var(--ok);margin-bottom:10px;
-  }
-  .solution ol{margin-left:18px;font-size:.88rem;color:#cfe0d6}
-  .solution ol li{margin-bottom:9px}
-  .solution .res{
-    display:inline-block;margin-top:2px;
-    font-family:'Consolas',monospace;color:#8ee7ff;
-    background:#0b1225;border-radius:6px;padding:1px 8px;
-  }
-  .exo-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.q{margin-bottom:14px}
+.q > label{display:block; font-size:0.85rem; font-weight:600; margin-bottom:7px; color:#dce6f7; font-family:var(--mono);}
+.q > label::before{content:'> '; color:var(--neon)}
+.input-row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.input-row input{flex:1; min-width:140px; background:#020509; border:1.5px solid var(--line2); color:var(--txt); border-radius:8px; padding:10px 12px; font-size:0.9rem; font-family:var(--mono); transition:.15s; outline:none;}
+.input-row input:focus{border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,217,255,0.12);}
+.input-row input.good{border-color:var(--ok); box-shadow:0 0 0 3px rgba(0,255,163,0.15);}
+.input-row input.bad{border-color:var(--bad); box-shadow:0 0 0 3px rgba(255,77,106,0.12);}
+.unit{font-family:var(--mono); font-size:0.76rem; color:var(--dim); white-space:nowrap}
+.btn{font-family:var(--mono); font-size:0.8rem; font-weight:600; border:1px solid var(--line2); background:var(--panel2); color:var(--txt); border-radius:8px; padding:9px 15px; cursor:pointer; transition:.15s;}
+.btn:hover{background:#16243d;}
+.btn.primary{background:rgba(0,255,163,0.1); color:var(--neon); border-color:rgba(0,255,163,0.4);}
+.btn.primary:hover{background:rgba(0,255,163,0.2)}
+.feedback{font-family:var(--mono); font-size:0.78rem; font-weight:600; margin-top:6px; display:none;}
+.feedback.show{display:block}
+.feedback.ok{color:var(--ok)}
+.feedback.bad{color:var(--bad)}
 
-  /* ---------- CALCULATRICE ---------- */
-  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  .calc-grid input,.calc-grid select{
-    width:100%;background:#0b1225;border:1.5px solid var(--line);
-    color:var(--txt);border-radius:10px;padding:11px 13px;
-    font-size:.9rem;font-family:inherit;outline:none;
-  }
-  .calc-grid input:focus,.calc-grid select:focus{border-color:var(--accent)}
-  .calc-out{
-    margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-    gap:10px;
-  }
-  .calc-out div{
-    background:#0b1225;border:1px solid var(--line);border-radius:10px;
-    padding:10px 12px;font-family:'Consolas',monospace;font-size:.85rem;
-    text-align:center;
-  }
-  .calc-out span{display:block;font-size:.68rem;color:var(--muted);
-    font-family:inherit;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px}
+.solution{display:none; margin-top:14px; border:1px solid rgba(0,255,163,0.25); background:rgba(0,255,163,0.03); border-radius:10px; padding:14px 16px;}
+.solution.show{display:block; animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.solution h4{font-family:var(--mono); font-size:0.72rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--neon); margin-bottom:10px;}
+.solution ol{margin-left:16px; font-size:0.83rem; color:#c8d6e8}
+.solution ol li{margin-bottom:8px}
+.solution .res{display:inline-block; margin-top:2px; font-family:var(--mono); color:var(--cyan); background:#020509; border:1px solid var(--line2); border-radius:5px; padding:1px 7px;}
+.exo-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px}
 
-  footer{
-    text-align:center;color:var(--muted);font-size:.8rem;
-    padding:50px 20px 0;border-top:1px solid var(--line);margin-top:60px;
-  }
+/* QCM */
+.qcm-intro{font-family:var(--mono); font-size:0.82rem; color:var(--warn); background:rgba(255,179,71,0.06); border:1px solid rgba(255,179,71,0.25); border-radius:8px; padding:10px 14px; margin-bottom:18px;}
+.qcm-intro::before{content:'⚠ '}
+.qcm-question{background:linear-gradient(165deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:14px;}
+.qcm-prompt{font-size:0.9rem; color:#dce6f7; margin-bottom:14px; line-height:1.55;}
+.qcm-prompt .qcm-num{display:inline-block; font-family:var(--mono); font-size:0.7rem; font-weight:800; color:var(--neon); background:rgba(0,255,163,0.1); border:1px solid rgba(0,255,163,0.3); border-radius:4px; padding:1px 7px; margin-right:8px; vertical-align:middle;}
+.qcm-prompt strong{color:var(--neon); font-family:var(--mono)}
+.qcm-options{display:grid; gap:8px}
+.opt{text-align:left; font-family:var(--mono); font-size:0.83rem; background:#020509; color:var(--txt); border:1.5px solid var(--line2); border-radius:8px; padding:11px 14px; cursor:pointer; transition:.15s; display:flex; align-items:center; gap:10px;}
+.opt:hover{border-color:var(--cyan); background:rgba(0,217,255,0.05)}
+.opt .key{font-weight:800; color:var(--cyan); flex:none; width:20px; height:20px; border-radius:4px; display:grid; place-items:center; background:rgba(0,217,255,0.1); font-size:0.72rem;}
+.opt.good{border-color:var(--ok); background:rgba(0,255,163,0.08);}
+.opt.good .key{background:var(--ok); color:#03060d}
+.opt.bad{border-color:var(--bad); background:rgba(255,77,106,0.06);}
+.opt.bad .key{background:var(--bad); color:#fff}
+.opt:disabled{cursor:default}
+.qcm-feedback{font-family:var(--mono); font-size:0.8rem; margin-top:10px; display:none; padding:10px 12px; border-radius:8px;}
+.qcm-feedback.show{display:block}
+.qcm-feedback.ok{color:var(--ok); background:rgba(0,255,163,0.06); border:1px solid rgba(0,255,163,0.2)}
+.qcm-feedback.bad{color:var(--bad); background:rgba(255,77,106,0.05); border:1px solid rgba(255,77,106,0.2)}
+.qcm-feedback .expl{color:var(--muted); display:block; margin-top:5px; font-size:0.76rem}
 
-  @media(max-width:560px){
-    .calc-grid{grid-template-columns:1fr}
-    .bar{padding:10px 14px}
-    nav a{padding:5px 9px;font-size:.8rem}
-    .exo{padding:18px}
-  }
+/* CALC */
+.calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+.calc-grid input,.calc-grid select{width:100%; background:#020509; border:1.5px solid var(--line2); color:var(--txt); border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:0.88rem; outline:none;}
+.calc-grid input:focus,.calc-grid select:focus{border-color:var(--cyan)}
+.calc-out{margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px;}
+.calc-out div{background:#020509; border:1px solid var(--line2); border-radius:8px; padding:9px 10px; font-family:var(--mono); font-size:0.82rem; text-align:center; color:var(--cyan);}
+.calc-out span{display:block; font-size:0.62rem; color:var(--muted); font-family:var(--sans); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:3px;}
+.card-panel{background:linear-gradient(160deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:12px; padding:18px;}
+
+footer{text-align:center; color:var(--dim); font-family:var(--mono); font-size:0.72rem; padding:40px 18px 0; margin-top:50px; border-top:1px solid var(--line);}
+footer::before{content:'// '}
+
+@media(max-width:560px){
+  .calc-grid{grid-template-columns:1fr}
+  .bar{padding:10px 14px}
+  nav a{padding:5px 8px; font-size:0.72rem}
+  .exo,.qcm-question{padding:16px}
+}
 </style>
 </head>
 <body>
 
 <header>
   <div class="bar">
-    <div class="logo"><span class="dot"></span> SNT · Révisions</div>
-    <button class="reroll" id="rerollBtn" title="Générer de nouvelles valeurs">🎲 Nouvelles valeurs</button>
+    <div class="logo"><span class="prompt">$</span> snt.revisions<span class="cursor"></span></div>
     <nav>
-      <a href="#essentiel">L'essentiel</a>
-      <a href="#exos">Exercices</a>
-      <a href="#calc">Calculateur</a>
+      <a href="#essentiel">essentiel</a>
+      <a href="#exos">exercices</a>
+      <a href="#qcm">qcm</a>
+      <a href="#calc">calculateur</a>
     </nav>
-    <div class="score" id="score">0 / 10 réussi</div>
+    <button class="reroll" id="rerollBtn">🎲 nouvelles valeurs</button>
+    <div class="score" id="score">0 / 14</div>
   </div>
 </header>
 
 <main>
 
-  <!-- HERO -->
   <div class="hero">
-    <div class="pill">Internet &amp; Le Web · Transmission de données</div>
-    <h1>Débit, paquets &amp; volume réel</h1>
-    <p>Révise et vérifie tes réponses aux 3 exercices : découpage en paquets, en-têtes,
-       calcul du volume réel et relation <strong>D = V / T</strong>.
-       🎲 <em>Les valeurs changent à chaque rechargement — clique sur « Nouvelles valeurs » pour en générer d'autres.</em></p>
-    <a href="#exos" class="cta">Commencer les exercices ↓</a>
+    <div class="kicker">module : transmission de données</div>
+    <h1>Débit · Paquets · <span class="hl">Volume réel</span></h1>
+    <p>Vérifie tes réponses, débloque les corrections, et affronte le QCM difficile.
+       Les valeurs changent à chaque rechargement.</p>
+    <a href="#exos" class="cta">▶ lancer les exercices</a>
   </div>
 
   <!-- ESSENTIEL -->
   <section id="essentiel">
-    <h2><span class="num">01</span> L'essentiel à retenir</h2>
-    <p class="sub">Les formules et conversions indispensables avant de se lancer.</p>
+    <h2><span class="num">01</span> L'essentiel (version simple)</h2>
+    <p class="sub">4 formules à connaître. C'est tout.</p>
 
-    <div class="grid g3">
-      <div class="card">
-        <h3>🔢 Bit, octet &amp; multiples</h3>
-        <ul>
-          <li><strong>1 octet = 8 bits</strong> (1 o = 8 b)</li>
-          <li>k = 10³ · M = 10⁶ · G = 10⁹</li>
-          <li>1 Mo = 1 000 000 octets</li>
-          <li>1 Mbit = 1 000 000 bits</li>
-        </ul>
+    <div class="ess-grid">
+      <div class="ess big">
+        <div class="label">la conversion de base</div>
+        <div class="formula-big"><span class="var">1 octet</span> <span class="op">=</span> <span class="var">8 bits</span></div>
+        <div class="note">1 Mo = 1 000 000 octets &nbsp;·&nbsp; 1 Mbit = 1 000 000 bits</div>
       </div>
 
-      <div class="card">
-        <h3>📦 Le paquet réseau</h3>
-        <p>Un paquet = <strong>en-tête</strong> (adresses, infos de contrôle)
-           + <strong>charge utile</strong> (les données).</p>
-        <p style="margin-top:8px">Le volume réellement transmis est toujours
-           <em>plus grand</em> que la taille du fichier.</p>
+      <div class="ess">
+        <div class="label">le débit</div>
+        <div class="formula-big"><span class="var">D</span> <span class="op">=</span> <span class="var">V</span> <span class="op">÷</span> <span class="var">T</span></div>
+        <div class="note">D en bit/s · V en bits · T en s</div>
       </div>
 
-      <div class="card">
-        <h3>➗ La relation fondamentale</h3>
-        <div class="formula">D = V / T</div>
-        <div class="formula" style="margin-top:8px">V = D × T &nbsp;·&nbsp; T = V / D</div>
-        <p style="margin-top:10px">D en bit/s · V en bits · T en secondes</p>
-      </div>
-    </div>
-
-    <div class="grid g2" style="margin-top:16px">
-      <div class="card">
-        <h3>🧮 Méthode de calcul (4 étapes)</h3>
-        <ul>
-          <li>Convertir la taille du fichier en <strong>octets</strong></li>
-          <li><strong>N = ⌈taille / charge utile max⌉</strong> (arrondi supérieur)</li>
-          <li><strong>V<sub>réel</sub> = N × (charge utile + en-tête)</strong></li>
-          <li>Convertir en bits (× 8) puis appliquer D, V ou T</li>
-        </ul>
+      <div class="ess">
+        <div class="label">le volume réel</div>
+        <div class="formula-big"><span class="var">Vréel</span> <span class="op">=</span> <span class="var">N</span> <span class="op">×</span> <span class="var">(C+E)</span></div>
+        <div class="note">C = charge utile · E = en-tête</div>
       </div>
 
-      <div class="card">
-        <h3>⚠️ Pièges classiques</h3>
-        <ul>
-          <li>Oublier de multiplier par 8 (octets → bits)</li>
-          <li>Ne pas arrondir N à l'entier supérieur</li>
-          <li>Oublier l'en-tête dans le volume réel</li>
-          <li>Mélanger Mbit/s (débit) et Mo (taille)</li>
-        </ul>
+      <div class="ess">
+        <div class="label">le nombre de paquets</div>
+        <div class="formula-big"><span class="var">N</span> <span class="op">=</span> <span class="var">⌈T/C⌉</span></div>
+        <div class="note">T = taille fichier · arrondi au-dessus</div>
       </div>
-    </div>
 
-    <div class="warnbox">
-      <strong>Convention SNT :</strong> on utilise les multiples décimaux (SI) :
-      1 Mo = 10⁶ octets, et non 1 024 × 1 024. C'est ce qui est attendu dans les exercices.
+      <div class="ess">
+        <div class="label">le piège classique</div>
+        <div class="formula-big" style="color:var(--warn); text-shadow:0 0 16px rgba(255,179,71,0.3)"><span class="var">⚠ toujours</span></div>
+        <div class="note">convertir en bits (×8) et ajouter l'en-tête</div>
+      </div>
     </div>
   </section>
 
-  <!-- EXERCICES -->
+  <!-- EXOS -->
   <section id="exos">
-    <h2><span class="num">02</span> Les trois exercices</h2>
-    <p class="sub">Saisis ta réponse, clique sur « Vérifier », puis consulte la correction détaillée.</p>
+    <h2><span class="num">02</span> Les 3 exercices</h2>
+    <p class="sub">Réponse acceptée avec ou sans unité, virgule ou point, majuscule/minuscule.</p>
 
-    <!-- ================= EXO 1 ================= -->
     <article class="exo" id="exo1">
       <div class="exo-head">
-        <div class="badge">1</div>
-        <div>
-          <h3>Partage d'une photo HD</h3>
-          <div class="tag">Calcul du débit D · Réseau mobile · TCP/IP</div>
-        </div>
+        <div class="badge">01</div>
+        <div><h3>Partage d'une photo HD</h3><div class="tag">calcul du débit D · TCP/IP</div></div>
       </div>
-
       <div class="enonce"></div>
 
       <div class="q">
-        <label>1. Nombre de paquets N nécessaires pour découper la photo</label>
+        <label>Nombre de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 2877 ou 2 877">
           <span class="unit">paquets</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>2. Volume total de données réseau V<sub>réel</sub></label>
+        <label>Volume réel V<sub>réel</sub> en octets</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 4315500">
           <span class="unit">octets</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>3. Ce même volume, exprimé en Mbits</label>
+        <label>Ce volume en Mbits</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 34,52">
           <span class="unit">Mbits</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>4. Débit D de la connexion</label>
+        <label>Débit D en Mbit/s</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 12,33">
           <span class="unit">Mbit/s</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions">
-        <button class="btn primary" data-sol="sol1">Voir la correction détaillée</button>
-      </div>
-
+      <div class="exo-actions"><button class="btn primary" data-sol="sol1">▸ voir la correction</button></div>
       <div class="solution" id="sol1"></div>
     </article>
 
-    <!-- ================= EXO 2 ================= -->
     <article class="exo" id="exo2">
       <div class="exo-head">
-        <div class="badge">2</div>
-        <div>
-          <h3>Mise à jour d'un logiciel</h3>
-          <div class="tag">Calcul du temps T · IPv6 · ADSL</div>
-        </div>
+        <div class="badge">02</div>
+        <div><h3>Mise à jour d'un logiciel</h3><div class="tag">calcul du temps T · IPv6 · ADSL</div></div>
       </div>
-
       <div class="enonce"></div>
 
       <div class="q">
-        <label>1. Nombre de paquets N générés par le téléchargement</label>
+        <label>Nombre de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 59860">
           <span class="unit">paquets</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>2. Volume réel de données V<sub>réel</sub> circulant sur le réseau</label>
+        <label>Volume réel V<sub>réel</sub> en bits</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 708742400">
           <span class="unit">bits</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>3. Durée théorique T du téléchargement</label>
+        <label>Durée T en secondes</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 59,06">
           <span class="unit">secondes</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions">
-        <button class="btn primary" data-sol="sol2">Voir la correction détaillée</button>
-      </div>
-
+      <div class="exo-actions"><button class="btn primary" data-sol="sol2">▸ voir la correction</button></div>
       <div class="solution" id="sol2"></div>
     </article>
 
-    <!-- ================= EXO 3 ================= -->
     <article class="exo" id="exo3">
       <div class="exo-head">
-        <div class="badge">3</div>
-        <div>
-          <h3>Visioconférence en direct</h3>
-          <div class="tag">Taille maximale transférable · UDP/IP</div>
-        </div>
+        <div class="badge">03</div>
+        <div><h3>Visioconférence en direct</h3><div class="tag">taille max transférable · UDP/IP</div></div>
       </div>
-
       <div class="enonce"></div>
 
       <div class="q">
-        <label>1. Volume total maximal V<sub>max</sub> que la ligne peut acheminer</label>
+        <label>Volume max V<sub>max</sub> en octets</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 18750000">
           <span class="unit">octets</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>2. Nombre maximal de paquets réseau complets N</label>
+        <label>Nombre max de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="numeric" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 12500">
           <span class="unit">paquets</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
       <div class="q">
-        <label>3. Taille maximale du fichier vidéo utile réellement reçue</label>
+        <label>Taille max utile en Mo</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="Ta réponse…">
+          <input type="text" inputmode="decimal" placeholder="ex: 18,4">
           <span class="unit">Mo</span>
-          <button class="btn">Vérifier</button>
+          <button class="btn">vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions">
-        <button class="btn primary" data-sol="sol3">Voir la correction détaillée</button>
-      </div>
-
+      <div class="exo-actions"><button class="btn primary" data-sol="sol3">▸ voir la correction</button></div>
       <div class="solution" id="sol3"></div>
     </article>
   </section>
 
-  <!-- CALCULATEUR -->
-  <section id="calc">
-    <h2><span class="num">03</span> Calculateur d'unités</h2>
-    <p class="sub">Convertis rapidement une valeur entre octets, bits et leurs multiples SI.</p>
+  <!-- QCM -->
+  <section id="qcm">
+    <h2><span class="num">03</span> QCM difficile</h2>
+    <p class="sub">5 questions pièges. Choisis la bonne réponse.</p>
+    <div class="qcm-intro">Les valeurs changent à chaque rechargement — attention aux conversions et aux arrondis.</div>
+    <div id="qcmList"></div>
+  </section>
 
-    <div class="card">
+  <!-- CALC -->
+  <section id="calc">
+    <h2><span class="num">04</span> Calculateur</h2>
+    <p class="sub">Convertis entre octets, bits et multiples.</p>
+    <div class="card-panel">
       <div class="calc-grid">
-        <input type="number" id="calcVal" value="4.2" step="any" placeholder="Valeur">
+        <input type="number" id="calcVal" value="4.2" step="any" placeholder="valeur">
         <select id="calcUnit">
           <option value="1">octets (o)</option>
           <option value="1e3">kilooctets (ko)</option>
@@ -539,347 +390,422 @@
     </div>
   </section>
 
-  <footer>
-    Fiche de révision SNT 2de — Internet &amp; Le Web · Transmission de données<br>
-    Convention : multiples décimaux (1 Mo = 10⁶ octets)
-  </footer>
+  <footer>SNT 2de · Internet &amp; Le Web · multiples décimaux (1 Mo = 10⁶ octets)</footer>
 </main>
 
 <script>
-/* =========================================================
-   HELPERS
-   ========================================================= */
+/* ============ UTILS ============ */
 const nf = new Intl.NumberFormat('fr-FR');
+function fmt(n, dec){ return n.toLocaleString('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function rndStep(min,max,step){ const n=Math.round((max-min)/step); return +(min+Math.floor(Math.random()*(n+1))*step).toFixed(6); }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
-function fmt(n, dec){
-  return n.toLocaleString('fr-FR', {
-    minimumFractionDigits: dec,
-    maximumFractionDigits: dec
-  });
-}
-
-function rndStep(min, max, step){
-  const n = Math.round((max - min) / step);
-  const i = Math.floor(Math.random() * (n + 1));
-  return +(min + i * step).toFixed(6);
-}
-
-function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
-
+/* ============ PARSING ULTRA TOLÉRANT ============
+   accepte "1 234,56", "1234.56", "1.234,56", "2877", "12,3 Mbit/s"
+   ignore texte, unités, majuscules/minuscules/accents */
 function parseNum(raw){
-  if(raw == null) return NaN;
-  let s = String(raw)
-    .replace(/\s|\u00A0|\u202F/g, '')
-    .replace(/,/g, '.')
-    .replace(/[^0-9.\-]/g, '');
-  if(s === '' || s === '.' || s === '-') return NaN;
-  return parseFloat(s);
-}
-
-/* =========================================================
-   STATE
-   ========================================================= */
-const questions = Array.from(document.querySelectorAll('.q'));
-let solved = new Set();
-
-function updateScore(){
-  document.getElementById('score').textContent =
-    solved.size + ' / ' + questions.length + ' réussi';
-}
-
-/* =========================================================
-   VÉRIFICATION DES RÉPONSES
-   ========================================================= */
-questions.forEach((q, idx) => {
-  const input = q.querySelector('input');
-  const btn   = q.querySelector('button');
-  const fb    = q.querySelector('.feedback');
-
-  function check(){
-    const answer = parseFloat(q.dataset.answer);
-    const tol    = parseFloat(q.dataset.tol || '0');
-    const val    = parseNum(input.value);
-
-    if(isNaN(val)){
-      input.classList.remove('good');
-      input.classList.add('bad');
-      fb.className = 'feedback show bad';
-      fb.textContent = '✗ Saisis une valeur numérique.';
-      return;
-    }
-
-    if(Math.abs(val - answer) <= tol){
-      input.classList.remove('bad');
-      input.classList.add('good');
-      fb.className = 'feedback show ok';
-      fb.textContent = '✓ Bonne réponse !';
-      solved.add(idx);
-    } else {
-      input.classList.remove('good');
-      input.classList.add('bad');
-      fb.className = 'feedback show bad';
-      fb.textContent = (val < answer)
-        ? '✗ Trop petit. Vérifie tes conversions et tes arrondis.'
-        : '✗ Trop grand. Vérifie tes conversions et tes arrondis.';
-      solved.delete(idx);
-    }
-    updateScore();
+  if(raw==null) return NaN;
+  let s = String(raw).trim();
+  if(!s) return NaN;
+  s = s.replace(/[^0-9.,\-]/g,'');
+  if(!s) return NaN;
+  const hasC = s.includes(','), hasD = s.includes('.');
+  if(hasC && hasD){
+    if(s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g,'').replace(/,/g,'.');
+    else s = s.replace(/,/g,'');
+  } else if(hasC){
+    const p = s.split(',');
+    if(p.length===2 && p[1].length===3) s = s.replace(/,/g,'');
+    else s = s.replace(/,/g,'.');
+  } else if(hasD){
+    if(s.split('.').length>2) s = s.replace(/\./g,'');
   }
+  const n = parseFloat(s);
+  return isNaN(n) ? NaN : n;
+}
 
-  btn.addEventListener('click', check);
-  input.addEventListener('keydown', e => { if(e.key === 'Enter') check(); });
-});
+/* ============ SCORE ============ */
+const solved = new Set();
+function updateScore(){
+  const total = document.querySelectorAll('.q').length + document.querySelectorAll('.qcm-question').length;
+  const el = document.getElementById('score');
+  el.textContent = solved.size + ' / ' + total;
+  el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
+}
 
-/* =========================================================
-   AFFICHAGE DES CORRECTIONS
-   ========================================================= */
-document.querySelectorAll('[data-sol]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const box  = document.getElementById(btn.dataset.sol);
-    const open = box.classList.toggle('show');
-    btn.textContent = open
-      ? 'Masquer la correction'
-      : 'Voir la correction détaillée';
+/* ============ EXOS HANDLERS ============ */
+function attachExerciseHandlers(){
+  document.querySelectorAll('.q').forEach(q => {
+    const input = q.querySelector('input'), btn = q.querySelector('button'), fb = q.querySelector('.feedback');
+    if(!input || !btn) return;
+    function check(){
+      const answer = parseFloat(q.dataset.answer);
+      const tol = parseFloat(q.dataset.tol || '0');
+      const val = parseNum(input.value);
+      if(isNaN(val)){
+        input.classList.remove('good'); input.classList.add('bad');
+        fb.className = 'feedback show bad'; fb.textContent = '✗ entre un nombre valide';
+        solved.delete(q); updateScore(); return;
+      }
+      if(Math.abs(val-answer) <= tol){
+        input.classList.remove('bad'); input.classList.add('good');
+        fb.className = 'feedback show ok'; fb.textContent = '✓ correct';
+        solved.add(q);
+      } else {
+        input.classList.remove('good'); input.classList.add('bad');
+        fb.className = 'feedback show bad';
+        fb.textContent = val<answer ? '✗ trop petit — vérifie l\'arrondi au-dessus et les conversions'
+                                    : '✗ trop grand — vérifie l\'arrondi au-dessus et les conversions';
+        solved.delete(q);
+      }
+      updateScore();
+    }
+    btn.addEventListener('click', check);
+    input.addEventListener('keydown', e => { if(e.key==='Enter') check(); });
   });
-});
+}
 
-/* =========================================================
-   RENDU EXERCICE 1 — Photo HD
-   ========================================================= */
+/* ============ CORRECTIONS ============ */
+function attachSolutionHandlers(){
+  document.querySelectorAll('[data-sol]').forEach(btn => {
+    if(btn.dataset.bound) return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => {
+      const box = document.getElementById(btn.dataset.sol);
+      const open = box.classList.toggle('show');
+      btn.textContent = open ? '▾ masquer la correction' : '▸ voir la correction';
+    });
+  });
+}
+
+/* ============ EXO 1 ============ */
 function renderExo1(){
-  const tailleMo    = rndStep(2.5, 8.5, 0.1);
-  const chargeUtile = Math.round(rndStep(1200, 1500, 10));
-  const entete      = pick([20, 40, 60]);
-  const duree       = rndStep(1.5, 5.0, 0.1);
+  const tailleMo = rndStep(2.5,8.5,0.1);
+  const C = Math.round(rndStep(1200,1500,10));
+  const E = pick([20,40,60]);
+  const duree = rndStep(1.5,5.0,0.1);
 
-  const tailleOctets = Math.round(tailleMo * 1e6);
-  const N            = Math.ceil(tailleOctets / chargeUtile);
-  const Vreel        = N * (chargeUtile + entete);
-  const Vbits        = Vreel * 8;
-  const VMbits       = Vbits / 1e6;
-  const D            = VMbits / duree;
+  const tailleOctets = Math.round(tailleMo*1e6);
+  const N = Math.ceil(tailleOctets/C);
+  const Vreel = N*(C+E);
+  const Vbits = Vreel*8;
+  const VMbits = Vbits/1e6;
+  const D = VMbits/duree;
 
   const exo = document.getElementById('exo1');
-
   exo.querySelector('.enonce').innerHTML = `
-    Une photo de <strong>${fmt(tailleMo, 1)} Mo</strong> est envoyée d'un smartphone
-    vers un serveur distant via le réseau mobile.
+    Une photo de <strong>${fmt(tailleMo,1)} Mo</strong> est envoyée depuis un smartphone.
     <ul>
-      <li>Charge utile maximale d'un paquet : <strong>${nf.format(chargeUtile)} octets</strong></li>
-      <li>En-tête TCP/IP de chaque paquet : <strong>${entete} octets</strong></li>
-      <li>Durée du transfert complet : <strong>${fmt(duree, 1)} secondes</strong></li>
+      <li>charge utile max par paquet : <strong>${nf.format(C)} octets</strong></li>
+      <li>en-tête TCP/IP : <strong>${E} octets</strong></li>
+      <li>durée du transfert : <strong>${fmt(duree,1)} s</strong></li>
     </ul>`;
 
   const qs = exo.querySelectorAll('.q');
-  qs[0].dataset.answer = N;
-  qs[0].dataset.tol    = 0;
-
-  qs[1].dataset.answer = Vreel;
-  qs[1].dataset.tol    = 0;
-
-  qs[2].dataset.answer = VMbits;
-  qs[2].dataset.tol    = Math.max(0.02, VMbits * 0.02);
-
-  qs[3].dataset.answer = D;
-  qs[3].dataset.tol    = Math.max(0.2, D * 0.02);
+  qs[0].dataset.answer=N; qs[0].dataset.tol=0;
+  qs[1].dataset.answer=Vreel; qs[1].dataset.tol=0;
+  qs[2].dataset.answer=VMbits; qs[2].dataset.tol=Math.max(0.02, VMbits*0.02);
+  qs[3].dataset.answer=D; qs[3].dataset.tol=Math.max(0.2, D*0.02);
 
   exo.querySelector('#sol1').innerHTML = `
-    <h4>✔ Correction détaillée</h4>
+    <h4>▸ correction</h4>
     <ol>
-      <li>Taille de la photo : ${fmt(tailleMo, 1)} Mo = ${fmt(tailleMo, 1)} × 10⁶ octets
-          = <span class="res">${nf.format(tailleOctets)} octets</span></li>
-      <li>Nombre de paquets : N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(chargeUtile)}⌉
-          = ⌈${fmt(tailleOctets / chargeUtile, 2)}⌉
-          = <span class="res">${nf.format(N)} paquets</span>
-          <br><em>(le dernier paquet transporte ${nf.format(tailleOctets - (N - 1) * chargeUtile)} octets utiles)</em></li>
-      <li>Paquet complet : ${nf.format(chargeUtile)} + ${entete} = ${nf.format(chargeUtile + entete)} octets
-          <br>V<sub>réel</sub> = ${nf.format(N)} × ${nf.format(chargeUtile + entete)}
-          = <span class="res">${nf.format(Vreel)} octets</span></li>
-      <li>En bits : ${nf.format(Vreel)} × 8 = ${nf.format(Vbits)} bits
-          = <span class="res">${fmt(VMbits, 3)} Mbits</span></li>
-      <li>Débit : D = V ÷ T = ${fmt(VMbits, 3)} ÷ ${fmt(duree, 1)}
-          = <span class="res">${fmt(D, 2)} Mbit/s</span></li>
+      <li>taille = ${fmt(tailleMo,1)} Mo = ${nf.format(tailleOctets)} octets</li>
+      <li>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = <span class="res">${nf.format(N)} paquets</span></li>
+      <li>paquet complet = ${nf.format(C)} + ${E} = ${nf.format(C+E)} octets<br>
+          Vréel = ${nf.format(N)} × ${nf.format(C+E)} = <span class="res">${nf.format(Vreel)} octets</span></li>
+      <li>en bits = ${nf.format(Vreel)} × 8 = ${nf.format(Vbits)} bits = <span class="res">${fmt(VMbits,3)} Mbits</span></li>
+      <li>D = V ÷ T = ${fmt(VMbits,3)} ÷ ${fmt(duree,1)} = <span class="res">${fmt(D,2)} Mbit/s</span></li>
     </ol>`;
 }
 
-/* =========================================================
-   RENDU EXERCICE 2 — Mise à jour logicielle
-   ========================================================= */
+/* ============ EXO 2 ============ */
 function renderExo2(){
-  const tailleMo    = rndStep(50, 200, 5);
-  const chargeUtile = Math.round(rndStep(1300, 1500, 10));
-  const entete      = Math.round(rndStep(40, 80, 10));
-  const debit       = rndStep(8, 25, 1);
+  const tailleMo = rndStep(50,200,5);
+  const C = Math.round(rndStep(1300,1500,10));
+  const E = Math.round(rndStep(40,80,10));
+  const debit = rndStep(8,25,1);
 
-  const tailleOctets = Math.round(tailleMo * 1e6);
-  const N            = Math.ceil(tailleOctets / chargeUtile);
-  const VreelOctets  = N * (chargeUtile + entete);
-  const Vbits        = VreelOctets * 8;
-  const T            = Vbits / (debit * 1e6);
+  const tailleOctets = Math.round(tailleMo*1e6);
+  const N = Math.ceil(tailleOctets/C);
+  const VreelOctets = N*(C+E);
+  const Vbits = VreelOctets*8;
+  const T = Vbits/(debit*1e6);
 
   const exo = document.getElementById('exo2');
-
   exo.querySelector('.enonce').innerHTML = `
-    Une mise à jour logicielle de <strong>${fmt(tailleMo, 0)} Mo</strong> doit être téléchargée
-    sur un ordinateur. La connexion réseau s'appuie sur le protocole IPv6.
+    Une mise à jour de <strong>${fmt(tailleMo,0)} Mo</strong> doit être téléchargée (IPv6).
     <ul>
-      <li>Charge utile par paquet : <strong>${nf.format(chargeUtile)} octets</strong></li>
-      <li>En-têtes cumulés (IPv6 + TCP) : <strong>${entete} octets</strong> par paquet</li>
-      <li>Débit descendant utile de la ligne ADSL : <strong>D = ${fmt(debit, 0)} Mbit/s</strong></li>
+      <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
+      <li>en-têtes (IPv6 + TCP) : <strong>${E} octets</strong></li>
+      <li>débit descendant : <strong>D = ${fmt(debit,0)} Mbit/s</strong></li>
     </ul>`;
 
   const qs = exo.querySelectorAll('.q');
-  qs[0].dataset.answer = N;
-  qs[0].dataset.tol    = 0;
-
-  qs[1].dataset.answer = Vbits;
-  qs[1].dataset.tol    = 0;
-
-  qs[2].dataset.answer = T;
-  qs[2].dataset.tol    = Math.max(0.2, T * 0.02);
+  qs[0].dataset.answer=N; qs[0].dataset.tol=0;
+  qs[1].dataset.answer=Vbits; qs[1].dataset.tol=0;
+  qs[2].dataset.answer=T; qs[2].dataset.tol=Math.max(0.2, T*0.02);
 
   exo.querySelector('#sol2').innerHTML = `
-    <h4>✔ Correction détaillée</h4>
+    <h4>▸ correction</h4>
     <ol>
-      <li>Taille de la mise à jour : ${fmt(tailleMo, 0)} Mo = ${fmt(tailleMo, 0)} × 10⁶ octets
-          = <span class="res">${nf.format(tailleOctets)} octets</span></li>
-      <li>Nombre de paquets : N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(chargeUtile)}⌉
-          = ⌈${fmt(tailleOctets / chargeUtile, 2)}⌉
-          = <span class="res">${nf.format(N)} paquets</span></li>
-      <li>Paquet complet : ${nf.format(chargeUtile)} + ${entete} = ${nf.format(chargeUtile + entete)} octets
-          <br>V<sub>réel</sub> = ${nf.format(N)} × ${nf.format(chargeUtile + entete)}
-          = ${nf.format(VreelOctets)} octets
-          <br>En bits : ${nf.format(VreelOctets)} × 8
-          = <span class="res">${nf.format(Vbits)} bits</span>
-          ≈ ${fmt(Vbits / 1e6, 1)} Mbits</li>
-      <li>Durée : T = V ÷ D = ${nf.format(Vbits)} ÷ ${nf.format(debit * 1e6)}
-          = <span class="res">${fmt(T, 2)} s</span></li>
+      <li>taille = ${fmt(tailleMo,0)} Mo = ${nf.format(tailleOctets)} octets</li>
+      <li>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = <span class="res">${nf.format(N)} paquets</span></li>
+      <li>paquet complet = ${nf.format(C+E)} octets<br>
+          Vréel = ${nf.format(N)} × ${nf.format(C+E)} = ${nf.format(VreelOctets)} octets<br>
+          = ${nf.format(VreelOctets)} × 8 = <span class="res">${nf.format(Vbits)} bits</span></li>
+      <li>T = V ÷ D = ${nf.format(Vbits)} ÷ ${nf.format(debit*1e6)} = <span class="res">${fmt(T,2)} s</span></li>
     </ol>`;
 }
 
-/* =========================================================
-   RENDU EXERCICE 3 — Visioconférence
-   ========================================================= */
+/* ============ EXO 3 ============ */
 function renderExo3(){
-  const debit       = rndStep(4, 10, 1);
-  const chargeUtile = Math.round(rndStep(1400, 1480, 4));
-  const entete      = Math.round(rndStep(20, 40, 4));
-  const duree       = rndStep(20, 60, 5);
+  const debit = rndStep(4,10,1);
+  const C = Math.round(rndStep(1400,1480,4));
+  const E = Math.round(rndStep(20,40,4));
+  const duree = rndStep(20,60,5);
 
-  const paquet     = chargeUtile + entete;
-  const VmaxBits   = debit * 1e6 * duree;
-  const VmaxOctets = VmaxBits / 8;
-  const N          = Math.floor(VmaxOctets / paquet);
-  const utileOctets = N * chargeUtile;
-  const utileMo     = utileOctets / 1e6;
+  const paquet = C+E;
+  const VmaxBits = debit*1e6*duree;
+  const VmaxOctets = VmaxBits/8;
+  const N = Math.floor(VmaxOctets/paquet);
+  const utileOctets = N*C;
+  const utileMo = utileOctets/1e6;
 
   const exo = document.getElementById('exo3');
-
   exo.querySelector('.enonce').innerHTML = `
-    Lors d'une session de cours à distance, un flux vidéo continu est diffusé via UDP/IP
-    à travers une connexion garantie à <strong>D = ${fmt(debit, 0)} Mbit/s</strong>.
+    Flux vidéo en direct via UDP/IP à <strong>D = ${fmt(debit,0)} Mbit/s</strong>.
     <ul>
-      <li>Charge utile par paquet : <strong>${nf.format(chargeUtile)} octets</strong></li>
-      <li>En-tête UDP/IP : <strong>${entete} octets</strong></li>
-      <li>Durée de l'extrait étudié : <strong>T = ${fmt(duree, 0)} secondes</strong></li>
+      <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
+      <li>en-tête UDP/IP : <strong>${E} octets</strong></li>
+      <li>durée de l'extrait : <strong>T = ${fmt(duree,0)} s</strong></li>
     </ul>`;
 
   const qs = exo.querySelectorAll('.q');
-  qs[0].dataset.answer = VmaxOctets;
-  qs[0].dataset.tol    = 0;
-
-  qs[1].dataset.answer = N;
-  qs[1].dataset.tol    = 0;
-
-  qs[2].dataset.answer = utileMo;
-  qs[2].dataset.tol    = Math.max(0.2, utileMo * 0.02);
+  qs[0].dataset.answer=VmaxOctets; qs[0].dataset.tol=0;
+  qs[1].dataset.answer=N; qs[1].dataset.tol=0;
+  qs[2].dataset.answer=utileMo; qs[2].dataset.tol=Math.max(0.2, utileMo*0.02);
 
   exo.querySelector('#sol3').innerHTML = `
-    <h4>✔ Correction détaillée</h4>
+    <h4>▸ correction</h4>
     <ol>
-      <li>Débit : ${fmt(debit, 0)} Mbit/s = ${nf.format(debit * 1e6)} bits/s ; T = ${fmt(duree, 0)} s
-          <br>V<sub>max</sub> = D × T = ${nf.format(debit * 1e6)} × ${fmt(duree, 0)}
-          = ${nf.format(VmaxBits)} bits
-          <br>= ${nf.format(VmaxBits)} ÷ 8
-          = <span class="res">${nf.format(VmaxOctets)} octets</span></li>
-      <li>Paquet complet : ${nf.format(chargeUtile)} + ${entete} = ${nf.format(paquet)} octets
-          <br>N = ${nf.format(VmaxOctets)} ÷ ${nf.format(paquet)}
-          = <span class="res">${nf.format(N)} paquets</span></li>
-      <li>Données utiles : ${nf.format(N)} × ${nf.format(chargeUtile)}
-          = ${nf.format(utileOctets)} octets
-          = <span class="res">${fmt(utileMo, 2)} Mo</span> de vidéo réellement reçue</li>
+      <li>Vmax = D × T = ${nf.format(debit*1e6)} × ${fmt(duree,0)} = ${nf.format(VmaxBits)} bits<br>
+          = ${nf.format(VmaxBits)} ÷ 8 = <span class="res">${nf.format(VmaxOctets)} octets</span></li>
+      <li>paquet complet = ${nf.format(C)} + ${E} = ${nf.format(paquet)} octets<br>
+          N = ⌊${nf.format(VmaxOctets)} ÷ ${nf.format(paquet)}⌋ = <span class="res">${nf.format(N)} paquets</span></li>
+      <li>utile = ${nf.format(N)} × ${nf.format(C)} = ${nf.format(utileOctets)} octets
+          = <span class="res">${fmt(utileMo,2)} Mo</span></li>
     </ol>`;
 }
 
-/* =========================================================
-   RESET + REROLL
-   ========================================================= */
+/* ============ QCM ============ */
+function distinctOptions(correct, wrongs){
+  const round = n => Math.abs(n)<1 ? +n.toFixed(4) : +n.toFixed(2);
+  const out = [round(correct)];
+  for(const w of wrongs){
+    if(out.length>=4) break;
+    const rw = round(w);
+    if(rw<=0) continue;
+    if(!out.some(o => Math.abs(o-rw)/Math.max(1,Math.abs(o)) < 0.001)) out.push(rw);
+  }
+  let k=1;
+  while(out.length<4){
+    const cand = round(correct*(1+0.15*k));
+    if(!out.some(o => Math.abs(o-cand)/Math.max(1,Math.abs(o)) < 0.001)) out.push(cand);
+    k++;
+  }
+  return out;
+}
+
+function buildQCM(){
+  const questions = [];
+
+  /* Q1 : nombre de paquets (piège arrondi supérieur) */
+  {
+    const tailleMo = rndStep(3.0,7.5,0.1);
+    const C = Math.round(rndStep(1300,1500,20));
+    const tailleOctets = Math.round(tailleMo*1e6);
+    const correct = Math.ceil(tailleOctets/C);
+    const opts = distinctOptions(correct, [
+      Math.floor(tailleOctets/C), correct+1, correct-1, Math.round(tailleOctets/C)
+    ]).map(v => ({v, display: nf.format(v)}));
+    questions.push({
+      prompt:`Un fichier de <strong>${fmt(tailleMo,1)} Mo</strong> est découpé en paquets de <strong>${nf.format(C)} octets</strong> de charge utile. Combien de paquets faut-il ?`,
+      opts, correct,
+      expl:`N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = ${nf.format(correct)}. Toujours arrondir au-dessus.`
+    });
+  }
+
+  /* Q2 : conversion Mo → bits */
+  {
+    const tailleMo = rndStep(1.0,5.0,0.5);
+    const correct = tailleMo*1e6*8;
+    const opts = distinctOptions(correct, [
+      tailleMo*1e6, tailleMo*1e6*4, tailleMo*1e3*8, tailleMo*1e6*8/1000
+    ]).map(v => ({v, display: nf.format(v)}));
+    questions.push({
+      prompt:`<strong>${fmt(tailleMo,1)} Mo</strong> correspond à combien de bits ?`,
+      opts, correct,
+      expl:`${fmt(tailleMo,1)} Mo = ${fmt(tailleMo,1)} × 10⁶ octets = ${nf.format(tailleMo*1e6)} octets × 8 = ${nf.format(correct)} bits.`
+    });
+  }
+
+  /* Q3 : volume réel */
+  {
+    const N = Math.round(rndStep(2000,8000,500));
+    const C = Math.round(rndStep(1300,1500,20));
+    const E = pick([20,40,60]);
+    const correct = N*(C+E);
+    const opts = distinctOptions(correct, [
+      N*C, N*C+E, (N+1)*(C+E), N*(C+E)-C
+    ]).map(v => ({v, display: nf.format(v)}));
+    questions.push({
+      prompt:`<strong>${nf.format(N)} paquets</strong>, chacun avec <strong>${nf.format(C)} octets</strong> de charge utile et <strong>${E} octets</strong> d'en-tête. Quel est le volume réel transmis ?`,
+      opts, correct,
+      expl:`Vréel = N × (C+E) = ${nf.format(N)} × (${nf.format(C)}+${E}) = ${nf.format(correct)} octets.`
+    });
+  }
+
+  /* Q4 : débit */
+  {
+    const Vbits = rndStep(40,120,10)*1e6;
+    const T = rndStep(3,10,1);
+    const correct = Vbits/1e6/T;
+    const opts = distinctOptions(correct, [
+      Vbits/1e6, Vbits/1e6/T*8, Vbits/1e6*T, Vbits/1e6/T/2
+    ]).map(v => ({v, display: fmt(v,2)+' Mbit/s'}));
+    questions.push({
+      prompt:`On transmet <strong>${fmt(Vbits/1e6,0)} Mbits</strong> en <strong>${fmt(T,0)} secondes</strong>. Quel est le débit ?`,
+      opts, correct,
+      expl:`D = V ÷ T = ${fmt(Vbits/1e6,0)} ÷ ${fmt(T,0)} = ${fmt(correct,2)} Mbit/s.`
+    });
+  }
+
+  /* Q5 : taille utile max (piège floor) */
+  {
+    const D = rndStep(4,9,1);
+    const T = rndStep(15,40,5);
+    const C = 1400, E = 40;
+    const VmaxBits = D*1e6*T;
+    const VmaxOctets = VmaxBits/8;
+    const N = Math.floor(VmaxOctets/(C+E));
+    const utileMo = (N*C)/1e6;
+    const correct = +utileMo.toFixed(2);
+    const opts = distinctOptions(correct, [
+      +(VmaxOctets/1e6).toFixed(2),
+      +((N*(C+E))/1e6).toFixed(2),
+      +((Math.ceil(VmaxOctets/(C+E))*C)/1e6).toFixed(2),
+      +(utileMo*0.5).toFixed(2)
+    ]).map(v => ({v, display: fmt(v,2)+' Mo'}));
+    questions.push({
+      prompt:`Débit <strong>${fmt(D,0)} Mbit/s</strong> pendant <strong>${fmt(T,0)} s</strong>. Charge utile <strong>${C} o</strong>, en-tête <strong>${E} o</strong>. Quelle est la taille utile max reçue ?`,
+      opts, correct,
+      expl:`Vmax = ${fmt(D,0)}×10⁶ × ${fmt(T,0)} = ${nf.format(VmaxBits)} bits = ${nf.format(VmaxOctets)} octets. N = ⌊${nf.format(VmaxOctets)} ÷ ${C+E}⌋ = ${nf.format(N)}. Utile = ${nf.format(N)} × ${C} = ${nf.format(N*C)} octets = ${fmt(utileMo,2)} Mo.`
+    });
+  }
+
+  return questions;
+}
+
+function renderQCM(){
+  const questions = buildQCM();
+  const list = document.getElementById('qcmList');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+
+  questions.forEach((q,qi) => {
+    const correctVal = q.correct;
+    const shuffled = shuffle(q.opts.slice());
+    const correctIndex = shuffled.findIndex(o => Math.abs(o.v-correctVal)/Math.max(1,Math.abs(correctVal)) < 0.001);
+
+    const el = document.createElement('div');
+    el.className = 'qcm-question';
+    el.dataset.qid = 'qcm'+qi;
+
+    const optsHtml = shuffled.map((o,i) =>
+      `<button class="opt" data-i="${i}"><span class="key">${letters[i]}</span><span>${o.display}</span></button>`
+    ).join('');
+
+    el.innerHTML = `
+      <p class="qcm-prompt"><span class="qcm-num">Q${qi+1}</span>${q.prompt}</p>
+      <div class="qcm-options">${optsHtml}</div>
+      <div class="qcm-feedback"></div>`;
+
+    el.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.i;
+        const fb = el.querySelector('.qcm-feedback');
+        el.querySelectorAll('.opt').forEach(b => b.disabled = true);
+        if(i === correctIndex){
+          btn.classList.add('good');
+          fb.className = 'qcm-feedback show ok';
+          fb.innerHTML = `✓ correct !<span class="expl">${q.expl}</span>`;
+          solved.add(el);
+        } else {
+          btn.classList.add('bad');
+          el.querySelectorAll('.opt')[correctIndex].classList.add('good');
+          fb.className = 'qcm-feedback show bad';
+          fb.innerHTML = `✗ raté.<span class="expl">${q.expl}</span>`;
+          solved.delete(el);
+        }
+        updateScore();
+      });
+    });
+
+    list.appendChild(el);
+  });
+}
+
+/* ============ RESET / REROLL ============ */
 function resetAll(){
   solved.clear();
-  updateScore();
-
   document.querySelectorAll('.q').forEach(q => {
     const input = q.querySelector('input');
-    input.value = '';
-    input.classList.remove('good', 'bad');
-
+    if(input){ input.value=''; input.classList.remove('good','bad'); }
     const fb = q.querySelector('.feedback');
-    fb.className = 'feedback';
-    fb.textContent = '';
+    if(fb){ fb.className='feedback'; fb.textContent=''; }
   });
-
   document.querySelectorAll('.solution').forEach(s => s.classList.remove('show'));
-  document.querySelectorAll('[data-sol]').forEach(b => {
-    b.textContent = 'Voir la correction détaillée';
-  });
+  document.querySelectorAll('[data-sol]').forEach(b => b.textContent = '▸ voir la correction');
+  updateScore();
 }
 
 function reroll(){
   resetAll();
-  renderExo1();
-  renderExo2();
-  renderExo3();
+  renderExo1(); renderExo2(); renderExo3();
+  renderQCM();
+  updateScore();
 }
 
-/* =========================================================
-   BOUTON NOUVELLES VALEURS
-   ========================================================= */
+/* ============ INIT ============ */
 document.getElementById('rerollBtn').addEventListener('click', reroll);
 
-/* =========================================================
-   LANCEMENT
-   ========================================================= */
-reroll();
+renderExo1(); renderExo2(); renderExo3();
+attachExerciseHandlers();
+attachSolutionHandlers();
+renderQCM();
+updateScore();
 
-/* =========================================================
-   CALCULATEUR D'UNITÉS
-   ========================================================= */
-const cVal  = document.getElementById('calcVal');
+/* ============ CALCULATEUR ============ */
+const cVal = document.getElementById('calcVal');
 const cUnit = document.getElementById('calcUnit');
-const cOut  = document.getElementById('calcOut');
-
-function fmtCalc(n){
-  return n.toLocaleString('fr-FR', { maximumFractionDigits: 6 });
-}
-
+const cOut = document.getElementById('calcOut');
+function fmtCalc(n){ return n.toLocaleString('fr-FR',{maximumFractionDigits:6}); }
 function convert(){
   const v = parseFloat(cVal.value);
   const f = parseFloat(cUnit.value);
-  if(isNaN(v)){ cOut.innerHTML = ''; return; }
-
-  const octets = v * f;
-  const bits   = octets * 8;
-
+  if(isNaN(v)){ cOut.innerHTML=''; return; }
+  const octets = v*f, bits = octets*8;
   cOut.innerHTML = `
     <div><span>octets</span>${fmtCalc(octets)} o</div>
-    <div><span>kilooctets</span>${fmtCalc(octets / 1e3)} ko</div>
-    <div><span>mégaoctets</span>${fmtCalc(octets / 1e6)} Mo</div>
-    <div><span>gigaoctets</span>${fmtCalc(octets / 1e9)} Go</div>
+    <div><span>kilooctets</span>${fmtCalc(octets/1e3)} ko</div>
+    <div><span>mégaoctets</span>${fmtCalc(octets/1e6)} Mo</div>
+    <div><span>gigaoctets</span>${fmtCalc(octets/1e9)} Go</div>
     <div><span>bits</span>${fmtCalc(bits)} b</div>
-    <div><span>mégabits</span>${fmtCalc(bits / 1e6)} Mbit</div>
+    <div><span>mégabits</span>${fmtCalc(bits/1e6)} Mbit</div>
   `;
 }
-
 cVal.addEventListener('input', convert);
 cUnit.addEventListener('change', convert);
 convert();

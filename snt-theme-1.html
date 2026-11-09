@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SNT · Débit, paquets & volume réel</title>
+<title>SNT · Débit, paquets & volume réel — fiche de révision</title>
 <style>
 :root{
-  --bg:#1e293b;          /* bleu-gris ardoise */
-  --bg2:#243447;
-  --panel:#2a3b52;
-  --panel2:#33475f;
-  --line:#3d5169;
-  --line2:#4a5f7a;
-  --txt:#e2e8f0;
-  --muted:#a3b3c9;
-  --dim:#7a8ba3;
-  --accent:#5eead4;      /* menthe douce */
-  --cyan:#7dd3fc;        /* ciel doux */
-  --ok:#4ade80;
-  --bad:#f87171;
-  --warn:#fbbf24;
-  --mono:'Consolas','Cascadia Code','Courier New',monospace;
+  --bg:#37414f;
+  --panel:#434f5f;
+  --panel2:#4c596b;
+  --line:#55637a;
+  --line2:#66758c;
+  --txt:#ebe6da;
+  --muted:#a3aec0;
+  --dim:#7d8a9c;
+  --accent:#e8b87a;      /* ambre chaud */
+  --accent-d:#c69a63;
+  --steel:#9db2c9;       /* bleu acier */
+  --ok:#8dbf7f;
+  --bad:#dc7a7a;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
   --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
+  --mono:'Consolas','Cascadia Code','Courier New',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -32,415 +32,437 @@ body{
   line-height:1.65;
   font-size:16px;
   min-height:100vh;
-  padding-bottom:60px;
+  padding-bottom:70px;
 }
-main{max-width:1000px;margin:0 auto;padding:0 20px}
+main{max-width:820px;margin:0 auto;padding:0 24px}
 
-/* ---------- HEADER ---------- */
+/* ---------- header discret ---------- */
 header{
-  position:sticky; top:0; z-index:50;
-  background:rgba(30,41,59,0.95);
   border-bottom:1px solid var(--line);
+  background:rgba(55,65,79,0.94);
+  position:sticky;top:0;z-index:50;
 }
 .bar{
-  max-width:1000px;margin:0 auto;padding:12px 20px;
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  max-width:820px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
 }
-.logo{
-  font-weight:700;font-size:1rem;color:var(--accent);
-  display:flex;align-items:center;gap:8px;
+.brand{
+  font-family:var(--serif);font-size:1.08rem;
+  color:var(--txt);font-weight:400;
+  letter-spacing:.2px;
 }
-.logo .dot{
-  width:9px;height:9px;border-radius:50%;
-  background:var(--accent);
-}
-nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.brand em{color:var(--accent);font-style:italic}
+nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
 nav a{
-  color:var(--muted);text-decoration:none;font-size:0.88rem;
-  padding:6px 12px;border-radius:6px;transition:background .15s,color .15s;
+  color:var(--muted);text-decoration:none;font-size:.9rem;
+  padding:6px 11px;border-radius:4px;transition:background .12s,color .12s;
 }
 nav a:hover{color:var(--txt);background:var(--panel2)}
 .score{
-  font-size:0.85rem;font-weight:600;color:var(--accent);
-  border:1px solid var(--line2);border-radius:6px;
-  padding:5px 12px;background:var(--panel);
+  font-size:.85rem;color:var(--muted);
+  border-left:1px solid var(--line2);padding-left:14px;
 }
+.score b{color:var(--accent);font-weight:600}
 .reroll{
-  font-size:0.82rem;font-weight:600;cursor:pointer;
-  background:var(--panel);color:var(--cyan);
-  border:1px solid var(--line2);border-radius:6px;
-  padding:6px 12px;font-family:inherit;transition:background .15s;
-}
-.reroll:hover{background:var(--panel2)}
-
-/* ---------- HERO ---------- */
-.hero{padding:48px 0 8px;text-align:center}
-.hero .kicker{
-  font-size:0.78rem;letter-spacing:1.6px;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:12px;font-weight:600;
-}
-.hero h1{
-  font-size:clamp(1.7rem,4.5vw,2.4rem);
-  line-height:1.2;margin-bottom:14px;color:#fff;
-  font-weight:700;
-}
-.hero h1 .hl{color:var(--accent)}
-.hero p{color:var(--muted);max-width:600px;margin:0 auto 24px;font-size:0.98rem}
-.cta{
-  display:inline-block;text-decoration:none;
-  font-weight:600;font-size:0.92rem;color:#1e293b;
-  background:var(--accent);padding:11px 24px;border-radius:8px;
-  transition:filter .15s;
-}
-.cta:hover{filter:brightness(1.08)}
-
-/* ---------- SECTIONS ---------- */
-section{padding-top:48px}
-h2{
-  font-size:1.3rem;font-weight:700;margin-bottom:6px;
-  display:flex;align-items:center;gap:10px;color:#fff;flex-wrap:wrap;
-}
-h2 .num{
-  font-size:0.72rem;letter-spacing:1px;font-weight:700;
-  color:var(--accent);background:var(--panel);
+  font-family:inherit;font-size:.85rem;cursor:pointer;
+  background:transparent;color:var(--steel);
   border:1px solid var(--line2);border-radius:4px;
-  padding:2px 8px;
+  padding:6px 12px;transition:background .12s,color .12s;
 }
-.sub{color:var(--muted);font-size:0.92rem;margin-bottom:22px}
+.reroll:hover{background:var(--panel2);color:var(--txt)}
 
-/* ---------- LEÇON ---------- */
-.lesson{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:22px;margin-bottom:18px;
+/* ---------- intro ---------- */
+.intro{padding:64px 0 20px;text-align:center}
+.intro .eyebrow{
+  font-family:var(--serif);font-style:italic;
+  color:var(--accent);font-size:.95rem;
+  margin-bottom:14px;
 }
-.lesson h3{
-  font-size:1.05rem;color:#fff;margin-bottom:10px;
-  display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-weight:700;
+.intro h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.9rem,5vw,2.6rem);
+  line-height:1.2;margin-bottom:16px;color:#fff;
 }
-.lesson h3 .tag{
-  font-size:0.68rem;letter-spacing:1px;text-transform:uppercase;
-  color:var(--cyan);background:var(--bg2);
-  border:1px solid var(--line2);border-radius:4px;
-  padding:1px 8px;font-weight:600;
+.intro p{
+  color:var(--muted);max-width:560px;margin:0 auto 8px;
+  font-size:1rem;
 }
-.lesson p{font-size:0.95rem;color:#cdd7e5;margin-bottom:10px}
-.lesson p strong{color:var(--accent);font-weight:600}
-.lesson p .key{color:var(--cyan);font-family:var(--mono)}
-.lesson ul{list-style:none;margin:8px 0 12px;padding:0}
-.lesson ul li{
-  padding-left:22px;position:relative;margin-bottom:6px;
-  font-size:0.93rem;color:#cdd7e5;
+.intro .small{font-size:.88rem;color:var(--dim);margin-top:14px}
+.intro .cta{
+  display:inline-block;margin-top:22px;
+  text-decoration:none;color:var(--bg);font-weight:600;
+  background:var(--accent);padding:11px 26px;border-radius:4px;
+  font-size:.93rem;transition:background .15s;
 }
-.lesson ul li::before{content:'•';position:absolute;left:6px;color:var(--cyan)}
-.lesson ul li strong{color:var(--accent);font-weight:600}
+.intro .cta:hover{background:var(--accent-d)}
 
-.formula-card{
-  text-align:center;background:var(--bg2);
-  border:1px solid var(--line2);border-radius:10px;
-  padding:16px;margin:14px 0;
-}
-.formula-card .lbl{
-  font-size:0.72rem;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--muted);margin-bottom:8px;font-weight:600;
-}
-.formula-card .f{
-  font-family:var(--mono);font-size:1.35rem;
-  color:var(--accent);font-weight:700;
-}
-.formula-card .f .op{color:var(--cyan);margin:0 5px;font-weight:400}
-.formula-card .f .var{color:#fff}
-.formula-card .note{font-size:0.82rem;color:var(--muted);margin-top:8px}
-
-.formula-row{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:10px;margin:14px 0;
-}
-.formula-row .fc{
-  text-align:center;background:var(--bg2);
-  border:1px solid var(--line2);border-radius:9px;padding:12px 8px;
-}
-.formula-row .fc .who{
-  font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;
-  color:var(--muted);margin-bottom:6px;font-weight:600;
-}
-.formula-row .fc .expr{
-  font-family:var(--mono);font-size:1.05rem;
-  color:var(--accent);font-weight:700;
-}
-
-.example{
-  border-left:3px solid var(--warn);
-  background:rgba(251,191,36,0.06);
-  border-radius:0 8px 8px 0;
-  padding:14px 16px;margin-top:12px;
-}
-.example .ex-tag{
-  font-size:0.72rem;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--warn);margin-bottom:8px;display:block;font-weight:700;
-}
-.example .step{
-  font-family:var(--mono);color:#d8dde5;
-  margin-bottom:5px;font-size:0.88rem;line-height:1.6;
-}
-.example .step .r{color:var(--accent);font-weight:700}
-.example .step .o{color:var(--cyan)}
-.example .concl{
-  color:var(--accent);font-weight:700;
-  margin-top:8px;font-size:0.9rem;
-}
-
-.warn-card{
-  border-left:3px solid var(--bad);
-  background:rgba(248,113,113,0.06);
-  border-radius:0 8px 8px 0;
-  padding:14px 16px;margin-bottom:12px;
-}
-.warn-card .wtitle{
-  font-size:0.92rem;color:var(--bad);
-  font-weight:700;margin-bottom:8px;
-}
-.warn-card p{font-size:0.9rem;margin-bottom:6px}
-.warn-card code{
-  font-family:var(--mono);background:var(--bg2);
-  border:1px solid var(--line2);border-radius:4px;
-  padding:1px 7px;color:var(--cyan);font-size:0.85rem;
-}
-
-.filrouge{
-  background:var(--panel);border:1px solid var(--line2);
-  border-left:3px solid var(--accent);
-  border-radius:8px;padding:16px 18px;margin-bottom:18px;
-  display:flex;gap:14px;align-items:flex-start;
-}
-.filrouge .icon{font-size:1.3rem;line-height:1}
-.filrouge .txt{font-size:0.92rem;color:#cdd7e5}
-.filrouge .txt strong{color:var(--accent);font-weight:700}
-.filrouge .txt .dim{color:var(--muted);font-size:0.85rem;display:block;margin-top:3px}
-
-/* ---------- EXOS ---------- */
-.exo{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:22px;margin-bottom:20px;
-}
-.exo-head{
-  display:flex;align-items:flex-start;gap:13px;
-  margin-bottom:16px;padding-bottom:14px;
+/* ---------- sections ---------- */
+section{padding-top:56px}
+section > h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.5rem;color:#fff;
+  padding-bottom:8px;margin-bottom:6px;
   border-bottom:1px solid var(--line);
 }
-.badge{
-  flex:none;width:40px;height:40px;border-radius:8px;
-  display:grid;place-items:center;font-weight:700;font-size:1rem;
-  background:var(--bg2);color:var(--accent);
-  border:1px solid var(--line2);
+section > h2 em{color:var(--accent);font-style:italic}
+section > .lead{
+  color:var(--muted);font-size:.94rem;
+  margin:10px 0 28px;
 }
-.exo-head h3{font-size:1.02rem;line-height:1.35;color:#fff;font-weight:700}
-.exo-head .tag{font-size:0.82rem;color:var(--muted);margin-top:2px}
 
-.enonce{
-  font-size:0.93rem;color:#cdd7e5;
-  background:var(--bg2);border:1px solid var(--line);
-  border-radius:8px;padding:14px 16px;margin-bottom:18px;
+/* ---------- cours (style document) ---------- */
+.chapter{margin-bottom:36px}
+.chapter h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.2rem;color:#fff;margin-bottom:12px;
 }
-.enonce strong{color:var(--accent);font-weight:600}
+.chapter h3 .marker{
+  color:var(--accent);font-style:italic;margin-right:6px;
+}
+.chapter p{
+  font-size:1rem;color:#d6d0c1;
+  margin-bottom:12px;line-height:1.7;
+}
+.chapter p strong{color:var(--txt);font-weight:600}
+.chapter p .kw{color:var(--steel);font-style:italic}
+.chapter ul{
+  list-style:none;margin:10px 0 14px;padding:0;
+}
+.chapter ul li{
+  padding-left:22px;position:relative;
+  margin-bottom:6px;font-size:.96rem;color:#d6d0c1;
+}
+.chapter ul li::before{content:'—';position:absolute;left:2px;color:var(--accent)}
+.chapter ul li strong{color:var(--txt);font-weight:600}
+
+.formula{
+  margin:18px 0;padding:14px 18px;
+  border:1px dashed var(--line2);
+  border-radius:4px;background:var(--panel);
+  text-align:center;font-family:var(--mono);
+  font-size:1.08rem;color:var(--accent);
+}
+.formula .small{
+  display:block;font-family:var(--sans);
+  font-size:.8rem;color:var(--muted);
+  font-style:italic;margin-top:6px;
+}
+.formula .var{color:var(--txt);font-style:italic}
+
+.example{
+  margin:16px 0;
+  padding:14px 18px;
+  border-left:3px solid var(--accent);
+  background:rgba(232,184,122,0.06);
+  font-size:.93rem;color:#d6d0c1;
+}
+.example .tag{
+  font-family:var(--serif);font-style:italic;
+  color:var(--accent);font-size:.85rem;
+  display:block;margin-bottom:8px;
+}
+.example .line{
+  font-family:var(--mono);font-size:.88rem;
+  line-height:1.7;color:#d6d0c1;
+}
+.example .line .v{color:var(--accent);font-weight:600}
+.example .line .s{color:var(--steel)}
+
+/* ---------- schémas ---------- */
+.schema{
+  margin:24px 0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:20px 16px 14px;
+}
+.schema svg{
+  display:block;width:100%;height:auto;
+  max-width:560px;margin:0 auto;
+}
+.schema figcaption{
+  font-family:var(--serif);font-style:italic;
+  font-size:.85rem;color:var(--muted);
+  text-align:center;margin-top:14px;
+}
+.schema .label{
+  font-family:var(--serif);font-style:italic;
+  font-size:.78rem;color:var(--dim);
+  letter-spacing:.4px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+/* ---------- pièges ---------- */
+.piege{
+  margin:14px 0;padding:14px 18px;
+  border-left:3px solid var(--bad);
+  background:rgba(220,122,122,0.05);
+  font-size:.94rem;color:#d6d0c1;
+}
+.piege .title{
+  color:var(--bad);font-weight:600;
+  margin-bottom:6px;font-family:var(--serif);
+  font-style:italic;font-size:.98rem;
+}
+.piege p{margin-bottom:4px}
+.piege code{
+  font-family:var(--mono);background:var(--panel);
+  border:1px solid var(--line2);border-radius:3px;
+  padding:1px 6px;color:var(--accent);font-size:.88rem;
+}
+.piege.warn{border-left-color:var(--accent)}
+.piege.warn .title{color:var(--accent)}
+.piege.steel{border-left-color:var(--steel)}
+.piege.steel .title{color:var(--steel)}
+
+/* ---------- exercices (cartes) ---------- */
+.exo{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:24px;margin-bottom:22px;
+}
+.exo-head{
+  display:flex;align-items:baseline;gap:14px;
+  margin-bottom:8px;padding-bottom:10px;
+  border-bottom:1px solid var(--line2);
+}
+.exo-head .num{
+  font-family:var(--serif);font-style:italic;
+  color:var(--accent);font-size:1.5rem;
+}
+.exo-head h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.15rem;color:#fff;
+}
+.exo-head .tag{font-size:.85rem;color:var(--muted);margin-top:2px}
+.enonce{
+  font-size:.94rem;color:#d6d0c1;
+  margin:16px 0 20px;
+}
+.enonce strong{color:var(--txt);font-weight:600}
 .enonce ul{list-style:none;margin:10px 0 0;padding:0}
 .enonce ul li{
-  padding-left:22px;position:relative;margin-bottom:4px;font-size:0.9rem;
+  padding-left:20px;position:relative;
+  margin-bottom:4px;font-size:.92rem;
 }
-.enonce ul li::before{content:'•';position:absolute;left:6px;color:var(--cyan)}
+.enonce ul li::before{content:'—';position:absolute;left:2px;color:var(--steel)}
 
 .q{margin-bottom:16px}
 .q > label{
-  display:block;font-size:0.92rem;font-weight:600;
-  margin-bottom:8px;color:#dbe4f0;
+  display:block;font-size:.93rem;color:#d6d0c1;
+  margin-bottom:7px;font-weight:500;
+}
+.q > label .n{
+  display:inline-block;min-width:22px;
+  color:var(--accent);font-family:var(--serif);
+  font-style:italic;font-weight:400;
 }
 .input-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .input-row input{
   flex:1;min-width:150px;
-  background:#1a2434;border:1px solid var(--line2);
-  color:var(--txt);border-radius:8px;padding:10px 13px;
-  font-size:0.95rem;font-family:inherit;
-  transition:border-color .15s,box-shadow .15s;outline:none;
+  background:#2f3947;border:1px solid var(--line2);
+  color:var(--txt);border-radius:3px;
+  padding:9px 12px;font-size:.95rem;
+  font-family:var(--mono);outline:none;
+  transition:border-color .12s;
 }
-.input-row input:focus{
-  border-color:var(--cyan);
-  box-shadow:0 0 0 2px rgba(125,211,252,0.2);
-}
+.input-row input:focus{border-color:var(--accent)}
 .input-row input.good{border-color:var(--ok)}
 .input-row input.bad{border-color:var(--bad)}
-.unit{font-size:0.85rem;color:var(--dim);white-space:nowrap}
+.unit{font-size:.85rem;color:var(--dim)}
 .btn{
-  font-family:inherit;font-size:0.88rem;font-weight:600;
+  font-family:inherit;font-size:.88rem;
   border:1px solid var(--line2);background:var(--panel2);
-  color:var(--txt);border-radius:8px;padding:9px 16px;
-  cursor:pointer;transition:background .15s;
+  color:var(--txt);border-radius:3px;
+  padding:8px 14px;cursor:pointer;
+  transition:background .12s;
 }
-.btn:hover{background:#3e5674}
-.btn.primary{
-  background:var(--bg2);color:var(--accent);
-  border-color:var(--line2);
+.btn:hover{background:#56647a}
+.btn.solution-btn{
+  background:transparent;color:var(--steel);
+  border-color:var(--line2);font-size:.86rem;
 }
-.btn.primary:hover{background:#2d425c}
-.feedback{font-size:0.88rem;font-weight:600;margin-top:7px;display:none}
+.btn.solution-btn:hover{background:var(--panel2);color:var(--txt)}
+.feedback{
+  font-size:.87rem;margin-top:6px;display:none;
+  font-style:italic;
+}
 .feedback.show{display:block}
 .feedback.ok{color:var(--ok)}
 .feedback.bad{color:var(--bad)}
 
 .solution{
-  display:none;margin-top:16px;
-  border:1px solid var(--line2);
-  background:var(--bg2);
-  border-radius:10px;padding:16px 18px;
+  display:none;margin-top:18px;
+  border-top:1px solid var(--line2);
+  padding-top:16px;
 }
 .solution.show{display:block}
 .solution h4{
-  font-size:0.78rem;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--accent);margin-bottom:10px;font-weight:700;
+  font-family:var(--serif);font-style:italic;
+  font-size:.92rem;color:var(--accent);
+  margin-bottom:10px;font-weight:400;
 }
-.solution ol{margin-left:18px;font-size:0.9rem;color:#cdd7e5}
-.solution ol li{margin-bottom:9px}
+.solution ol{
+  margin-left:18px;font-size:.92rem;
+  color:#d6d0c1;line-height:1.7;
+}
+.solution ol li{margin-bottom:8px}
 .solution .res{
-  display:inline-block;margin-top:2px;
   font-family:var(--mono);color:var(--accent);
-  background:var(--panel);border:1px solid var(--line2);
-  border-radius:5px;padding:1px 8px;font-weight:600;
+  background:#2f3947;border:1px solid var(--line2);
+  border-radius:3px;padding:1px 7px;font-weight:600;
 }
-.exo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.exo-actions{margin-top:6px}
 
-/* ---------- QCM ---------- */
-.qcm-intro{
-  font-size:0.88rem;color:var(--warn);
-  background:rgba(251,191,36,0.08);
-  border:1px solid rgba(251,191,36,0.3);
-  border-radius:8px;padding:11px 14px;margin-bottom:18px;
+/* ---------- qcm ---------- */
+.qcm-note{
+  font-size:.88rem;color:var(--accent);
+  font-style:italic;font-family:var(--serif);
+  margin-bottom:20px;
 }
 .qcm-question{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:18px 20px;margin-bottom:14px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:20px 22px;margin-bottom:14px;
 }
 .qcm-prompt{
-  font-size:0.95rem;color:#dbe4f0;
+  font-size:.98rem;color:#d6d0c1;
   margin-bottom:14px;line-height:1.6;
 }
-.qcm-prompt .qcm-num{
-  display:inline-block;font-size:0.75rem;font-weight:700;
-  color:var(--accent);background:var(--bg2);
-  border:1px solid var(--line2);border-radius:4px;
-  padding:1px 8px;margin-right:8px;vertical-align:middle;
+.qcm-prompt strong{color:var(--txt);font-weight:600}
+.qcm-prompt .qnum{
+  font-family:var(--serif);font-style:italic;
+  color:var(--accent);margin-right:8px;
+  font-size:1.05rem;
 }
-.qcm-prompt strong{color:var(--accent);font-weight:600}
-.qcm-options{display:grid;gap:8px}
+.qcm-options{display:grid;gap:6px}
 .opt{
-  text-align:left;font-family:inherit;font-size:0.9rem;
-  background:var(--bg2);color:var(--txt);
-  border:1px solid var(--line2);border-radius:8px;
-  padding:11px 14px;cursor:pointer;
-  transition:background .15s,border-color .15s;
+  text-align:left;font-family:inherit;
+  font-size:.92rem;background:#2f3947;
+  color:var(--txt);border:1px solid var(--line2);
+  border-radius:3px;padding:10px 13px;
+  cursor:pointer;transition:background .12s,border-color .12s;
   display:flex;align-items:center;gap:10px;
 }
-.opt:hover{background:var(--panel2);border-color:var(--cyan)}
-.opt .key{
-  font-weight:700;color:var(--cyan);flex:none;
-  width:22px;height:22px;border-radius:4px;
-  display:grid;place-items:center;background:var(--panel);
-  font-size:0.78rem;
+.opt:hover{background:var(--panel2);border-color:var(--steel)}
+.opt .k{
+  color:var(--steel);flex:none;width:18px;
+  font-family:var(--serif);font-style:italic;
 }
-.opt.good{border-color:var(--ok);background:rgba(74,222,128,0.1)}
-.opt.good .key{background:var(--ok);color:#1e293b}
-.opt.bad{border-color:var(--bad);background:rgba(248,113,113,0.08)}
-.opt.bad .key{background:var(--bad);color:#fff}
-.opt:disabled{cursor:default}
+.opt.good{border-color:var(--ok);background:rgba(141,191,127,0.08)}
+.opt.good .k{color:var(--ok)}
+.opt.bad{border-color:var(--bad);background:rgba(220,122,122,0.06)}
+.opt.bad .k{color:var(--bad)}
+.opt:disabled{cursor:default;opacity:.85}
 .qcm-feedback{
-  font-size:0.9rem;margin-top:10px;display:none;
-  padding:11px 13px;border-radius:8px;
+  font-size:.9rem;margin-top:10px;display:none;
+  padding:10px 12px;border-radius:3px;
+  font-style:italic;
 }
 .qcm-feedback.show{display:block}
 .qcm-feedback.ok{
-  color:var(--ok);background:rgba(74,222,128,0.08);
-  border:1px solid rgba(74,222,128,0.3);
+  color:var(--ok);background:rgba(141,191,127,0.06);
+  border-left:2px solid var(--ok);
 }
 .qcm-feedback.bad{
-  color:var(--bad);background:rgba(248,113,113,0.07);
-  border:1px solid rgba(248,113,113,0.3);
+  color:var(--bad);background:rgba(220,122,122,0.05);
+  border-left:2px solid var(--bad);
 }
 .qcm-feedback .expl{
-  color:var(--muted);display:block;margin-top:6px;font-size:0.85rem;
+  display:block;margin-top:6px;
+  color:var(--muted);font-style:normal;
+  font-size:.87rem;
 }
 
-/* ---------- SIMULATEUR ---------- */
+/* ---------- simulateur ---------- */
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:22px;
+}
 .sim-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:12px;margin-bottom:14px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px;margin-bottom:18px;
 }
 .sim-field label{
-  display:block;font-size:0.8rem;color:var(--muted);
-  text-transform:uppercase;letter-spacing:0.6px;
-  margin-bottom:5px;font-weight:600;
+  display:block;font-size:.82rem;
+  color:var(--muted);margin-bottom:5px;
 }
 .sim-field input{
-  width:100%;background:#1a2434;border:1px solid var(--line2);
-  color:var(--txt);border-radius:8px;padding:10px 12px;
-  font-family:inherit;font-size:0.95rem;outline:none;
+  width:100%;background:#2f3947;
+  border:1px solid var(--line2);color:var(--txt);
+  border-radius:3px;padding:9px 12px;
+  font-family:var(--mono);font-size:.92rem;outline:none;
 }
-.sim-field input:focus{border-color:var(--cyan)}
+.sim-field input:focus{border-color:var(--accent)}
 .sim-out{
-  background:var(--bg2);border:1px solid var(--line2);
-  border-radius:10px;padding:16px 18px;margin-top:6px;
+  background:#2f3947;border:1px solid var(--line2);
+  border-radius:3px;padding:16px 18px;
 }
 .sim-out .step{
-  font-size:0.9rem;color:#cdd7e5;
-  margin-bottom:8px;line-height:1.6;
+  font-size:.9rem;color:#d6d0c1;
+  margin-bottom:7px;line-height:1.6;
 }
 .sim-out .step .n{
-  color:var(--dim);font-weight:700;margin-right:8px;
-  font-family:var(--mono);font-size:0.82rem;
+  color:var(--dim);font-weight:600;
+  margin-right:8px;font-family:var(--mono);
+  font-size:.82rem;
 }
-.sim-out .step .r{color:var(--accent);font-weight:700}
-.sim-out .step .o{color:var(--cyan)}
+.sim-out .step .r{color:var(--accent);font-weight:600}
+.sim-out .step .o{color:var(--steel)}
 .sim-out .final{
-  border-top:1px solid var(--line2);margin-top:14px;padding-top:14px;
-  font-size:1rem;color:var(--accent);font-weight:700;
+  border-top:1px solid var(--line2);
+  margin-top:14px;padding-top:12px;
+  font-size:1rem;color:var(--accent);
+  font-weight:600;font-family:var(--serif);
+  font-style:italic;
 }
 
-/* ---------- CALCULATEUR ---------- */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.calc-grid input,.calc-grid select{
-  width:100%;background:#1a2434;border:1px solid var(--line2);
-  color:var(--txt);border-radius:8px;padding:10px 12px;
-  font-family:inherit;font-size:0.95rem;outline:none;
+/* ---------- convertisseur ---------- */
+.conv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.conv-grid input,.conv-grid select{
+  width:100%;background:#2f3947;
+  border:1px solid var(--line2);color:var(--txt);
+  border-radius:3px;padding:9px 12px;
+  font-family:var(--mono);font-size:.92rem;outline:none;
 }
-.calc-grid input:focus,.calc-grid select:focus{border-color:var(--cyan)}
-.calc-out{
-  margin-top:14px;display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;
+.conv-grid input:focus,.conv-grid select:focus{border-color:var(--accent)}
+.conv-out{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:8px;
 }
-.calc-out div{
-  background:var(--bg2);border:1px solid var(--line2);
-  border-radius:8px;padding:10px 12px;
-  font-size:0.92rem;text-align:center;color:var(--accent);
-  font-weight:600;
+.conv-out div{
+  background:#2f3947;border:1px solid var(--line2);
+  border-radius:3px;padding:9px 12px;
+  font-family:var(--mono);font-size:.9rem;
+  text-align:center;color:var(--accent);
 }
-.calc-out span{
-  display:block;font-size:0.68rem;color:var(--muted);
-  letter-spacing:0.6px;text-transform:uppercase;
-  margin-bottom:3px;font-weight:600;
-}
-.card-panel{
-  background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:18px;
+.conv-out span{
+  display:block;font-size:.7rem;color:var(--muted);
+  font-family:var(--sans);text-transform:uppercase;
+  letter-spacing:.5px;margin-bottom:2px;
 }
 
 footer{
-  text-align:center;color:var(--dim);font-size:0.82rem;
-  padding:40px 20px 0;margin-top:50px;
-  border-top:1px solid var(--line);
+  text-align:center;color:var(--dim);
+  font-size:.85rem;padding:50px 24px 0;
+  margin-top:60px;border-top:1px solid var(--line);
+  font-family:var(--serif);font-style:italic;
 }
 
 @media(max-width:560px){
-  .calc-grid{grid-template-columns:1fr}
-  .bar{padding:10px 14px}
-  nav a{padding:5px 9px;font-size:0.82rem}
-  .exo,.qcm-question,.lesson{padding:16px}
+  main{padding:0 16px}
+  .bar{padding:12px 16px;gap:10px}
+  nav a{padding:5px 8px;font-size:.85rem}
+  .conv-grid{grid-template-columns:1fr}
+  .exo,.qcm-question,.panel,.chapter,.schema{padding:16px}
   body{font-size:15px}
+  .intro h1{font-size:1.8rem}
 }
 </style>
 </head>
@@ -448,290 +470,377 @@ footer{
 
 <header>
   <div class="bar">
-    <div class="logo"><span class="dot"></span> SNT · Révisions</div>
+    <div class="brand">SNT · <em>fiche de révision</em></div>
     <nav>
       <a href="#cours">cours</a>
       <a href="#exos">exercices</a>
       <a href="#qcm">qcm</a>
       <a href="#sim">simulateur</a>
+      <a href="#conv">convertisseur</a>
     </nav>
-    <button class="reroll" id="rerollBtn">🎲 nouvelles valeurs</button>
-    <div class="score" id="score">0 / 15</div>
+    <div class="score">réussi : <b id="score">0</b> / 15</div>
+    <button class="reroll" id="rerollBtn">nouvelles valeurs</button>
   </div>
 </header>
 
 <main>
 
-  <div class="hero">
-    <div class="kicker">Internet &amp; Le Web · Transmission de données</div>
-    <h1>Débit · Paquets · <span class="hl">Volume réel</span></h1>
-    <p>Le cours complet, les exercices corrigés et un QCM pour vérifier tes acquis.
-       Les valeurs changent à chaque rechargement.</p>
-    <a href="#cours" class="cta">Lire le cours ↓</a>
+  <div class="intro">
+    <div class="eyebrow">Internet &amp; le Web · transmission de données</div>
+    <h1>Débit, paquets et volume réel</h1>
+    <p>Toute la leçon, les schémas pour ceux qui préfèrent voir, trois exercices corrigés
+       et un QCM pour vérifier ce qui reste.</p>
+    <a href="#cours" class="cta">Commencer la lecture</a>
+    <p class="small">Convention SNT : multiples décimaux (1 Mo = 10<sup>6</sup> octets).</p>
   </div>
 
-  <!-- ================= COURS ================= -->
+  <!-- =================== COURS =================== -->
   <section id="cours">
-    <h2><span class="num">01</span> Le cours</h2>
-    <p class="sub">L'essentiel de la fiche, avec un fil rouge : un fichier de 1,5 Mo.</p>
+    <h2>Le cours</h2>
+    <p class="lead">Suivons le même fichier du début à la fin : 1,5 Mo, découpé en paquets de 1 460 octets, avec un en-tête de 40 octets, envoyé en 4 secondes.</p>
 
-    <div class="filrouge">
-      <div class="icon">🧵</div>
-      <div class="txt">
-        <strong>Fil rouge de la fiche :</strong> un fichier de <strong>1,5 Mo</strong> (= 1 500 000 octets),
-        charge utile de <strong>1 460 octets</strong> par paquet, en-tête de <strong>40 octets</strong>,
-        transfert en <strong>4 secondes</strong>.
-        <span class="dim">Chaque partie ci-dessous déroule une étape de ce même exemple.</span>
-      </div>
-    </div>
+    <!-- 1. Découpage -->
+    <div class="chapter">
+      <h3><span class="marker">§1.</span> Découpage en paquets</h3>
+      <p>Sur Internet, un fichier n'est <strong>jamais envoyé d'un seul bloc</strong>. Il est découpé en <span class="kw">paquets</span>, chacun transportant une portion des données. Cette portion s'appelle la <strong>charge utile</strong>.</p>
 
-    <div class="lesson">
-      <h3><span class="tag">1.1</span> Le découpage en paquets</h3>
-      <p>Sur Internet, les données ne sont <strong>jamais envoyées en un seul bloc</strong> :
-         elles sont découpées en <strong>paquets</strong>.</p>
       <ul>
-        <li><strong>Charge utile</strong> : la quantité maximale de données réelles du fichier
-            contenue dans un paquet (souvent <strong>1 460 octets</strong> sur Ethernet).</li>
-        <li><strong>Taille totale du paquet</strong> : données + en-têtes (souvent <strong>1 500 octets</strong>).</li>
+        <li><strong>Charge utile</strong> : maximum de données réelles dans un paquet — souvent 1 460 octets sur Ethernet.</li>
+        <li><strong>Taille totale du paquet</strong> : charge utile + en-têtes — souvent 1 500 octets.</li>
       </ul>
 
-      <div class="formula-card">
-        <div class="lbl">nombre de paquets</div>
-        <div class="f"><span class="var">N</span> <span class="op">=</span> <span class="var">⌈V ÷ C⌉</span></div>
-        <div class="note">V = volume du fichier · C = charge utile · on arrondit toujours au-dessus</div>
+      <figure class="schema">
+        <div class="label">Schéma 1</div>
+        <svg viewBox="0 0 540 260" role="img" aria-label="Découpage d'un fichier en paquets">
+          <!-- Fichier -->
+          <rect x="150" y="20" width="240" height="60" fill="none" stroke="#9db2c9" stroke-width="1.5"/>
+          <text x="270" y="48" text-anchor="middle" fill="#ebe6da" font-size="14" font-family="Georgia,serif" font-style="italic">Fichier</text>
+          <text x="270" y="67" text-anchor="middle" fill="#a3aec0" font-size="12">1,5 Mo · 1 500 000 octets</text>
+
+          <!-- Flèche -->
+          <line x1="270" y1="88" x2="270" y2="122" stroke="#e8b87a" stroke-width="1.8" stroke-linecap="round"/>
+          <polygon points="270,130 264,118 276,118" fill="#e8b87a"/>
+          <text x="290" y="112" fill="#e8b87a" font-size="11" font-family="Georgia,serif" font-style="italic">découpage</text>
+
+          <!-- Paquets (petites variations pour un côté dessiné) -->
+          <g fill="#4c596b" stroke="#9db2c9" stroke-width="1.2">
+            <rect x="55" y="152" width="58" height="46" rx="1"/>
+            <rect x="125" y="151" width="58" height="47" rx="1"/>
+            <rect x="195" y="152" width="58" height="46" rx="1"/>
+            <rect x="265" y="151" width="58" height="47" rx="1"/>
+            <rect x="335" y="152" width="58" height="46" rx="1"/>
+          </g>
+          <text x="410" y="180" fill="#a3aec0" font-size="18" font-family="Georgia,serif">…</text>
+          <rect x="435" y="151" width="58" height="47" rx="1" fill="#4c596b" stroke="#9db2c9" stroke-width="1.2"/>
+
+          <!-- Label -->
+          <text x="270" y="232" text-anchor="middle" fill="#ebe6da" font-size="13" font-family="Georgia,serif" font-style="italic">N = 1 028 paquets</text>
+        </svg>
+        <figcaption>Un fichier de 1,5 Mo, découpé en 1 028 paquets de 1 460 octets.</figcaption>
+      </figure>
+
+      <div class="formula">
+        N = ⌈<span class="var">V</span> ÷ <span class="var">C</span>⌉
+        <span class="small">V = volume du fichier · C = charge utile · on arrondit toujours au-dessus</span>
       </div>
 
-      <p>Si la division ne tombe pas juste, on <strong>arrondit systématiquement à l'entier
-         supérieur</strong> : le dernier paquet contient le reste des données.</p>
+      <p>Si la division ne tombe pas juste, on <strong>arrondit à l'entier supérieur</strong> : le dernier paquet contient le reste des données.</p>
 
       <div class="example">
-        <span class="ex-tag">Exemple (fil rouge)</span>
-        <div class="step">V = <span class="o">1,5 Mo</span> = <span class="o">1 500 000 octets</span></div>
-        <div class="step">N = ⌈1 500 000 ÷ 1 460⌉ = ⌈<span class="o">1027,4</span>⌉</div>
-        <div class="concl">→ N = 1 028 paquets</div>
+        <span class="tag">Exemple — fil rouge</span>
+        <div class="line">V = <span class="s">1,5 Mo</span> = <span class="s">1 500 000 octets</span></div>
+        <div class="line">N = ⌈1 500 000 ÷ 1 460⌉ = ⌈1 027,4⌉ = <span class="v">1 028 paquets</span></div>
       </div>
     </div>
 
-    <div class="lesson">
-      <h3><span class="tag">1.2</span> Le volume réel transféré (en-têtes + données)</h3>
-      <p>Chaque paquet comprend la <strong>charge utile</strong> plus des <strong>en-têtes</strong>
-         (IP, TCP…) qui contiennent les adresses de provenance, de destination et le numéro du paquet.</p>
+    <!-- 2. Volume réel -->
+    <div class="chapter">
+      <h3><span class="marker">§2.</span> Volume réellement transféré</h3>
+      <p>Chaque paquet contient la charge utile, mais aussi un <strong>en-tête</strong> qui transporte les adresses de provenance, de destination et le numéro du paquet. Cet en-tête pèse sur le volume total transmis.</p>
 
-      <div class="formula-card">
-        <div class="lbl">taille totale d'un paquet</div>
-        <div class="f"><span class="var">P</span> <span class="op">=</span> <span class="var">C + E</span></div>
-        <div class="note">C = charge utile · E = taille de l'en-tête</div>
+      <figure class="schema">
+        <div class="label">Schéma 2</div>
+        <svg viewBox="0 0 540 190" role="img" aria-label="Structure d'un paquet : en-tête et charge utile">
+          <!-- En-tête -->
+          <rect x="60" y="40" width="110" height="58" fill="#4c596b" stroke="#9db2c9" stroke-width="1.5"/>
+          <text x="115" y="66" text-anchor="middle" fill="#ebe6da" font-size="12" font-family="Georgia,serif" font-style="italic">En-tête</text>
+          <text x="115" y="84" text-anchor="middle" fill="#a3aec0" font-size="11">40 octets</text>
+
+          <!-- Charge utile -->
+          <rect x="170" y="40" width="310" height="58" fill="#2f3947" stroke="#9db2c9" stroke-width="1.5"/>
+          <text x="325" y="66" text-anchor="middle" fill="#ebe6da" font-size="12" font-family="Georgia,serif" font-style="italic">Charge utile</text>
+          <text x="325" y="84" text-anchor="middle" fill="#a3aec0" font-size="11">1 460 octets</text>
+
+          <!-- Crochet total -->
+          <path d="M 60 118 L 60 134 L 480 134 L 480 118" stroke="#e8b87a" stroke-width="1.5" fill="none"/>
+          <text x="270" y="158" text-anchor="middle" fill="#e8b87a" font-size="13" font-family="Georgia,serif" font-style="italic">Paquet complet : 1 500 octets</text>
+        </svg>
+        <figcaption>Un paquet complet = charge utile + en-tête.</figcaption>
+      </figure>
+
+      <div class="formula">
+        <span class="var">P</span> = <span class="var">C</span> + <span class="var">E</span>
+        <span class="small">C = charge utile · E = taille de l'en-tête</span>
       </div>
 
-      <div class="formula-card">
-        <div class="lbl">volume réel à transférer</div>
-        <div class="f"><span class="var">Vréel</span> <span class="op">=</span> <span class="var">N × (C + E)</span></div>
-        <div class="note">le volume réel est toujours plus grand que la taille du fichier</div>
+      <div class="formula">
+        <span class="var">V<sub>réel</sub></span> = <span class="var">N</span> × (<span class="var">C</span> + <span class="var">E</span>)
+        <span class="small">le volume réel dépasse toujours la taille du fichier</span>
       </div>
+
+      <p>La différence entre le volume réel et la taille du fichier s'appelle le <strong>surcoût réseau</strong> (ou <em>overhead</em>). Il correspond à tout ce que transportent les en-têtes.</p>
+
+      <figure class="schema">
+        <div class="label">Schéma 3</div>
+        <svg viewBox="0 0 540 210" role="img" aria-label="Surcoût réseau entre données utiles et volume réel">
+          <!-- Barre 1 : données utiles -->
+          <rect x="70" y="42" width="300" height="38" fill="#4c596b" stroke="#9db2c9" stroke-width="1.2"/>
+          <text x="220" y="66" text-anchor="middle" fill="#ebe6da" font-size="12">Données utiles</text>
+          <text x="385" y="66" fill="#a3aec0" font-size="12" font-family="Georgia,serif" font-style="italic">1,5 Mo</text>
+
+          <!-- Barre 2 : volume réel -->
+          <rect x="70" y="104" width="308" height="38" fill="#2f3947" stroke="#9db2c9" stroke-width="1.2"/>
+          <rect x="378" y="104" width="8" height="38" fill="#e8b87a"/>
+          <text x="220" y="128" text-anchor="middle" fill="#ebe6da" font-size="12">Volume réel</text>
+          <text x="398" y="128" fill="#a3aec0" font-size="12" font-family="Georgia,serif" font-style="italic">1,542 Mo</text>
+
+          <!-- Annotation surcoût -->
+          <line x1="382" y1="148" x2="382" y2="166" stroke="#e8b87a" stroke-width="1.2"/>
+          <text x="382" y="182" text-anchor="middle" fill="#e8b87a" font-size="11" font-family="Georgia,serif" font-style="italic">surcoût</text>
+          <text x="382" y="196" text-anchor="middle" fill="#e8b87a" font-size="11">42 ko</text>
+        </svg>
+        <figcaption>Les en-têtes ajoutent un surcoût de 42 ko au volume transmis.</figcaption>
+      </figure>
 
       <div class="example">
-        <span class="ex-tag">Exemple (suite)</span>
-        <div class="step">en-tête E = <span class="o">40 octets</span> (TCP + IP)</div>
-        <div class="step">paquet complet = 1 460 + 40 = <span class="o">1 500 octets</span></div>
-        <div class="step">Vréel = 1 028 × 1 500 = <span class="r">1 542 000 octets</span></div>
-        <div class="concl">→ 1,542 Mo — surcoût réseau (overhead) = 42 000 octets = 42 ko</div>
+        <span class="tag">Exemple — suite</span>
+        <div class="line">en-tête E = <span class="s">40 octets</span> (TCP + IP)</div>
+        <div class="line">paquet complet = 1 460 + 40 = <span class="s">1 500 octets</span></div>
+        <div class="line">V<sub>réel</sub> = 1 028 × 1 500 = <span class="v">1 542 000 octets</span></div>
+        <div class="line">surcoût = 1 542 000 − 1 500 000 = <span class="v">42 000 octets</span> ≈ 42 ko</div>
       </div>
     </div>
 
-    <div class="lesson">
-      <h3><span class="tag">1.3</span> La formule du débit (D = V / T)</h3>
-      <p>Le <strong>débit</strong> D mesure la quantité d'informations transmises par unité de temps.
-         Trois formes à connaître :</p>
+    <!-- 3. Débit -->
+    <div class="chapter">
+      <h3><span class="marker">§3.</span> Débit, volume et temps</h3>
+      <p>Le <strong>débit</strong> mesure la quantité d'informations transmises par unité de temps. Trois formes d'une même relation :</p>
 
-      <div class="formula-row">
-        <div class="fc"><div class="who">débit</div><div class="expr">D = V ÷ T</div></div>
-        <div class="fc"><div class="who">volume</div><div class="expr">V = D × T</div></div>
-        <div class="fc"><div class="who">temps</div><div class="expr">T = V ÷ D</div></div>
+      <figure class="schema">
+        <div class="label">Schéma 4</div>
+        <svg viewBox="0 0 400 220" role="img" aria-label="Triangle de la relation D = V / T">
+          <!-- Triangle -->
+          <polygon points="200,30 350,180 50,180" fill="#4c596b" stroke="#9db2c9" stroke-width="1.5"/>
+
+          <!-- Séparations -->
+          <line x1="125" y1="105" x2="275" y2="105" stroke="#9db2c9" stroke-width="1.5"/>
+          <line x1="200" y1="105" x2="200" y2="180" stroke="#9db2c9" stroke-width="1.5"/>
+
+          <!-- Lettres -->
+          <text x="200" y="80" text-anchor="middle" fill="#ebe6da" font-size="22" font-family="Georgia,serif" font-style="italic">V</text>
+          <text x="162" y="150" text-anchor="middle" fill="#e8b87a" font-size="22" font-family="Georgia,serif" font-style="italic">D</text>
+          <text x="237" y="150" text-anchor="middle" fill="#e8b87a" font-size="22" font-family="Georgia,serif" font-style="italic">T</text>
+
+          <!-- Annotations -->
+          <text x="200" y="206" text-anchor="middle" fill="#a3aec0" font-size="11" font-family="Georgia,serif" font-style="italic">D = V ÷ T &nbsp;·&nbsp; V = D × T &nbsp;·&nbsp; T = V ÷ D</text>
+        </svg>
+        <figcaption>Cache la valeur à trouver, la relation apparaît.</figcaption>
+      </figure>
+
+      <div class="formula">
+        <span class="var">D</span> = <span class="var">V</span> ÷ <span class="var">T</span>
+        <span class="small">D en bit/s · V en bits · T en secondes</span>
       </div>
 
-      <p><strong>Unités :</strong> D en bit/s · V en bits · T en secondes.
-         Si l'on veut un débit en <strong>Mbit/s</strong>, il faut diviser un volume en
-         <strong>Mbit</strong> (et non en Mo) par un temps en <strong>secondes</strong>.</p>
+      <p>Pour un débit en <strong>Mbit/s</strong>, on divise un volume en <strong>Mbit</strong> (et non en Mo) par un temps en <strong>secondes</strong>.</p>
 
       <div class="example">
-        <span class="ex-tag">Exemple (suite)</span>
-        <div class="step">V = 1,542 Mo → × 8 = <span class="o">12,336 Mbit</span></div>
-        <div class="step">D = 12,336 ÷ 4 = <span class="r">3,084 Mbit/s</span></div>
-        <div class="concl">→ débit de la liaison ≈ 3,084 Mbit/s</div>
+        <span class="tag">Exemple — fin du fil rouge</span>
+        <div class="line">V = 1,542 Mo → × 8 = <span class="s">12,336 Mbit</span></div>
+        <div class="line">D = 12,336 ÷ 4 = <span class="v">3,084 Mbit/s</span></div>
       </div>
     </div>
 
-    <div class="lesson">
-      <h3><span class="tag">1.4</span> Les 3 erreurs classiques</h3>
+    <!-- 4. Pièges -->
+    <div class="chapter">
+      <h3><span class="marker">§4.</span> Trois pièges à éviter</h3>
 
-      <div class="warn-card">
-        <div class="wtitle">Erreur n°1 — octets vs bits</div>
+      <div class="piege">
+        <div class="title">1. Octets et bits</div>
         <p><code>1 octet = 8 bits</code> (en anglais : 1 Byte = 8 bits).</p>
-        <p>Les <strong>tailles de fichiers</strong> sont en octets ; les <strong>débits</strong> en bits/s.</p>
-        <p>Octet → bit : <strong>× 8</strong> &nbsp;·&nbsp; bit → octet : <strong>÷ 8</strong>
-           &nbsp;·&nbsp; 1 Mo = 8 Mbit &nbsp;·&nbsp; 800 Mbit/s = 100 Mo/s.</p>
+        <p>Les tailles de fichiers sont en <em>octets</em>, les débits en <em>bits par seconde</em>. Pour passer de l'un à l'autre : × 8 dans un sens, ÷ 8 dans l'autre.</p>
+        <p>1 Mo = 8 Mbit &nbsp;·&nbsp; 800 Mbit/s = 100 Mo/s.</p>
       </div>
 
-      <div class="warn-card" style="border-left-color:var(--warn);background:rgba(251,191,36,0.06)">
-        <div class="wtitle" style="color:var(--warn)">Erreur n°2 — les multiples</div>
-        <p>En SNT (normes SI) : <code>k = 10³</code> · <code>M = 10⁶</code> · <code>G = 10⁹</code>.</p>
-        <p>1 ko = 1 000 o · 1 Mo = 1 000 000 o · 1 Go = 1 000 000 000 o.</p>
+      <div class="piege warn">
+        <div class="title">2. Multiples kilo, méga, giga</div>
+        <p>En SNT, on suit les normes SI : <code>k = 10³</code> · <code>M = 10⁶</code> · <code>G = 10⁹</code>.</p>
+        <p>1 ko = 1 000 o &nbsp;·&nbsp; 1 Mo = 1 000 000 o &nbsp;·&nbsp; 1 Go = 1 000 000 000 o.</p>
       </div>
 
-      <div class="warn-card" style="border-left-color:var(--cyan);background:rgba(125,211,252,0.06)">
-        <div class="wtitle" style="color:var(--cyan)">Erreur n°3 — les unités de temps</div>
+      <div class="piege steel">
+        <div class="title">3. Unités de temps</div>
         <p>Le temps T s'exprime <strong>toujours en secondes</strong> dans la formule.</p>
-        <p>Conversion : <code>145 s = 2 min 25 s</code> (car 145 = 2×60 + 25).</p>
+        <p>Pour convertir : <code>145 s = 2 min 25 s</code> (car 145 = 2×60 + 25).</p>
       </div>
     </div>
   </section>
 
-  <!-- ================= EXOS ================= -->
+  <!-- =================== EXERCICES =================== -->
   <section id="exos">
-    <h2><span class="num">02</span> Les 3 exercices</h2>
-    <p class="sub">Réponse acceptée avec ou sans unité, virgule ou point, majuscule ou minuscule.</p>
+    <h2>Trois exercices</h2>
+    <p class="lead">Les valeurs changent à chaque rechargement. Réponse acceptée avec ou sans unité, virgule ou point.</p>
 
     <article class="exo" id="exo1">
       <div class="exo-head">
-        <div class="badge">1</div>
-        <div><h3>Partage d'une photo HD</h3><div class="tag">calcul du débit D · TCP/IP</div></div>
+        <div class="num">I.</div>
+        <div>
+          <h3>Partage d'une photo HD</h3>
+          <div class="tag">calcul du débit · TCP/IP</div>
+        </div>
       </div>
       <div class="enonce"></div>
 
       <div class="q">
-        <label>Nombre de paquets N</label>
+        <label><span class="n">1.</span> Nombre de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 2877">
+          <input type="text" inputmode="decimal" placeholder="ex : 2877">
           <span class="unit">paquets</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Volume réel V<sub>réel</sub> en octets</label>
+        <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en octets</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 4315500">
+          <input type="text" inputmode="decimal" placeholder="ex : 4315500">
           <span class="unit">octets</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Ce volume en Mbits</label>
+        <label><span class="n">3.</span> Ce volume en Mbits</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 34,52">
+          <input type="text" inputmode="decimal" placeholder="ex : 34,52">
           <span class="unit">Mbits</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Débit D en Mbit/s</label>
+        <label><span class="n">4.</span> Débit D en Mbit/s</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 12,33">
+          <input type="text" inputmode="decimal" placeholder="ex : 12,33">
           <span class="unit">Mbit/s</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol1">Voir la correction</button></div>
+      <div class="exo-actions"><button class="btn solution-btn" data-sol="sol1">Voir la correction</button></div>
       <div class="solution" id="sol1"></div>
     </article>
 
     <article class="exo" id="exo2">
       <div class="exo-head">
-        <div class="badge">2</div>
-        <div><h3>Mise à jour d'un logiciel</h3><div class="tag">calcul du temps T · IPv6 · ADSL</div></div>
+        <div class="num">II.</div>
+        <div>
+          <h3>Mise à jour d'un logiciel</h3>
+          <div class="tag">calcul du temps · IPv6 · ADSL</div>
+        </div>
       </div>
       <div class="enonce"></div>
 
       <div class="q">
-        <label>Nombre de paquets N</label>
+        <label><span class="n">1.</span> Nombre de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 59860">
+          <input type="text" inputmode="decimal" placeholder="ex : 59860">
           <span class="unit">paquets</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Volume réel V<sub>réel</sub> en bits</label>
+        <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en bits</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 708742400">
+          <input type="text" inputmode="decimal" placeholder="ex : 708742400">
           <span class="unit">bits</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Durée T en secondes</label>
+        <label><span class="n">3.</span> Durée T en secondes</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 59,06">
+          <input type="text" inputmode="decimal" placeholder="ex : 59,06">
           <span class="unit">secondes</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol2">Voir la correction</button></div>
+      <div class="exo-actions"><button class="btn solution-btn" data-sol="sol2">Voir la correction</button></div>
       <div class="solution" id="sol2"></div>
     </article>
 
     <article class="exo" id="exo3">
       <div class="exo-head">
-        <div class="badge">3</div>
-        <div><h3>Visioconférence en direct</h3><div class="tag">taille max transférable · UDP/IP</div></div>
+        <div class="num">III.</div>
+        <div>
+          <h3>Visioconférence en direct</h3>
+          <div class="tag">taille maximale transférable · UDP/IP</div>
+        </div>
       </div>
       <div class="enonce"></div>
 
       <div class="q">
-        <label>Volume max V<sub>max</sub> en octets</label>
+        <label><span class="n">1.</span> Volume maximal V<sub>max</sub> en octets</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 18750000">
+          <input type="text" inputmode="decimal" placeholder="ex : 18750000">
           <span class="unit">octets</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Nombre max de paquets N</label>
+        <label><span class="n">2.</span> Nombre maximal de paquets N</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 12500">
+          <input type="text" inputmode="decimal" placeholder="ex : 12500">
           <span class="unit">paquets</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
       <div class="q">
-        <label>Taille max utile en Mo</label>
+        <label><span class="n">3.</span> Taille maximale utile en Mo</label>
         <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex: 18,4">
+          <input type="text" inputmode="decimal" placeholder="ex : 18,4">
           <span class="unit">Mo</span>
           <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol3">Voir la correction</button></div>
+      <div class="exo-actions"><button class="btn solution-btn" data-sol="sol3">Voir la correction</button></div>
       <div class="solution" id="sol3"></div>
     </article>
   </section>
 
-  <!-- ================= QCM ================= -->
+  <!-- =================== QCM =================== -->
   <section id="qcm">
-    <h2><span class="num">03</span> QCM difficile</h2>
-    <p class="sub">5 questions pièges. Choisis la bonne réponse.</p>
-    <div class="qcm-intro">Valeurs aléatoires à chaque chargement — attention aux conversions et aux arrondis.</div>
+    <h2>QCM</h2>
+    <p class="lead">Cinq questions pièges, tirées au hasard à chaque rechargement.</p>
+    <p class="qcm-note">Attention aux conversions et aux arrondis.</p>
     <div id="qcmList"></div>
   </section>
 
-  <!-- ================= SIMULATEUR ================= -->
+  <!-- =================== SIMULATEUR =================== -->
   <section id="sim">
-    <h2><span class="num">04</span> Simulateur complet</h2>
-    <p class="sub">Entre tes valeurs : le site déroule tout le calcul, étape par étape.</p>
+    <h2>Simulateur</h2>
+    <p class="lead">Entre tes propres valeurs, le calcul est déroulé étape par étape.</p>
 
-    <div class="card-panel">
+    <div class="panel">
       <div class="sim-grid">
         <div class="sim-field"><label>Taille fichier (Mo)</label><input type="number" id="simTaille" value="1.5" step="any"></div>
         <div class="sim-field"><label>Charge utile (octets)</label><input type="number" id="simC" value="1460" step="any"></div>
@@ -742,12 +851,12 @@ footer{
     </div>
   </section>
 
-  <!-- ================= CALCULATEUR ================= -->
-  <section id="calc">
-    <h2><span class="num">05</span> Convertisseur d'unités</h2>
-    <p class="sub">Octets ↔ bits et multiples SI.</p>
-    <div class="card-panel">
-      <div class="calc-grid">
+  <!-- =================== CONVERTISSEUR =================== -->
+  <section id="conv">
+    <h2>Convertisseur d'unités</h2>
+    <p class="lead">Octets ↔ bits et multiples SI.</p>
+    <div class="panel">
+      <div class="conv-grid">
         <input type="number" id="calcVal" value="4.2" step="any" placeholder="valeur">
         <select id="calcUnit">
           <option value="1">octets (o)</option>
@@ -760,24 +869,23 @@ footer{
           <option value="125000000">gigabits (Gbit)</option>
         </select>
       </div>
-      <div class="calc-out" id="calcOut"></div>
+      <div class="conv-out" id="calcOut"></div>
     </div>
   </section>
 
   <footer>
-    SNT 2de · Internet &amp; Le Web · multiples décimaux (1 Mo = 10⁶ octets)
+    SNT · 2de · Internet &amp; le Web — multiples décimaux (1 Mo = 10⁶ octets)
   </footer>
 </main>
 
 <script>
-/* ============ UTILS ============ */
+/* ========== utils ========== */
 const nf = new Intl.NumberFormat('fr-FR');
 function fmt(n, dec){ return n.toLocaleString('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
 function rndStep(min,max,step){ const n=Math.round((max-min)/step); return +(min+Math.floor(Math.random()*(n+1))*step).toFixed(6); }
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
 function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
-/* parsing tolérant : "1 234,56", "1234.56", "12,3 Mbit/s"… */
 function parseNum(raw){
   if(raw==null) return NaN;
   let s = String(raw).trim();
@@ -799,14 +907,14 @@ function parseNum(raw){
   return isNaN(n) ? NaN : n;
 }
 
-/* ============ SCORE ============ */
+/* ========== score ========== */
 const solved = new Set();
 function updateScore(){
   const total = document.querySelectorAll('.q').length + document.querySelectorAll('.qcm-question').length;
   document.getElementById('score').textContent = solved.size + ' / ' + total;
 }
 
-/* ============ EXOS ============ */
+/* ========== exercices ========== */
 function attachExerciseHandlers(){
   document.querySelectorAll('.q').forEach(q => {
     const input = q.querySelector('input'), btn = q.querySelector('button'), fb = q.querySelector('.feedback');
@@ -817,18 +925,18 @@ function attachExerciseHandlers(){
       const val = parseNum(input.value);
       if(isNaN(val)){
         input.classList.remove('good'); input.classList.add('bad');
-        fb.className = 'feedback show bad'; fb.textContent = '✗ Entre un nombre valide.';
+        fb.className = 'feedback show bad'; fb.textContent = 'Entre un nombre valide.';
         solved.delete(q); updateScore(); return;
       }
       if(Math.abs(val-answer) <= tol){
         input.classList.remove('bad'); input.classList.add('good');
-        fb.className = 'feedback show ok'; fb.textContent = '✓ Bonne réponse.';
+        fb.className = 'feedback show ok'; fb.textContent = 'Bonne réponse.';
         solved.add(q);
       } else {
         input.classList.remove('good'); input.classList.add('bad');
         fb.className = 'feedback show bad';
-        fb.textContent = val<answer ? '✗ Trop petit — vérifie l\'arrondi au-dessus et les conversions.'
-                                    : '✗ Trop grand — vérifie l\'arrondi au-dessus et les conversions.';
+        fb.textContent = val<answer ? 'Trop petit — vérifie l\'arrondi au-dessus et les conversions.'
+                                    : 'Trop grand — vérifie l\'arrondi au-dessus et les conversions.';
         solved.delete(q);
       }
       updateScore();
@@ -850,7 +958,7 @@ function attachSolutionHandlers(){
   });
 }
 
-/* ============ EXO 1 ============ */
+/* ========== exo 1 ========== */
 function renderExo1(){
   const tailleMo = rndStep(2.5,8.5,0.1);
   const C = Math.round(rndStep(1200,1500,10));
@@ -866,11 +974,11 @@ function renderExo1(){
 
   const exo = document.getElementById('exo1');
   exo.querySelector('.enonce').innerHTML = `
-    Une photo de <strong>${fmt(tailleMo,1)} Mo</strong> est envoyée depuis un smartphone.
+    Une photo de <strong>${fmt(tailleMo,1)} Mo</strong> est envoyée depuis un smartphone vers un serveur distant.
     <ul>
-      <li>charge utile max par paquet : <strong>${nf.format(C)} octets</strong></li>
+      <li>charge utile maximale par paquet : <strong>${nf.format(C)} octets</strong></li>
       <li>en-tête TCP/IP : <strong>${E} octets</strong></li>
-      <li>durée du transfert : <strong>${fmt(duree,1)} s</strong></li>
+      <li>durée du transfert complet : <strong>${fmt(duree,1)} s</strong></li>
     </ul>`;
 
   const qs = exo.querySelectorAll('.q');
@@ -891,7 +999,7 @@ function renderExo1(){
     </ol>`;
 }
 
-/* ============ EXO 2 ============ */
+/* ========== exo 2 ========== */
 function renderExo2(){
   const tailleMo = rndStep(50,200,5);
   const C = Math.round(rndStep(1300,1500,10));
@@ -906,10 +1014,10 @@ function renderExo2(){
 
   const exo = document.getElementById('exo2');
   exo.querySelector('.enonce').innerHTML = `
-    Une mise à jour de <strong>${fmt(tailleMo,0)} Mo</strong> doit être téléchargée (IPv6).
+    Une mise à jour logicielle de <strong>${fmt(tailleMo,0)} Mo</strong> doit être téléchargée sur un ordinateur (IPv6).
     <ul>
       <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
-      <li>en-têtes (IPv6 + TCP) : <strong>${E} octets</strong></li>
+      <li>en-têtes cumulés (IPv6 + TCP) : <strong>${E} octets</strong></li>
       <li>débit descendant : <strong>D = ${fmt(debit,0)} Mbit/s</strong></li>
     </ul>`;
 
@@ -925,12 +1033,12 @@ function renderExo2(){
       <li>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = <span class="res">${nf.format(N)} paquets</span></li>
       <li>paquet = ${nf.format(C+E)} octets<br>
           Vréel = ${nf.format(N)} × ${nf.format(C+E)} = ${nf.format(VreelOctets)} octets<br>
-          = × 8 = <span class="res">${nf.format(Vbits)} bits</span></li>
+          en bits = × 8 = <span class="res">${nf.format(Vbits)} bits</span></li>
       <li>T = V ÷ D = ${nf.format(Vbits)} ÷ ${nf.format(debit*1e6)} = <span class="res">${fmt(T,2)} s</span></li>
     </ol>`;
 }
 
-/* ============ EXO 3 ============ */
+/* ========== exo 3 ========== */
 function renderExo3(){
   const debit = rndStep(4,10,1);
   const C = Math.round(rndStep(1400,1480,4));
@@ -946,7 +1054,7 @@ function renderExo3(){
 
   const exo = document.getElementById('exo3');
   exo.querySelector('.enonce').innerHTML = `
-    Flux vidéo en direct via UDP/IP à <strong>D = ${fmt(debit,0)} Mbit/s</strong>.
+    Flux vidéo continu diffusé via UDP/IP à <strong>D = ${fmt(debit,0)} Mbit/s</strong>.
     <ul>
       <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
       <li>en-tête UDP/IP : <strong>${E} octets</strong></li>
@@ -965,12 +1073,11 @@ function renderExo3(){
           = ÷ 8 = <span class="res">${nf.format(VmaxOctets)} octets</span></li>
       <li>paquet = ${nf.format(C)} + ${E} = ${nf.format(paquet)} octets<br>
           N = ⌊${nf.format(VmaxOctets)} ÷ ${nf.format(paquet)}⌋ = <span class="res">${nf.format(N)} paquets</span></li>
-      <li>utile = ${nf.format(N)} × ${nf.format(C)} = ${nf.format(utileOctets)} octets
-          = <span class="res">${fmt(utileMo,2)} Mo</span></li>
+      <li>utile = ${nf.format(N)} × ${nf.format(C)} = ${nf.format(utileOctets)} octets = <span class="res">${fmt(utileMo,2)} Mo</span></li>
     </ol>`;
 }
 
-/* ============ QCM ============ */
+/* ========== qcm ========== */
 function distinctOptions(correct, wrongs){
   const round = n => Math.abs(n)<1 ? +n.toFixed(4) : +n.toFixed(2);
   const out = [round(correct)];
@@ -1065,7 +1172,7 @@ function buildQCM(){
       +(utileMo*0.5).toFixed(2)
     ]).map(v => ({v, display: fmt(v,2)+' Mo'}));
     questions.push({
-      prompt:`Débit <strong>${fmt(D,0)} Mbit/s</strong> pendant <strong>${fmt(T,0)} s</strong>. Charge utile <strong>${C} o</strong>, en-tête <strong>${E} o</strong>. Quelle est la taille utile max reçue ?`,
+      prompt:`Débit <strong>${fmt(D,0)} Mbit/s</strong> pendant <strong>${fmt(T,0)} s</strong>. Charge utile <strong>${C} o</strong>, en-tête <strong>${E} o</strong>. Quelle est la taille utile maximale reçue ?`,
       opts, correct,
       expl:`Vmax = ${fmt(D,0)}×10⁶ × ${fmt(T,0)} = ${nf.format(VmaxBits)} bits = ${nf.format(VmaxOctets)} octets. N = ⌊${nf.format(VmaxOctets)} ÷ ${C+E}⌋ = ${nf.format(N)}. Utile = ${nf.format(N)} × ${C} = ${nf.format(N*C)} octets = ${fmt(utileMo,2)} Mo.`
     });
@@ -1078,7 +1185,7 @@ function renderQCM(){
   const questions = buildQCM();
   const list = document.getElementById('qcmList');
   list.innerHTML = '';
-  const letters = ['A','B','C','D'];
+  const letters = ['a','b','c','d'];
 
   questions.forEach((q,qi) => {
     const correctVal = q.correct;
@@ -1089,11 +1196,11 @@ function renderQCM(){
     el.className = 'qcm-question';
 
     const optsHtml = shuffled.map((o,i) =>
-      `<button class="opt" data-i="${i}"><span class="key">${letters[i]}</span><span>${o.display}</span></button>`
+      `<button class="opt" data-i="${i}"><span class="k">${letters[i]}.</span><span>${o.display}</span></button>`
     ).join('');
 
     el.innerHTML = `
-      <p class="qcm-prompt"><span class="qcm-num">Q${qi+1}</span>${q.prompt}</p>
+      <p class="qcm-prompt"><span class="qnum">${qi+1}.</span>${q.prompt}</p>
       <div class="qcm-options">${optsHtml}</div>
       <div class="qcm-feedback"></div>`;
 
@@ -1105,13 +1212,13 @@ function renderQCM(){
         if(i === correctIndex){
           btn.classList.add('good');
           fb.className = 'qcm-feedback show ok';
-          fb.innerHTML = `✓ Bonne réponse.<span class="expl">${q.expl}</span>`;
+          fb.innerHTML = `Bonne réponse.<span class="expl">${q.expl}</span>`;
           solved.add(el);
         } else {
           btn.classList.add('bad');
           el.querySelectorAll('.opt')[correctIndex].classList.add('good');
           fb.className = 'qcm-feedback show bad';
-          fb.innerHTML = `✗ Raté.<span class="expl">${q.expl}</span>`;
+          fb.innerHTML = `Raté.<span class="expl">${q.expl}</span>`;
           solved.delete(el);
         }
         updateScore();
@@ -1122,7 +1229,7 @@ function renderQCM(){
   });
 }
 
-/* ============ RESET / REROLL ============ */
+/* ========== reset / reroll ========== */
 function resetAll(){
   solved.clear();
   document.querySelectorAll('.q').forEach(q => {
@@ -1143,7 +1250,7 @@ function reroll(){
   updateScore();
 }
 
-/* ============ SIMULATEUR ============ */
+/* ========== simulateur ========== */
 const simTaille = document.getElementById('simTaille');
 const simC      = document.getElementById('simC');
 const simE      = document.getElementById('simE');
@@ -1156,7 +1263,7 @@ function simCalc(){
   const E = parseFloat(simE.value);
   const T = parseFloat(simDuree.value);
   if([tailleMo,C,E,T].some(isNaN) || C<=0 || T<=0 || E<0){
-    simOut.innerHTML = '<div class="step" style="color:var(--bad)">✗ Entre des valeurs valides (C &gt; 0, T &gt; 0).</div>';
+    simOut.innerHTML = '<div class="step" style="color:var(--bad)">Entre des valeurs valides (C &gt; 0, T &gt; 0).</div>';
     return;
   }
   const tailleOctets = Math.round(tailleMo*1e6);
@@ -1174,17 +1281,17 @@ function simCalc(){
     <div class="step"><span class="n">02</span>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈<span class="o">${fmt(tailleOctets/C,2)}</span>⌉ = <span class="r">${nf.format(N)} paquets</span></div>
     <div class="step"><span class="n">03</span>Paquet complet = ${nf.format(C)} + ${nf.format(E)} = <span class="o">${nf.format(paquet)} octets</span></div>
     <div class="step"><span class="n">04</span>Vréel = ${nf.format(N)} × ${nf.format(paquet)} = <span class="r">${nf.format(Vreel)} octets</span> (${fmt(Vreel/1e6,3)} Mo)</div>
-    <div class="step"><span class="n">05</span>Surcoût réseau (overhead) = ${nf.format(Vreel)} − ${nf.format(tailleOctets)} = <span class="o">${nf.format(overhead)} octets</span> (${fmt(overhead/1e3,1)} ko)</div>
+    <div class="step"><span class="n">05</span>Surcoût = ${nf.format(Vreel)} − ${nf.format(tailleOctets)} = <span class="o">${nf.format(overhead)} octets</span> (${fmt(overhead/1e3,1)} ko)</div>
     <div class="step"><span class="n">06</span>En bits = ${nf.format(Vreel)} × 8 = <span class="o">${nf.format(Vbits)} bits</span> = ${fmt(VMbits,3)} Mbits</div>
-    <div class="step"><span class="n">07</span>Débit D = ${fmt(VMbits,3)} ÷ ${fmt(T,2)} = <span class="r">${fmt(D,3)} Mbit/s</span></div>
-    <div class="step" style="color:var(--muted);font-size:0.85rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
-    <div class="final">→ D = ${fmt(D,3)} Mbit/s &nbsp;·&nbsp; Vréel = ${fmt(Vreel/1e6,3)} Mo &nbsp;·&nbsp; N = ${nf.format(N)}</div>
+    <div class="step"><span class="n">07</span>Débit = ${fmt(VMbits,3)} ÷ ${fmt(T,2)} = <span class="r">${fmt(D,3)} Mbit/s</span></div>
+    <div class="step" style="color:var(--dim);font-size:.85rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
+    <div class="final">D = ${fmt(D,3)} Mbit/s &nbsp;·&nbsp; Vréel = ${fmt(Vreel/1e6,3)} Mo &nbsp;·&nbsp; N = ${nf.format(N)}</div>
   `;
 }
 [simTaille, simC, simE, simDuree].forEach(el => el.addEventListener('input', simCalc));
 simCalc();
 
-/* ============ INIT ============ */
+/* ========== init ========== */
 document.getElementById('rerollBtn').addEventListener('click', reroll);
 
 renderExo1(); renderExo2(); renderExo3();
@@ -1193,23 +1300,23 @@ attachSolutionHandlers();
 renderQCM();
 updateScore();
 
-/* ============ CALCULATEUR ============ */
+/* ========== convertisseur ========== */
 const cVal = document.getElementById('calcVal');
 const cUnit = document.getElementById('calcUnit');
 const cOut = document.getElementById('calcOut');
-function fmtCalc(n){ return n.toLocaleString('fr-FR',{maximumFractionDigits:6}); }
+function fmtConv(n){ return n.toLocaleString('fr-FR',{maximumFractionDigits:6}); }
 function convert(){
   const v = parseFloat(cVal.value);
   const f = parseFloat(cUnit.value);
   if(isNaN(v)){ cOut.innerHTML=''; return; }
   const octets = v*f, bits = octets*8;
   cOut.innerHTML = `
-    <div><span>octets</span>${fmtCalc(octets)} o</div>
-    <div><span>kilooctets</span>${fmtCalc(octets/1e3)} ko</div>
-    <div><span>mégaoctets</span>${fmtCalc(octets/1e6)} Mo</div>
-    <div><span>gigaoctets</span>${fmtCalc(octets/1e9)} Go</div>
-    <div><span>bits</span>${fmtCalc(bits)} b</div>
-    <div><span>mégabits</span>${fmtCalc(bits/1e6)} Mbit</div>
+    <div><span>octets</span>${fmtConv(octets)} o</div>
+    <div><span>kilooctets</span>${fmtConv(octets/1e3)} ko</div>
+    <div><span>mégaoctets</span>${fmtConv(octets/1e6)} Mo</div>
+    <div><span>gigaoctets</span>${fmtConv(octets/1e9)} Go</div>
+    <div><span>bits</span>${fmtConv(bits)} b</div>
+    <div><span>mégabits</span>${fmtConv(bits/1e6)} Mbit</div>
   `;
 }
 cVal.addEventListener('input', convert);

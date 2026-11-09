@@ -3,201 +3,444 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SNT // Débit · Paquets · Volume réel — Cours & Exos</title>
+<title>SNT · Débit, paquets & volume réel</title>
 <style>
 :root{
-  --bg:#03060d; --bg2:#060b16; --panel:#0a1220; --panel2:#0e1828;
-  --line:#17263f; --line2:#1f3252;
-  --txt:#d4e1f4; --muted:#6b7f9e; --dim:#45566f;
-  --neon:#00ffa3; --cyan:#00d9ff; --ok:#00ffa3; --bad:#ff4d6a; --warn:#ffb347;
-  --mono:'JetBrains Mono','Cascadia Code','Fira Code','Consolas','Courier New',monospace;
-  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --bg:#1e293b;          /* bleu-gris ardoise */
+  --bg2:#243447;
+  --panel:#2a3b52;
+  --panel2:#33475f;
+  --line:#3d5169;
+  --line2:#4a5f7a;
+  --txt:#e2e8f0;
+  --muted:#a3b3c9;
+  --dim:#7a8ba3;
+  --accent:#5eead4;      /* menthe douce */
+  --cyan:#7dd3fc;        /* ciel doux */
+  --ok:#4ade80;
+  --bad:#f87171;
+  --warn:#fbbf24;
+  --mono:'Consolas','Cascadia Code','Courier New',monospace;
+  --sans:'Segoe UI',system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:var(--sans); background:var(--bg);
-  background-image:
-    linear-gradient(rgba(0,255,163,0.022) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,163,0.022) 1px,transparent 1px);
-  background-size:44px 44px; color:var(--txt); line-height:1.58;
-  min-height:100vh; padding-bottom:60px; position:relative;
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--txt);
+  line-height:1.65;
+  font-size:16px;
+  min-height:100vh;
+  padding-bottom:60px;
 }
-body::before{
-  content:''; position:fixed; inset:0;
-  background:radial-gradient(900px 500px at 50% -10%,rgba(0,217,255,0.07),transparent 60%);
-  pointer-events:none; z-index:0;
+main{max-width:1000px;margin:0 auto;padding:0 20px}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:rgba(30,41,59,0.95);
+  border-bottom:1px solid var(--line);
 }
-main{position:relative; z-index:1; max-width:1000px; margin:0 auto; padding:0 18px}
+.bar{
+  max-width:1000px;margin:0 auto;padding:12px 20px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.logo{
+  font-weight:700;font-size:1rem;color:var(--accent);
+  display:flex;align-items:center;gap:8px;
+}
+.logo .dot{
+  width:9px;height:9px;border-radius:50%;
+  background:var(--accent);
+}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+nav a{
+  color:var(--muted);text-decoration:none;font-size:0.88rem;
+  padding:6px 12px;border-radius:6px;transition:background .15s,color .15s;
+}
+nav a:hover{color:var(--txt);background:var(--panel2)}
+.score{
+  font-size:0.85rem;font-weight:600;color:var(--accent);
+  border:1px solid var(--line2);border-radius:6px;
+  padding:5px 12px;background:var(--panel);
+}
+.reroll{
+  font-size:0.82rem;font-weight:600;cursor:pointer;
+  background:var(--panel);color:var(--cyan);
+  border:1px solid var(--line2);border-radius:6px;
+  padding:6px 12px;font-family:inherit;transition:background .15s;
+}
+.reroll:hover{background:var(--panel2)}
 
-/* HEADER */
-header{position:sticky; top:0; z-index:50; background:rgba(3,6,13,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
-.bar{max-width:1000px; margin:0 auto; padding:11px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
-.logo{font-family:var(--mono); font-weight:700; font-size:0.93rem; display:flex; align-items:center; gap:8px; color:var(--neon); text-shadow:0 0 12px rgba(0,255,163,0.5);}
-.logo .prompt{color:var(--cyan); font-weight:400}
-.logo .cursor{display:inline-block; width:8px; height:15px; background:var(--neon); animation:blink 1.1s steps(2) infinite;}
-@keyframes blink{50%{opacity:0}}
-nav{display:flex; gap:2px; flex-wrap:wrap; margin-left:auto}
-nav a{color:var(--muted); text-decoration:none; font-family:var(--mono); font-size:0.75rem; padding:6px 10px; border-radius:6px; transition:.15s;}
-nav a:hover{color:var(--neon); background:var(--panel2)}
-.score{font-family:var(--mono); font-size:0.76rem; font-weight:700; color:var(--neon); border:1px solid var(--line2); border-radius:6px; padding:5px 11px; background:rgba(0,255,163,0.05); transition:.3s;}
-.score.pulse{animation:pulse .6s ease}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,163,0.3)}50%{box-shadow:0 0 0 6px rgba(0,255,163,0)}}
-.reroll{font-family:var(--mono); font-size:0.73rem; font-weight:700; cursor:pointer; background:rgba(0,217,255,0.08); color:var(--cyan); border:1px solid var(--line2); border-radius:6px; padding:6px 11px; transition:.15s;}
-.reroll:hover{background:rgba(0,217,255,0.18); border-color:var(--cyan)}
+/* ---------- HERO ---------- */
+.hero{padding:48px 0 8px;text-align:center}
+.hero .kicker{
+  font-size:0.78rem;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:12px;font-weight:600;
+}
+.hero h1{
+  font-size:clamp(1.7rem,4.5vw,2.4rem);
+  line-height:1.2;margin-bottom:14px;color:#fff;
+  font-weight:700;
+}
+.hero h1 .hl{color:var(--accent)}
+.hero p{color:var(--muted);max-width:600px;margin:0 auto 24px;font-size:0.98rem}
+.cta{
+  display:inline-block;text-decoration:none;
+  font-weight:600;font-size:0.92rem;color:#1e293b;
+  background:var(--accent);padding:11px 24px;border-radius:8px;
+  transition:filter .15s;
+}
+.cta:hover{filter:brightness(1.08)}
 
-/* HERO */
-.hero{padding:48px 0 6px; text-align:center;}
-.hero .kicker{font-family:var(--mono); font-size:0.7rem; letter-spacing:2px; color:var(--cyan); text-transform:uppercase; margin-bottom:14px;}
-.hero .kicker::before{content:'> '; color:var(--neon)}
-.hero h1{font-family:var(--mono); font-size:clamp(1.65rem,5vw,2.5rem); line-height:1.15; margin-bottom:14px; color:#fff;}
-.hero h1 .hl{color:var(--neon); text-shadow:0 0 24px rgba(0,255,163,0.4)}
-.hero p{color:var(--muted); max-width:580px; margin:0 auto 22px; font-size:0.9rem}
-.cta{display:inline-block; text-decoration:none; font-family:var(--mono); font-weight:700; font-size:0.83rem; color:#03060d; background:var(--neon); padding:10px 22px; border-radius:8px; box-shadow:0 0 24px rgba(0,255,163,0.35); transition:.2s;}
-.cta:hover{transform:translateY(-2px); box-shadow:0 0 32px rgba(0,255,163,0.55)}
+/* ---------- SECTIONS ---------- */
+section{padding-top:48px}
+h2{
+  font-size:1.3rem;font-weight:700;margin-bottom:6px;
+  display:flex;align-items:center;gap:10px;color:#fff;flex-wrap:wrap;
+}
+h2 .num{
+  font-size:0.72rem;letter-spacing:1px;font-weight:700;
+  color:var(--accent);background:var(--panel);
+  border:1px solid var(--line2);border-radius:4px;
+  padding:2px 8px;
+}
+.sub{color:var(--muted);font-size:0.92rem;margin-bottom:22px}
 
-/* SECTIONS */
-section{padding-top:46px}
-h2{font-family:var(--mono); font-size:1.18rem; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:10px; color:#fff; flex-wrap:wrap;}
-h2 .num{font-size:0.63rem; letter-spacing:1px; color:var(--neon); background:rgba(0,255,163,0.08); border:1px solid rgba(0,255,163,0.3); border-radius:4px; padding:2px 7px;}
-.sub{color:var(--muted); font-size:0.8rem; margin-bottom:20px; font-family:var(--mono)}
+/* ---------- LEÇON ---------- */
+.lesson{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:22px;margin-bottom:18px;
+}
+.lesson h3{
+  font-size:1.05rem;color:#fff;margin-bottom:10px;
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-weight:700;
+}
+.lesson h3 .tag{
+  font-size:0.68rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--cyan);background:var(--bg2);
+  border:1px solid var(--line2);border-radius:4px;
+  padding:1px 8px;font-weight:600;
+}
+.lesson p{font-size:0.95rem;color:#cdd7e5;margin-bottom:10px}
+.lesson p strong{color:var(--accent);font-weight:600}
+.lesson p .key{color:var(--cyan);font-family:var(--mono)}
+.lesson ul{list-style:none;margin:8px 0 12px;padding:0}
+.lesson ul li{
+  padding-left:22px;position:relative;margin-bottom:6px;
+  font-size:0.93rem;color:#cdd7e5;
+}
+.lesson ul li::before{content:'•';position:absolute;left:6px;color:var(--cyan)}
+.lesson ul li strong{color:var(--accent);font-weight:600}
 
-/* LEÇON */
-.lesson{background:linear-gradient(165deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:18px; position:relative;}
-.lesson::before{content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); opacity:0.35; border-radius:14px 14px 0 0;}
-.lesson h3{font-family:var(--mono); font-size:1rem; color:#fff; margin-bottom:10px; display:flex; align-items:center; gap:9px; flex-wrap:wrap;}
-.lesson h3 .tag{font-size:0.6rem; letter-spacing:1px; text-transform:uppercase; color:var(--cyan); background:rgba(0,217,255,0.08); border:1px solid rgba(0,217,255,0.25); border-radius:4px; padding:1px 7px; font-weight:600;}
-.lesson p{font-size:0.87rem; color:#b8c6de; margin-bottom:10px}
-.lesson p strong{color:var(--neon); font-family:var(--mono); font-weight:600}
-.lesson p .key{color:var(--cyan); font-family:var(--mono)}
-.lesson ul{list-style:none; margin:8px 0 12px; padding:0}
-.lesson ul li{padding-left:20px; position:relative; margin-bottom:5px; font-size:0.85rem; color:#b8c6de}
-.lesson ul li::before{content:'▸'; position:absolute; left:3px; color:var(--cyan)}
-.lesson ul li strong{color:var(--neon); font-family:var(--mono); font-weight:600}
-
-.formula-card{text-align:center; background:#020509; border:1px dashed rgba(0,255,163,0.35); border-radius:10px; padding:16px; margin:14px 0; font-family:var(--mono);}
-.formula-card .lbl{font-size:0.65rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
-.formula-card .f{font-size:1.35rem; color:var(--neon); font-weight:700; text-shadow:0 0 16px rgba(0,255,163,0.3);}
-.formula-card .f .op{color:var(--cyan); margin:0 5px; font-weight:400}
+.formula-card{
+  text-align:center;background:var(--bg2);
+  border:1px solid var(--line2);border-radius:10px;
+  padding:16px;margin:14px 0;
+}
+.formula-card .lbl{
+  font-size:0.72rem;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;font-weight:600;
+}
+.formula-card .f{
+  font-family:var(--mono);font-size:1.35rem;
+  color:var(--accent);font-weight:700;
+}
+.formula-card .f .op{color:var(--cyan);margin:0 5px;font-weight:400}
 .formula-card .f .var{color:#fff}
-.formula-card .note{font-size:0.72rem; color:var(--muted); margin-top:8px; font-family:var(--sans)}
+.formula-card .note{font-size:0.82rem;color:var(--muted);margin-top:8px}
 
-.formula-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:14px 0;}
-.formula-row .fc{text-align:center; background:#020509; border:1px solid var(--line2); border-radius:9px; padding:12px 8px; font-family:var(--mono);}
-.formula-row .fc .who{font-size:0.62rem; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:6px}
-.formula-row .fc .expr{font-size:1.05rem; color:var(--neon); font-weight:700}
+.formula-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;margin:14px 0;
+}
+.formula-row .fc{
+  text-align:center;background:var(--bg2);
+  border:1px solid var(--line2);border-radius:9px;padding:12px 8px;
+}
+.formula-row .fc .who{
+  font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;font-weight:600;
+}
+.formula-row .fc .expr{
+  font-family:var(--mono);font-size:1.05rem;
+  color:var(--accent);font-weight:700;
+}
 
-.example{border-left:3px solid var(--warn); background:rgba(255,179,71,0.05); border-radius:0 10px 10px 0; padding:13px 16px; margin-top:12px; font-size:0.84rem;}
-.example .ex-tag{font-family:var(--mono); font-size:0.62rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--warn); margin-bottom:7px; display:block; font-weight:700;}
-.example .step{font-family:var(--mono); color:#d6c9a8; margin-bottom:4px; font-size:0.82rem; line-height:1.6}
-.example .step .r{color:var(--neon); font-weight:700}
+.example{
+  border-left:3px solid var(--warn);
+  background:rgba(251,191,36,0.06);
+  border-radius:0 8px 8px 0;
+  padding:14px 16px;margin-top:12px;
+}
+.example .ex-tag{
+  font-size:0.72rem;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--warn);margin-bottom:8px;display:block;font-weight:700;
+}
+.example .step{
+  font-family:var(--mono);color:#d8dde5;
+  margin-bottom:5px;font-size:0.88rem;line-height:1.6;
+}
+.example .step .r{color:var(--accent);font-weight:700}
 .example .step .o{color:var(--cyan)}
-.example .concl{font-family:var(--mono); color:var(--neon); font-weight:700; margin-top:6px; font-size:0.86rem}
+.example .concl{
+  color:var(--accent);font-weight:700;
+  margin-top:8px;font-size:0.9rem;
+}
 
-.warn-card{border-left:3px solid var(--bad); background:rgba(255,77,106,0.04); border-radius:0 10px 10px 0; padding:13px 16px; margin-bottom:10px;}
-.warn-card .wtitle{font-family:var(--mono); font-size:0.82rem; color:var(--bad); font-weight:700; margin-bottom:6px;}
-.warn-card p{font-size:0.83rem; margin-bottom:6px}
-.warn-card code{font-family:var(--mono); background:#020509; border:1px solid var(--line2); border-radius:4px; padding:1px 6px; color:var(--cyan); font-size:0.8rem}
+.warn-card{
+  border-left:3px solid var(--bad);
+  background:rgba(248,113,113,0.06);
+  border-radius:0 8px 8px 0;
+  padding:14px 16px;margin-bottom:12px;
+}
+.warn-card .wtitle{
+  font-size:0.92rem;color:var(--bad);
+  font-weight:700;margin-bottom:8px;
+}
+.warn-card p{font-size:0.9rem;margin-bottom:6px}
+.warn-card code{
+  font-family:var(--mono);background:var(--bg2);
+  border:1px solid var(--line2);border-radius:4px;
+  padding:1px 7px;color:var(--cyan);font-size:0.85rem;
+}
 
-/* FIL ROUGE BANNER */
-.filrouge{background:linear-gradient(135deg,rgba(0,255,163,0.08),rgba(0,217,255,0.05)); border:1px solid rgba(0,255,163,0.3); border-radius:12px; padding:16px 18px; margin-bottom:18px; display:flex; gap:14px; align-items:flex-start;}
-.filrouge .icon{font-size:1.4rem; line-height:1;}
-.filrouge .txt{font-size:0.85rem; color:#c8d6e8}
-.filrouge .txt strong{color:var(--neon); font-family:var(--mono)}
-.filrouge .txt .dim{color:var(--muted); font-size:0.78rem; display:block; margin-top:3px}
+.filrouge{
+  background:var(--panel);border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:8px;padding:16px 18px;margin-bottom:18px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.filrouge .icon{font-size:1.3rem;line-height:1}
+.filrouge .txt{font-size:0.92rem;color:#cdd7e5}
+.filrouge .txt strong{color:var(--accent);font-weight:700}
+.filrouge .txt .dim{color:var(--muted);font-size:0.85rem;display:block;margin-top:3px}
 
-/* EXOS */
-.exo{background:linear-gradient(165deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:20px; position:relative;}
-.exo::before{content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--neon),transparent); opacity:0.4; border-radius:14px 14px 0 0;}
-.exo-head{display:flex; align-items:flex-start; gap:13px; margin-bottom:14px; padding-bottom:13px; border-bottom:1px dashed var(--line2);}
-.badge{flex:none; width:40px; height:40px; border-radius:8px; display:grid; place-items:center; font-family:var(--mono); font-weight:800; font-size:1rem; background:rgba(0,255,163,0.1); color:var(--neon); border:1px solid rgba(0,255,163,0.35);}
-.exo-head h3{font-family:var(--mono); font-size:0.98rem; line-height:1.35; color:#fff}
-.exo-head .tag{font-family:var(--mono); font-size:0.7rem; color:var(--muted); margin-top:2px}
+/* ---------- EXOS ---------- */
+.exo{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:22px;margin-bottom:20px;
+}
+.exo-head{
+  display:flex;align-items:flex-start;gap:13px;
+  margin-bottom:16px;padding-bottom:14px;
+  border-bottom:1px solid var(--line);
+}
+.badge{
+  flex:none;width:40px;height:40px;border-radius:8px;
+  display:grid;place-items:center;font-weight:700;font-size:1rem;
+  background:var(--bg2);color:var(--accent);
+  border:1px solid var(--line2);
+}
+.exo-head h3{font-size:1.02rem;line-height:1.35;color:#fff;font-weight:700}
+.exo-head .tag{font-size:0.82rem;color:var(--muted);margin-top:2px}
 
-.enonce{font-size:0.87rem; color:#b8c6de; background:rgba(0,217,255,0.03); border:1px solid var(--line); border-radius:8px; padding:13px 15px; margin-bottom:16px;}
-.enonce strong{color:var(--neon); font-family:var(--mono)}
-.enonce ul{list-style:none; margin:9px 0 0; padding:0}
-.enonce ul li{padding-left:20px; position:relative; margin-bottom:3px; font-size:0.85rem;}
-.enonce ul li::before{content:'▸'; position:absolute; left:4px; color:var(--cyan)}
+.enonce{
+  font-size:0.93rem;color:#cdd7e5;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:8px;padding:14px 16px;margin-bottom:18px;
+}
+.enonce strong{color:var(--accent);font-weight:600}
+.enonce ul{list-style:none;margin:10px 0 0;padding:0}
+.enonce ul li{
+  padding-left:22px;position:relative;margin-bottom:4px;font-size:0.9rem;
+}
+.enonce ul li::before{content:'•';position:absolute;left:6px;color:var(--cyan)}
 
-.q{margin-bottom:14px}
-.q > label{display:block; font-size:0.84rem; font-weight:600; margin-bottom:7px; color:#dce6f7; font-family:var(--mono);}
-.q > label::before{content:'> '; color:var(--neon)}
-.input-row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-.input-row input{flex:1; min-width:140px; background:#020509; border:1.5px solid var(--line2); color:var(--txt); border-radius:8px; padding:10px 12px; font-size:0.9rem; font-family:var(--mono); transition:.15s; outline:none;}
-.input-row input:focus{border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,217,255,0.12);}
-.input-row input.good{border-color:var(--ok); box-shadow:0 0 0 3px rgba(0,255,163,0.15);}
-.input-row input.bad{border-color:var(--bad); box-shadow:0 0 0 3px rgba(255,77,106,0.12);}
-.unit{font-family:var(--mono); font-size:0.74rem; color:var(--dim); white-space:nowrap}
-.btn{font-family:var(--mono); font-size:0.78rem; font-weight:600; border:1px solid var(--line2); background:var(--panel2); color:var(--txt); border-radius:8px; padding:9px 14px; cursor:pointer; transition:.15s;}
-.btn:hover{background:#16243d;}
-.btn.primary{background:rgba(0,255,163,0.1); color:var(--neon); border-color:rgba(0,255,163,0.4);}
-.btn.primary:hover{background:rgba(0,255,163,0.2)}
-.feedback{font-family:var(--mono); font-size:0.77rem; font-weight:600; margin-top:6px; display:none;}
+.q{margin-bottom:16px}
+.q > label{
+  display:block;font-size:0.92rem;font-weight:600;
+  margin-bottom:8px;color:#dbe4f0;
+}
+.input-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.input-row input{
+  flex:1;min-width:150px;
+  background:#1a2434;border:1px solid var(--line2);
+  color:var(--txt);border-radius:8px;padding:10px 13px;
+  font-size:0.95rem;font-family:inherit;
+  transition:border-color .15s,box-shadow .15s;outline:none;
+}
+.input-row input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 2px rgba(125,211,252,0.2);
+}
+.input-row input.good{border-color:var(--ok)}
+.input-row input.bad{border-color:var(--bad)}
+.unit{font-size:0.85rem;color:var(--dim);white-space:nowrap}
+.btn{
+  font-family:inherit;font-size:0.88rem;font-weight:600;
+  border:1px solid var(--line2);background:var(--panel2);
+  color:var(--txt);border-radius:8px;padding:9px 16px;
+  cursor:pointer;transition:background .15s;
+}
+.btn:hover{background:#3e5674}
+.btn.primary{
+  background:var(--bg2);color:var(--accent);
+  border-color:var(--line2);
+}
+.btn.primary:hover{background:#2d425c}
+.feedback{font-size:0.88rem;font-weight:600;margin-top:7px;display:none}
 .feedback.show{display:block}
 .feedback.ok{color:var(--ok)}
 .feedback.bad{color:var(--bad)}
 
-.solution{display:none; margin-top:14px; border:1px solid rgba(0,255,163,0.25); background:rgba(0,255,163,0.03); border-radius:10px; padding:14px 16px;}
-.solution.show{display:block; animation:fade .3s ease}
-@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.solution h4{font-family:var(--mono); font-size:0.7rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--neon); margin-bottom:10px;}
-.solution ol{margin-left:16px; font-size:0.82rem; color:#c8d6e8}
-.solution ol li{margin-bottom:8px}
-.solution .res{display:inline-block; margin-top:2px; font-family:var(--mono); color:var(--cyan); background:#020509; border:1px solid var(--line2); border-radius:5px; padding:1px 7px;}
-.exo-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px}
+.solution{
+  display:none;margin-top:16px;
+  border:1px solid var(--line2);
+  background:var(--bg2);
+  border-radius:10px;padding:16px 18px;
+}
+.solution.show{display:block}
+.solution h4{
+  font-size:0.78rem;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:10px;font-weight:700;
+}
+.solution ol{margin-left:18px;font-size:0.9rem;color:#cdd7e5}
+.solution ol li{margin-bottom:9px}
+.solution .res{
+  display:inline-block;margin-top:2px;
+  font-family:var(--mono);color:var(--accent);
+  background:var(--panel);border:1px solid var(--line2);
+  border-radius:5px;padding:1px 8px;font-weight:600;
+}
+.exo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 
-/* QCM */
-.qcm-intro{font-family:var(--mono); font-size:0.8rem; color:var(--warn); background:rgba(255,179,71,0.06); border:1px solid rgba(255,179,71,0.25); border-radius:8px; padding:10px 14px; margin-bottom:16px;}
-.qcm-intro::before{content:'⚠ '}
-.qcm-question{background:linear-gradient(165deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:13px;}
-.qcm-prompt{font-size:0.88rem; color:#dce6f7; margin-bottom:13px; line-height:1.55;}
-.qcm-prompt .qcm-num{display:inline-block; font-family:var(--mono); font-size:0.68rem; font-weight:800; color:var(--neon); background:rgba(0,255,163,0.1); border:1px solid rgba(0,255,163,0.3); border-radius:4px; padding:1px 7px; margin-right:8px; vertical-align:middle;}
-.qcm-prompt strong{color:var(--neon); font-family:var(--mono)}
-.qcm-options{display:grid; gap:7px}
-.opt{text-align:left; font-family:var(--mono); font-size:0.82rem; background:#020509; color:var(--txt); border:1.5px solid var(--line2); border-radius:8px; padding:10px 13px; cursor:pointer; transition:.15s; display:flex; align-items:center; gap:10px;}
-.opt:hover{border-color:var(--cyan); background:rgba(0,217,255,0.05)}
-.opt .key{font-weight:800; color:var(--cyan); flex:none; width:20px; height:20px; border-radius:4px; display:grid; place-items:center; background:rgba(0,217,255,0.1); font-size:0.7rem;}
-.opt.good{border-color:var(--ok); background:rgba(0,255,163,0.08);}
-.opt.good .key{background:var(--ok); color:#03060d}
-.opt.bad{border-color:var(--bad); background:rgba(255,77,106,0.06);}
-.opt.bad .key{background:var(--bad); color:#fff}
+/* ---------- QCM ---------- */
+.qcm-intro{
+  font-size:0.88rem;color:var(--warn);
+  background:rgba(251,191,36,0.08);
+  border:1px solid rgba(251,191,36,0.3);
+  border-radius:8px;padding:11px 14px;margin-bottom:18px;
+}
+.qcm-question{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:18px 20px;margin-bottom:14px;
+}
+.qcm-prompt{
+  font-size:0.95rem;color:#dbe4f0;
+  margin-bottom:14px;line-height:1.6;
+}
+.qcm-prompt .qcm-num{
+  display:inline-block;font-size:0.75rem;font-weight:700;
+  color:var(--accent);background:var(--bg2);
+  border:1px solid var(--line2);border-radius:4px;
+  padding:1px 8px;margin-right:8px;vertical-align:middle;
+}
+.qcm-prompt strong{color:var(--accent);font-weight:600}
+.qcm-options{display:grid;gap:8px}
+.opt{
+  text-align:left;font-family:inherit;font-size:0.9rem;
+  background:var(--bg2);color:var(--txt);
+  border:1px solid var(--line2);border-radius:8px;
+  padding:11px 14px;cursor:pointer;
+  transition:background .15s,border-color .15s;
+  display:flex;align-items:center;gap:10px;
+}
+.opt:hover{background:var(--panel2);border-color:var(--cyan)}
+.opt .key{
+  font-weight:700;color:var(--cyan);flex:none;
+  width:22px;height:22px;border-radius:4px;
+  display:grid;place-items:center;background:var(--panel);
+  font-size:0.78rem;
+}
+.opt.good{border-color:var(--ok);background:rgba(74,222,128,0.1)}
+.opt.good .key{background:var(--ok);color:#1e293b}
+.opt.bad{border-color:var(--bad);background:rgba(248,113,113,0.08)}
+.opt.bad .key{background:var(--bad);color:#fff}
 .opt:disabled{cursor:default}
-.qcm-feedback{font-family:var(--mono); font-size:0.78rem; margin-top:9px; display:none; padding:10px 12px; border-radius:8px;}
+.qcm-feedback{
+  font-size:0.9rem;margin-top:10px;display:none;
+  padding:11px 13px;border-radius:8px;
+}
 .qcm-feedback.show{display:block}
-.qcm-feedback.ok{color:var(--ok); background:rgba(0,255,163,0.06); border:1px solid rgba(0,255,163,0.2)}
-.qcm-feedback.bad{color:var(--bad); background:rgba(255,77,106,0.05); border:1px solid rgba(255,77,106,0.2)}
-.qcm-feedback .expl{color:var(--muted); display:block; margin-top:5px; font-size:0.75rem}
+.qcm-feedback.ok{
+  color:var(--ok);background:rgba(74,222,128,0.08);
+  border:1px solid rgba(74,222,128,0.3);
+}
+.qcm-feedback.bad{
+  color:var(--bad);background:rgba(248,113,113,0.07);
+  border:1px solid rgba(248,113,113,0.3);
+}
+.qcm-feedback .expl{
+  color:var(--muted);display:block;margin-top:6px;font-size:0.85rem;
+}
 
-/* SIMULATEUR */
-.sim-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-bottom:14px;}
-.sim-field label{display:block; font-family:var(--mono); font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:5px;}
-.sim-field input{width:100%; background:#020509; border:1.5px solid var(--line2); color:var(--txt); border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:0.88rem; outline:none;}
-.sim-field input:focus{border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,217,255,0.1)}
-.sim-out{background:#020509; border:1px solid var(--line2); border-radius:10px; padding:16px 18px; margin-top:6px;}
-.sim-out .step{font-family:var(--mono); font-size:0.82rem; color:#c8d6e8; margin-bottom:8px; line-height:1.6;}
-.sim-out .step .n{color:var(--dim); margin-right:6px;}
-.sim-out .step .r{color:var(--neon); font-weight:700;}
-.sim-out .step .o{color:var(--cyan);}
-.sim-out .final{border-top:1px dashed var(--line2); margin-top:12px; padding-top:12px; font-family:var(--mono); font-size:0.95rem; color:var(--neon); font-weight:700;}
+/* ---------- SIMULATEUR ---------- */
+.sim-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;margin-bottom:14px;
+}
+.sim-field label{
+  display:block;font-size:0.8rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.6px;
+  margin-bottom:5px;font-weight:600;
+}
+.sim-field input{
+  width:100%;background:#1a2434;border:1px solid var(--line2);
+  color:var(--txt);border-radius:8px;padding:10px 12px;
+  font-family:inherit;font-size:0.95rem;outline:none;
+}
+.sim-field input:focus{border-color:var(--cyan)}
+.sim-out{
+  background:var(--bg2);border:1px solid var(--line2);
+  border-radius:10px;padding:16px 18px;margin-top:6px;
+}
+.sim-out .step{
+  font-size:0.9rem;color:#cdd7e5;
+  margin-bottom:8px;line-height:1.6;
+}
+.sim-out .step .n{
+  color:var(--dim);font-weight:700;margin-right:8px;
+  font-family:var(--mono);font-size:0.82rem;
+}
+.sim-out .step .r{color:var(--accent);font-weight:700}
+.sim-out .step .o{color:var(--cyan)}
+.sim-out .final{
+  border-top:1px solid var(--line2);margin-top:14px;padding-top:14px;
+  font-size:1rem;color:var(--accent);font-weight:700;
+}
 
-/* CALC CONVERT */
-.calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
-.calc-grid input,.calc-grid select{width:100%; background:#020509; border:1.5px solid var(--line2); color:var(--txt); border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:0.88rem; outline:none;}
+/* ---------- CALCULATEUR ---------- */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.calc-grid input,.calc-grid select{
+  width:100%;background:#1a2434;border:1px solid var(--line2);
+  color:var(--txt);border-radius:8px;padding:10px 12px;
+  font-family:inherit;font-size:0.95rem;outline:none;
+}
 .calc-grid input:focus,.calc-grid select:focus{border-color:var(--cyan)}
-.calc-out{margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px;}
-.calc-out div{background:#020509; border:1px solid var(--line2); border-radius:8px; padding:9px 10px; font-family:var(--mono); font-size:0.82rem; text-align:center; color:var(--cyan);}
-.calc-out span{display:block; font-size:0.6rem; color:var(--muted); font-family:var(--sans); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:3px;}
-.card-panel{background:linear-gradient(160deg,var(--panel),var(--bg2)); border:1px solid var(--line); border-radius:12px; padding:18px;}
+.calc-out{
+  margin-top:14px;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;
+}
+.calc-out div{
+  background:var(--bg2);border:1px solid var(--line2);
+  border-radius:8px;padding:10px 12px;
+  font-size:0.92rem;text-align:center;color:var(--accent);
+  font-weight:600;
+}
+.calc-out span{
+  display:block;font-size:0.68rem;color:var(--muted);
+  letter-spacing:0.6px;text-transform:uppercase;
+  margin-bottom:3px;font-weight:600;
+}
+.card-panel{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;padding:18px;
+}
 
-footer{text-align:center; color:var(--dim); font-family:var(--mono); font-size:0.7rem; padding:40px 18px 0; margin-top:50px; border-top:1px solid var(--line);}
-footer::before{content:'// '}
+footer{
+  text-align:center;color:var(--dim);font-size:0.82rem;
+  padding:40px 20px 0;margin-top:50px;
+  border-top:1px solid var(--line);
+}
 
 @media(max-width:560px){
   .calc-grid{grid-template-columns:1fr}
-  .bar{padding:9px 14px}
-  nav a{padding:5px 7px; font-size:0.7rem}
+  .bar{padding:10px 14px}
+  nav a{padding:5px 9px;font-size:0.82rem}
   .exo,.qcm-question,.lesson{padding:16px}
+  body{font-size:15px}
 }
 </style>
 </head>
@@ -205,7 +448,7 @@ footer::before{content:'// '}
 
 <header>
   <div class="bar">
-    <div class="logo"><span class="prompt">$</span> snt.revisions<span class="cursor"></span></div>
+    <div class="logo"><span class="dot"></span> SNT · Révisions</div>
     <nav>
       <a href="#cours">cours</a>
       <a href="#exos">exercices</a>
@@ -220,17 +463,17 @@ footer::before{content:'// '}
 <main>
 
   <div class="hero">
-    <div class="kicker">module : transmission de données</div>
+    <div class="kicker">Internet &amp; Le Web · Transmission de données</div>
     <h1>Débit · Paquets · <span class="hl">Volume réel</span></h1>
-    <p>Le cours complet, le fil rouge déroulé pas à pas, les exercices et le QCM.
+    <p>Le cours complet, les exercices corrigés et un QCM pour vérifier tes acquis.
        Les valeurs changent à chaque rechargement.</p>
-    <a href="#cours" class="cta">▶ lire le cours</a>
+    <a href="#cours" class="cta">Lire le cours ↓</a>
   </div>
 
   <!-- ================= COURS ================= -->
   <section id="cours">
     <h2><span class="num">01</span> Le cours</h2>
-    <p class="sub">Tout ce qu'il faut retenir, avec un fil rouge : un fichier de 1,5 Mo.</p>
+    <p class="sub">L'essentiel de la fiche, avec un fil rouge : un fichier de 1,5 Mo.</p>
 
     <div class="filrouge">
       <div class="icon">🧵</div>
@@ -242,7 +485,6 @@ footer::before{content:'// '}
       </div>
     </div>
 
-    <!-- 1.1 -->
     <div class="lesson">
       <h3><span class="tag">1.1</span> Le découpage en paquets</h3>
       <p>Sur Internet, les données ne sont <strong>jamais envoyées en un seul bloc</strong> :
@@ -263,14 +505,13 @@ footer::before{content:'// '}
          supérieur</strong> : le dernier paquet contient le reste des données.</p>
 
       <div class="example">
-        <span class="ex-tag">▸ exemple (fil rouge)</span>
+        <span class="ex-tag">Exemple (fil rouge)</span>
         <div class="step">V = <span class="o">1,5 Mo</span> = <span class="o">1 500 000 octets</span></div>
         <div class="step">N = ⌈1 500 000 ÷ 1 460⌉ = ⌈<span class="o">1027,4</span>⌉</div>
         <div class="concl">→ N = 1 028 paquets</div>
       </div>
     </div>
 
-    <!-- 1.2 -->
     <div class="lesson">
       <h3><span class="tag">1.2</span> Le volume réel transféré (en-têtes + données)</h3>
       <p>Chaque paquet comprend la <strong>charge utile</strong> plus des <strong>en-têtes</strong>
@@ -289,7 +530,7 @@ footer::before{content:'// '}
       </div>
 
       <div class="example">
-        <span class="ex-tag">▸ exemple (suite)</span>
+        <span class="ex-tag">Exemple (suite)</span>
         <div class="step">en-tête E = <span class="o">40 octets</span> (TCP + IP)</div>
         <div class="step">paquet complet = 1 460 + 40 = <span class="o">1 500 octets</span></div>
         <div class="step">Vréel = 1 028 × 1 500 = <span class="r">1 542 000 octets</span></div>
@@ -297,7 +538,6 @@ footer::before{content:'// '}
       </div>
     </div>
 
-    <!-- 1.3 -->
     <div class="lesson">
       <h3><span class="tag">1.3</span> La formule du débit (D = V / T)</h3>
       <p>Le <strong>débit</strong> D mesure la quantité d'informations transmises par unité de temps.
@@ -314,33 +554,32 @@ footer::before{content:'// '}
          <strong>Mbit</strong> (et non en Mo) par un temps en <strong>secondes</strong>.</p>
 
       <div class="example">
-        <span class="ex-tag">▸ exemple (suite)</span>
+        <span class="ex-tag">Exemple (suite)</span>
         <div class="step">V = 1,542 Mo → × 8 = <span class="o">12,336 Mbit</span></div>
         <div class="step">D = 12,336 ÷ 4 = <span class="r">3,084 Mbit/s</span></div>
         <div class="concl">→ débit de la liaison ≈ 3,084 Mbit/s</div>
       </div>
     </div>
 
-    <!-- 1.4 -->
     <div class="lesson">
       <h3><span class="tag">1.4</span> Les 3 erreurs classiques</h3>
 
       <div class="warn-card">
-        <div class="wtitle">⚠ erreur n°1 — octets vs bits</div>
+        <div class="wtitle">Erreur n°1 — octets vs bits</div>
         <p><code>1 octet = 8 bits</code> (en anglais : 1 Byte = 8 bits).</p>
         <p>Les <strong>tailles de fichiers</strong> sont en octets ; les <strong>débits</strong> en bits/s.</p>
         <p>Octet → bit : <strong>× 8</strong> &nbsp;·&nbsp; bit → octet : <strong>÷ 8</strong>
            &nbsp;·&nbsp; 1 Mo = 8 Mbit &nbsp;·&nbsp; 800 Mbit/s = 100 Mo/s.</p>
       </div>
 
-      <div class="warn-card" style="border-left-color:var(--warn); background:rgba(255,179,71,0.04)">
-        <div class="wtitle" style="color:var(--warn)">⚠ erreur n°2 — les multiples</div>
+      <div class="warn-card" style="border-left-color:var(--warn);background:rgba(251,191,36,0.06)">
+        <div class="wtitle" style="color:var(--warn)">Erreur n°2 — les multiples</div>
         <p>En SNT (normes SI) : <code>k = 10³</code> · <code>M = 10⁶</code> · <code>G = 10⁹</code>.</p>
         <p>1 ko = 1 000 o · 1 Mo = 1 000 000 o · 1 Go = 1 000 000 000 o.</p>
       </div>
 
-      <div class="warn-card" style="border-left-color:var(--cyan); background:rgba(0,217,255,0.04)">
-        <div class="wtitle" style="color:var(--cyan)">⚠ erreur n°3 — les unités de temps</div>
+      <div class="warn-card" style="border-left-color:var(--cyan);background:rgba(125,211,252,0.06)">
+        <div class="wtitle" style="color:var(--cyan)">Erreur n°3 — les unités de temps</div>
         <p>Le temps T s'exprime <strong>toujours en secondes</strong> dans la formule.</p>
         <p>Conversion : <code>145 s = 2 min 25 s</code> (car 145 = 2×60 + 25).</p>
       </div>
@@ -354,7 +593,7 @@ footer::before{content:'// '}
 
     <article class="exo" id="exo1">
       <div class="exo-head">
-        <div class="badge">01</div>
+        <div class="badge">1</div>
         <div><h3>Partage d'une photo HD</h3><div class="tag">calcul du débit D · TCP/IP</div></div>
       </div>
       <div class="enonce"></div>
@@ -364,7 +603,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 2877">
           <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -373,7 +612,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 4315500">
           <span class="unit">octets</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -382,7 +621,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 34,52">
           <span class="unit">Mbits</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -391,18 +630,18 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 12,33">
           <span class="unit">Mbit/s</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol1">▸ voir la correction</button></div>
+      <div class="exo-actions"><button class="btn primary" data-sol="sol1">Voir la correction</button></div>
       <div class="solution" id="sol1"></div>
     </article>
 
     <article class="exo" id="exo2">
       <div class="exo-head">
-        <div class="badge">02</div>
+        <div class="badge">2</div>
         <div><h3>Mise à jour d'un logiciel</h3><div class="tag">calcul du temps T · IPv6 · ADSL</div></div>
       </div>
       <div class="enonce"></div>
@@ -412,7 +651,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 59860">
           <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -421,7 +660,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 708742400">
           <span class="unit">bits</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -430,18 +669,18 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 59,06">
           <span class="unit">secondes</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol2">▸ voir la correction</button></div>
+      <div class="exo-actions"><button class="btn primary" data-sol="sol2">Voir la correction</button></div>
       <div class="solution" id="sol2"></div>
     </article>
 
     <article class="exo" id="exo3">
       <div class="exo-head">
-        <div class="badge">03</div>
+        <div class="badge">3</div>
         <div><h3>Visioconférence en direct</h3><div class="tag">taille max transférable · UDP/IP</div></div>
       </div>
       <div class="enonce"></div>
@@ -451,7 +690,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 18750000">
           <span class="unit">octets</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -460,7 +699,7 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 12500">
           <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
@@ -469,12 +708,12 @@ footer::before{content:'// '}
         <div class="input-row">
           <input type="text" inputmode="decimal" placeholder="ex: 18,4">
           <span class="unit">Mo</span>
-          <button class="btn">vérifier</button>
+          <button class="btn">Vérifier</button>
         </div>
         <p class="feedback"></p>
       </div>
 
-      <div class="exo-actions"><button class="btn primary" data-sol="sol3">▸ voir la correction</button></div>
+      <div class="exo-actions"><button class="btn primary" data-sol="sol3">Voir la correction</button></div>
       <div class="solution" id="sol3"></div>
     </article>
   </section>
@@ -525,7 +764,9 @@ footer::before{content:'// '}
     </div>
   </section>
 
-  <footer>SNT 2de · Internet &amp; Le Web · multiples décimaux (1 Mo = 10⁶ octets)</footer>
+  <footer>
+    SNT 2de · Internet &amp; Le Web · multiples décimaux (1 Mo = 10⁶ octets)
+  </footer>
 </main>
 
 <script>
@@ -562,9 +803,7 @@ function parseNum(raw){
 const solved = new Set();
 function updateScore(){
   const total = document.querySelectorAll('.q').length + document.querySelectorAll('.qcm-question').length;
-  const el = document.getElementById('score');
-  el.textContent = solved.size + ' / ' + total;
-  el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
+  document.getElementById('score').textContent = solved.size + ' / ' + total;
 }
 
 /* ============ EXOS ============ */
@@ -578,18 +817,18 @@ function attachExerciseHandlers(){
       const val = parseNum(input.value);
       if(isNaN(val)){
         input.classList.remove('good'); input.classList.add('bad');
-        fb.className = 'feedback show bad'; fb.textContent = '✗ entre un nombre valide';
+        fb.className = 'feedback show bad'; fb.textContent = '✗ Entre un nombre valide.';
         solved.delete(q); updateScore(); return;
       }
       if(Math.abs(val-answer) <= tol){
         input.classList.remove('bad'); input.classList.add('good');
-        fb.className = 'feedback show ok'; fb.textContent = '✓ correct';
+        fb.className = 'feedback show ok'; fb.textContent = '✓ Bonne réponse.';
         solved.add(q);
       } else {
         input.classList.remove('good'); input.classList.add('bad');
         fb.className = 'feedback show bad';
-        fb.textContent = val<answer ? '✗ trop petit — vérifie l\'arrondi au-dessus et les conversions'
-                                    : '✗ trop grand — vérifie l\'arrondi au-dessus et les conversions';
+        fb.textContent = val<answer ? '✗ Trop petit — vérifie l\'arrondi au-dessus et les conversions.'
+                                    : '✗ Trop grand — vérifie l\'arrondi au-dessus et les conversions.';
         solved.delete(q);
       }
       updateScore();
@@ -599,7 +838,6 @@ function attachExerciseHandlers(){
   });
 }
 
-/* ============ CORRECTIONS ============ */
 function attachSolutionHandlers(){
   document.querySelectorAll('[data-sol]').forEach(btn => {
     if(btn.dataset.bound) return;
@@ -607,7 +845,7 @@ function attachSolutionHandlers(){
     btn.addEventListener('click', () => {
       const box = document.getElementById(btn.dataset.sol);
       const open = box.classList.toggle('show');
-      btn.textContent = open ? '▾ masquer la correction' : '▸ voir la correction';
+      btn.textContent = open ? 'Masquer la correction' : 'Voir la correction';
     });
   });
 }
@@ -642,7 +880,7 @@ function renderExo1(){
   qs[3].dataset.answer=D; qs[3].dataset.tol=Math.max(0.2, D*0.02);
 
   exo.querySelector('#sol1').innerHTML = `
-    <h4>▸ correction</h4>
+    <h4>Correction</h4>
     <ol>
       <li>taille = ${fmt(tailleMo,1)} Mo = ${nf.format(tailleOctets)} octets</li>
       <li>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = <span class="res">${nf.format(N)} paquets</span></li>
@@ -681,7 +919,7 @@ function renderExo2(){
   qs[2].dataset.answer=T; qs[2].dataset.tol=Math.max(0.2, T*0.02);
 
   exo.querySelector('#sol2').innerHTML = `
-    <h4>▸ correction</h4>
+    <h4>Correction</h4>
     <ol>
       <li>taille = ${fmt(tailleMo,0)} Mo = ${nf.format(tailleOctets)} octets</li>
       <li>N = ⌈${nf.format(tailleOctets)} ÷ ${nf.format(C)}⌉ = ⌈${fmt(tailleOctets/C,2)}⌉ = <span class="res">${nf.format(N)} paquets</span></li>
@@ -721,7 +959,7 @@ function renderExo3(){
   qs[2].dataset.answer=utileMo; qs[2].dataset.tol=Math.max(0.2, utileMo*0.02);
 
   exo.querySelector('#sol3').innerHTML = `
-    <h4>▸ correction</h4>
+    <h4>Correction</h4>
     <ol>
       <li>Vmax = D × T = ${nf.format(debit*1e6)} × ${fmt(duree,0)} = ${nf.format(VmaxBits)} bits<br>
           = ÷ 8 = <span class="res">${nf.format(VmaxOctets)} octets</span></li>
@@ -754,7 +992,6 @@ function distinctOptions(correct, wrongs){
 function buildQCM(){
   const questions = [];
 
-  /* Q1 : nombre de paquets (arrondi supérieur) */
   {
     const tailleMo = rndStep(3.0,7.5,0.1);
     const C = Math.round(rndStep(1300,1500,20));
@@ -770,7 +1007,6 @@ function buildQCM(){
     });
   }
 
-  /* Q2 : Mo → bits */
   {
     const tailleMo = rndStep(1.0,5.0,0.5);
     const correct = tailleMo*1e6*8;
@@ -784,7 +1020,6 @@ function buildQCM(){
     });
   }
 
-  /* Q3 : volume réel */
   {
     const N = Math.round(rndStep(2000,8000,500));
     const C = Math.round(rndStep(1300,1500,20));
@@ -800,7 +1035,6 @@ function buildQCM(){
     });
   }
 
-  /* Q4 : débit */
   {
     const Vbits = rndStep(40,120,10)*1e6;
     const T = rndStep(3,10,1);
@@ -815,7 +1049,6 @@ function buildQCM(){
     });
   }
 
-  /* Q5 : taille utile max (floor) */
   {
     const D = rndStep(4,9,1);
     const T = rndStep(15,40,5);
@@ -872,13 +1105,13 @@ function renderQCM(){
         if(i === correctIndex){
           btn.classList.add('good');
           fb.className = 'qcm-feedback show ok';
-          fb.innerHTML = `✓ correct !<span class="expl">${q.expl}</span>`;
+          fb.innerHTML = `✓ Bonne réponse.<span class="expl">${q.expl}</span>`;
           solved.add(el);
         } else {
           btn.classList.add('bad');
           el.querySelectorAll('.opt')[correctIndex].classList.add('good');
           fb.className = 'qcm-feedback show bad';
-          fb.innerHTML = `✗ raté.<span class="expl">${q.expl}</span>`;
+          fb.innerHTML = `✗ Raté.<span class="expl">${q.expl}</span>`;
           solved.delete(el);
         }
         updateScore();
@@ -899,7 +1132,7 @@ function resetAll(){
     if(fb){ fb.className='feedback'; fb.textContent=''; }
   });
   document.querySelectorAll('.solution').forEach(s => s.classList.remove('show'));
-  document.querySelectorAll('[data-sol]').forEach(b => b.textContent = '▸ voir la correction');
+  document.querySelectorAll('[data-sol]').forEach(b => b.textContent = 'Voir la correction');
   updateScore();
 }
 
@@ -923,7 +1156,7 @@ function simCalc(){
   const E = parseFloat(simE.value);
   const T = parseFloat(simDuree.value);
   if([tailleMo,C,E,T].some(isNaN) || C<=0 || T<=0 || E<0){
-    simOut.innerHTML = '<div class="step" style="color:var(--bad)">✗ entre des valeurs valides (C > 0, T > 0)</div>';
+    simOut.innerHTML = '<div class="step" style="color:var(--bad)">✗ Entre des valeurs valides (C &gt; 0, T &gt; 0).</div>';
     return;
   }
   const tailleOctets = Math.round(tailleMo*1e6);
@@ -944,7 +1177,7 @@ function simCalc(){
     <div class="step"><span class="n">05</span>Surcoût réseau (overhead) = ${nf.format(Vreel)} − ${nf.format(tailleOctets)} = <span class="o">${nf.format(overhead)} octets</span> (${fmt(overhead/1e3,1)} ko)</div>
     <div class="step"><span class="n">06</span>En bits = ${nf.format(Vreel)} × 8 = <span class="o">${nf.format(Vbits)} bits</span> = ${fmt(VMbits,3)} Mbits</div>
     <div class="step"><span class="n">07</span>Débit D = ${fmt(VMbits,3)} ÷ ${fmt(T,2)} = <span class="r">${fmt(D,3)} Mbit/s</span></div>
-    <div class="step" style="color:var(--muted); font-size:0.76rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
+    <div class="step" style="color:var(--muted);font-size:0.85rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
     <div class="final">→ D = ${fmt(D,3)} Mbit/s &nbsp;·&nbsp; Vréel = ${fmt(Vreel/1e6,3)} Mo &nbsp;·&nbsp; N = ${nf.format(N)}</div>
   `;
 }

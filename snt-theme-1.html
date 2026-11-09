@@ -38,36 +38,50 @@ body{
 main{max-width:820px;margin:0 auto;padding:0 22px}
 
 /* header */
-header{position:sticky;top:0;z-index:50;background:rgba(42,49,64,0.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.bar{max-width:820px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.file-tab{font-family:var(--mono);font-size:.85rem;color:var(--amber);padding:4px 10px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel)}
+header{position:sticky;top:0;z-index:50;background:rgba(42,49,64,0.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.bar{max-width:820px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.file-tab{font-family:var(--mono);font-size:.82rem;color:var(--amber);padding:4px 9px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel)}
 .file-tab::before{content:'●';color:var(--coral);margin-right:6px;font-size:.7rem;vertical-align:middle}
-nav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
-nav a{color:var(--muted);text-decoration:none;font-size:.86rem;padding:5px 9px;border-radius:3px;transition:color .12s,background .12s}
+nav{display:flex;gap:1px;flex-wrap:wrap;margin-left:auto}
+nav a{color:var(--muted);text-decoration:none;font-size:.84rem;padding:5px 9px;border-radius:3px;transition:color .12s,background .12s;white-space:nowrap}
 nav a:hover{color:var(--txt);background:var(--panel)}
-.score{font-family:var(--mono);font-size:.83rem;color:var(--muted);padding:4px 10px;border-left:1px solid var(--line)}
+nav a.active{color:var(--amber);background:var(--panel)}
+nav a.partial{color:var(--teal)}
+nav a.done{color:var(--ok)}
+nav a .np{font-family:var(--mono);font-size:.72rem;opacity:.85;margin-left:2px}
+.score{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding:4px 9px;border-left:1px solid var(--line)}
 .score b{color:var(--amber);font-weight:600}
 .score .total{color:var(--dim)}
-.reroll{font-family:var(--mono);font-size:.8rem;background:var(--panel);color:var(--teal);border:1px solid var(--line-2);border-radius:3px;padding:5px 11px;cursor:pointer;transition:background .12s,color .12s}
+.reroll{font-family:var(--mono);font-size:.78rem;background:var(--panel);color:var(--teal);border:1px solid var(--line-2);border-radius:3px;padding:5px 10px;cursor:pointer;transition:background .12s,color .12s}
 .reroll:hover{background:var(--panel-2);color:var(--txt)}
 
-/* hero */
+/* view switching */
+.view{display:none}
+.view.active{display:block;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* hero (accueil) */
 .hero{padding:52px 0 20px}
 .hero .tag{font-family:var(--hand);font-size:1.15rem;color:var(--amber);margin-bottom:10px}
-.hero h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.8rem,4.5vw,2.4rem);line-height:1.2;color:var(--txt);margin-bottom:18px;letter-spacing:-.5px}
+.hero h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.9rem,4.5vw,2.5rem);line-height:1.2;color:var(--txt);margin-bottom:18px;letter-spacing:-.5px}
 .hero h1 .hl{background:linear-gradient(180deg,transparent 45%,rgba(245,199,110,.35) 45%,rgba(245,199,110,.35) 90%,transparent 90%);padding:0 4px}
 .hero p{color:var(--muted);font-size:1rem;max-width:580px;margin-bottom:10px}
 .hero .note-line{font-family:var(--hand);font-size:1.1rem;color:var(--amber);margin:16px 0 22px}
 .hero .note-line::before{content:'↳ ';opacity:.7}
-.cta{display:inline-block;font-family:var(--mono);font-weight:500;font-size:.9rem;text-decoration:none;color:var(--bg);background:var(--amber);padding:10px 20px;border-radius:3px;border:1px solid var(--amber);transition:background .15s,transform .15s}
-.cta:hover{background:var(--amber-d);transform:translateY(-1px)}
 
-/* sections */
-section{padding-top:52px}
-section > h2{font-family:var(--sans);font-weight:600;font-size:1.4rem;color:var(--txt);display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap}
-section > h2 .num{display:inline-grid;place-items:center;width:38px;height:38px;font-family:var(--hand);font-size:1.7rem;font-weight:600;color:var(--amber);border:1.5px solid var(--amber);border-radius:46% 52% 48% 54% / 48% 52% 48% 52%;transform:rotate(-3deg)}
-section > h2::after{content:'';flex-basis:100%;height:5px;margin-top:8px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='5' viewBox='0 0 28 5'%3E%3Cpath d='M0 2.5 Q7 0 14 2.5 T28 2.5' stroke='%23f5c76e' fill='none' stroke-width='1.2' opacity='0.55'/%3E%3C/svg%3E");background-repeat:repeat-x;background-size:28px 5px}
-section > .sub{color:var(--muted);font-size:.94rem;margin:10px 0 24px}
+/* quick nav grid on accueil */
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:32px}
+.quick-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px;text-decoration:none;color:var(--txt);transition:border-color .15s,transform .15s}
+.quick-card:hover{border-color:var(--amber);transform:translateY(-2px)}
+.quick-num{font-family:var(--hand);font-size:1.7rem;color:var(--amber);font-weight:600;margin-bottom:2px;line-height:1}
+.quick-title{font-weight:600;font-size:.96rem;margin-bottom:2px}
+.quick-desc{font-size:.82rem;color:var(--muted)}
+
+/* page headers (interior views) */
+.page-head{padding:40px 0 20px;border-bottom:1px dashed var(--line);margin-bottom:24px}
+.page-tag{font-family:var(--hand);font-size:1.1rem;color:var(--amber);margin-bottom:4px}
+.page-head h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.6rem,4vw,2.1rem);color:var(--txt);line-height:1.2;letter-spacing:-.3px}
+.page-sub{color:var(--muted);font-size:.92rem;margin-top:6px}
 
 /* cours */
 .chapter{margin-bottom:40px}
@@ -80,20 +94,11 @@ section > .sub{color:var(--muted);font-size:.94rem;margin:10px 0 24px}
 .chapter ul li{padding-left:22px;position:relative;margin-bottom:6px;font-size:.94rem;color:#d6d0c4}
 .chapter ul li::before{content:'—';position:absolute;left:2px;color:var(--amber)}
 .chapter ul li strong{color:var(--txt);font-weight:600}
-
 .hl{background:linear-gradient(180deg,transparent 42%,rgba(245,199,110,.32) 42%,rgba(245,199,110,.32) 88%,transparent 88%);padding:0 3px;color:var(--txt)}
-
-.sticky{display:inline-block;background:linear-gradient(135deg,#f5c76e 0%,#e8b95c 100%);color:#2a1e0f;font-family:var(--hand);font-size:1.15rem;line-height:1.35;padding:12px 18px;border-radius:2px;transform:rotate(-1.5deg);box-shadow:3px 4px 0 rgba(0,0,0,.2),0 1px 3px rgba(0,0,0,.15);margin:16px 0 20px;max-width:100%}
-.sticky strong{font-weight:700}
-
-.inline-comment{font-family:var(--mono);font-size:.8rem;color:var(--teal);font-style:italic;margin:10px 0;opacity:.85}
-.inline-comment::before{content:'/* ';opacity:.6}
-.inline-comment::after{content:' */';opacity:.6}
 
 /* formules */
 .formula{margin:16px 0;padding:14px 18px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel);text-align:center;font-family:var(--mono);font-size:1.08rem;color:var(--amber)}
 .formula .small{display:block;font-family:var(--sans);font-size:.82rem;color:var(--muted);margin-top:6px;font-style:italic}
-
 .formula-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:16px 0}
 .formula-row .fc{padding:12px 8px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel);text-align:center;font-family:var(--mono)}
 .formula-row .fc .who{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
@@ -119,19 +124,15 @@ section > .sub{color:var(--muted);font-size:.94rem;margin:10px 0 24px}
 .schema svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
 .schema figcaption{font-family:var(--sans);font-size:.85rem;font-style:italic;color:var(--muted);text-align:center;margin-top:10px;padding:0 4px}
 
-/* exos */
-.exo{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:22px;margin-bottom:18px}
-.exo-label{font-family:var(--hand);font-size:1.4rem;color:var(--amber);font-weight:600;margin-bottom:2px}
-.exo h3{font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--txt);margin-bottom:4px}
-.exo-sub{font-size:.85rem;color:var(--dim);font-style:italic;margin-bottom:16px}
-.enonce{font-size:.93rem;color:#d6d0c4;padding:12px 14px;background:rgba(255,255,255,.02);border-radius:3px;border:1px solid var(--line);margin-bottom:16px}
+/* enoncé & questions */
+.enonce{font-size:.94rem;color:#d6d0c4;padding:14px 16px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:3px;margin-bottom:20px}
 .enonce strong{color:var(--txt);font-weight:600}
-.enonce ul{list-style:none;margin:8px 0 0;padding:0}
-.enonce ul li{padding-left:18px;position:relative;margin-bottom:3px;font-size:.9rem}
-.enonce ul li::before{content:'·';position:absolute;left:5px;color:var(--amber);font-weight:700}
+.enonce ul{list-style:none;margin:10px 0 0;padding:0}
+.enonce ul li{padding-left:20px;position:relative;margin-bottom:4px;font-size:.92rem}
+.enonce ul li::before{content:'·';position:absolute;left:6px;color:var(--amber);font-weight:700}
 
-.q{margin-bottom:14px}
-.q > label{display:block;font-size:.92rem;color:var(--txt);margin-bottom:6px}
+.q{margin-bottom:18px}
+.q > label{display:block;font-size:.94rem;color:var(--txt);margin-bottom:6px}
 .q > label .n{display:inline-block;min-width:22px;font-family:var(--hand);color:var(--amber);font-size:1.05rem;font-weight:600}
 .input-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .input-row input{flex:1;min-width:140px;background:var(--bg);border:1px solid var(--line-2);color:var(--txt);border-radius:3px;padding:8px 11px;font-family:var(--mono);font-size:.92rem;outline:none;transition:border-color .12s}
@@ -145,7 +146,9 @@ section > .sub{color:var(--muted);font-size:.94rem;margin:10px 0 24px}
 .feedback.show{display:block}
 .feedback.ok{color:var(--ok)}
 .feedback.bad{color:var(--bad)}
-.solution-btn{font-family:var(--hand);font-size:1.1rem;color:var(--teal);background:transparent;border:none;cursor:pointer;padding:8px 0;margin-top:4px}
+
+/* solution */
+.solution-btn{font-family:var(--hand);font-size:1.15rem;color:var(--teal);background:transparent;border:none;cursor:pointer;padding:8px 0;margin-top:6px}
 .solution-btn:hover{text-decoration:underline}
 .solution{display:none;margin-top:12px;padding:14px 16px;background:rgba(255,255,255,.02);border:1px dashed var(--line-2);border-radius:3px}
 .solution.show{display:block}
@@ -195,14 +198,22 @@ section > .sub{color:var(--muted);font-size:.94rem;margin:10px 0 24px}
 .conv-out div{background:var(--bg);border:1px solid var(--line-2);border-radius:3px;padding:8px 10px;font-family:var(--mono);font-size:.88rem;text-align:center;color:var(--amber)}
 .conv-out span{display:block;font-size:.7rem;color:var(--muted);font-family:var(--sans);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px}
 
+/* nav entre pages */
+.exo-nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:22px;border-top:1px solid var(--line);flex-wrap:wrap}
+.exo-nav a{font-family:var(--hand);font-size:1.15rem;color:var(--teal);text-decoration:none;padding:4px 0;font-weight:600}
+.exo-nav a:hover{color:var(--amber)}
+.exo-nav a.next{margin-left:auto;text-align:right}
+
 footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px solid var(--line);text-align:center;font-family:var(--hand);font-size:1.05rem;color:var(--dim)}
 
 @media(max-width:560px){
   main{padding:0 16px}
-  .bar{padding:10px 16px;gap:10px}
-  nav a{padding:4px 7px;font-size:.82rem}
+  .bar{padding:10px 16px;gap:8px}
+  nav{width:100%;order:3;margin-left:0;justify-content:flex-start}
+  nav a{padding:4px 7px;font-size:.8rem}
   .conv-grid{grid-template-columns:1fr}
-  .exo,.qcm-question,.panel,.chapter,.schema{padding:16px}
+  .chapter,.panel,.schema{padding:16px}
+  .qcm-question{padding:14px 16px}
   body{font-size:15px}
 }
 </style>
@@ -213,10 +224,13 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
   <div class="bar">
     <div class="file-tab">snt_notes.txt</div>
     <nav>
+      <a href="#accueil">accueil</a>
       <a href="#cours">cours</a>
-      <a href="#exos">exos</a>
-      <a href="#qcm">qcm</a>
-      <a href="#sim">simulateur</a>
+      <a href="#exo1" data-page="exo1">exo I<span class="np"></span></a>
+      <a href="#exo2" data-page="exo2">exo II<span class="np"></span></a>
+      <a href="#exo3" data-page="exo3">exo III<span class="np"></span></a>
+      <a href="#qcm" data-page="qcm">qcm<span class="np"></span></a>
+      <a href="#sim">simu</a>
       <a href="#conv">convert</a>
     </nav>
     <div class="score">score <b id="score">0</b><span class="total">/15</span></div>
@@ -226,20 +240,57 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
 
 <main>
 
-  <div class="hero">
-    <div class="tag">~ notes de cours · SNT 2de ~</div>
-    <h1>Débit, paquets & <span class="hl">volume réel</span></h1>
-    <p>Un fichier de 1,5 Mo traverse un réseau. On le découpe en paquets, on ajoute des en-têtes, on mesure le débit. Voilà l'histoire.</p>
-    <p class="note-line">(les valeurs changent à chaque rechargement)</p>
-    <a href="#cours" class="cta">lire le cours →</a>
+  <!-- ============================================ ACCUEIL ============================================ -->
+  <div class="view" id="view-accueil">
+    <div class="hero">
+      <div class="tag">~ notes de cours · SNT 2de ~</div>
+      <h1>Débit, paquets & <span class="hl">volume réel</span></h1>
+      <p>Un fichier de 1,5 Mo traverse un réseau. On le découpe en paquets, on ajoute des en-têtes, on mesure le débit. Voilà l'histoire.</p>
+      <p class="note-line">(les valeurs changent à chaque rechargement)</p>
+    </div>
+
+    <div class="quick-grid">
+      <a href="#cours" class="quick-card">
+        <div class="quick-num">§</div>
+        <div class="quick-title">Le cours</div>
+        <div class="quick-desc">4 chapitres + schémas</div>
+      </a>
+      <a href="#exo1" class="quick-card">
+        <div class="quick-num">I</div>
+        <div class="quick-title">Photo HD</div>
+        <div class="quick-desc">calcul du débit</div>
+      </a>
+      <a href="#exo2" class="quick-card">
+        <div class="quick-num">II</div>
+        <div class="quick-title">Mise à jour</div>
+        <div class="quick-desc">calcul du temps</div>
+      </a>
+      <a href="#exo3" class="quick-card">
+        <div class="quick-num">III</div>
+        <div class="quick-title">Visio</div>
+        <div class="quick-desc">taille maximale</div>
+      </a>
+      <a href="#qcm" class="quick-card">
+        <div class="quick-num">?</div>
+        <div class="quick-title">QCM</div>
+        <div class="quick-desc">5 questions pièges</div>
+      </a>
+      <a href="#sim" class="quick-card">
+        <div class="quick-num">→</div>
+        <div class="quick-title">Simulateur</div>
+        <div class="quick-desc">calcul pas à pas</div>
+      </a>
+    </div>
   </div>
 
-  <!-- ============ COURS ============ -->
-  <section id="cours">
-    <h2><span class="num">1</span> Le cours</h2>
-    <p class="sub">Fil rouge : un fichier de 1,5 Mo, charge utile 1 460 octets, en-tête 40 octets, transfert en 4 secondes.</p>
+  <!-- ============================================ COURS ============================================ -->
+  <div class="view" id="view-cours">
+    <div class="page-head">
+      <div class="page-tag">§ le cours</div>
+      <h1>Quatre chapitres, un fil rouge</h1>
+      <p class="page-sub">Un fichier de 1,5 Mo, charge utile 1 460 octets, en-tête 40 octets, transfert en 4 secondes.</p>
+    </div>
 
-    <!-- 1.1 -->
     <div class="chapter">
       <h3><span class="num">§1.</span> Découpage en paquets</h3>
       <p>Sur Internet, un fichier n'est <strong>jamais envoyé d'un seul bloc</strong>. Il est découpé en <span class="kw">paquets</span>, chacun transportant une portion des données. Cette portion s'appelle la <strong>charge utile</strong>.</p>
@@ -251,18 +302,13 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <figure class="schema">
         <div class="schema-tag">schéma 1</div>
         <svg viewBox="0 0 520 240" aria-label="Découpage d'un fichier en paquets">
-          <!-- fichier -->
           <path d="M196 24 Q194 20 200 19 L320 20 Q326 20 325 25 L324 78 Q325 82 320 82 L198 81 Q193 81 194 77 Z"
                 fill="none" stroke="#ebe5d8" stroke-width="1.5" opacity="0.85"/>
           <text x="260" y="50" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="22" font-weight="600">fichier</text>
           <text x="260" y="70" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="12">1,5 Mo</text>
-
-          <!-- flèche -->
           <path d="M258 90 Q256 102 260 114" stroke="#f5c76e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
           <path d="M253 108 L260 116 L267 108" stroke="#f5c76e" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
           <text x="278" y="108" fill="#f5c76e" font-family="Caveat, cursive" font-size="17">découpage</text>
-
-          <!-- paquets -->
           <g fill="#3a4256" stroke="#8a92a8" stroke-width="1.3">
             <rect x="52" y="146" width="62" height="48" rx="1"/>
             <rect x="122" y="146" width="62" height="48" rx="1"/>
@@ -272,7 +318,6 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
           </g>
           <text x="410" y="176" fill="#a0a8be" font-family="Caveat, cursive" font-size="24">…</text>
           <rect x="440" y="146" width="62" height="48" rx="1" fill="#3a4256" stroke="#8a92a8" stroke-width="1.3"/>
-
           <text x="260" y="222" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="20" font-weight="600">N = 1 028 paquets</text>
         </svg>
         <figcaption>Un fichier de 1,5 Mo découpé en 1 028 paquets de 1 460 octets.</figcaption>
@@ -292,7 +337,6 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </div>
     </div>
 
-    <!-- 1.2 -->
     <div class="chapter">
       <h3><span class="num">§2.</span> Volume réellement transféré</h3>
       <p>Chaque paquet contient la charge utile, mais aussi un <strong>en-tête</strong> qui transporte les adresses de provenance, de destination et le numéro du paquet. Cet en-tête pèse sur le volume total transmis.</p>
@@ -303,11 +347,9 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
           <rect x="60" y="42" width="110" height="60" fill="#3a4256" stroke="#ebe5d8" stroke-width="1.5"/>
           <text x="115" y="68" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="18">en-tête</text>
           <text x="115" y="86" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="11">40 octets</text>
-
           <rect x="170" y="42" width="310" height="60" fill="#2a3140" stroke="#ebe5d8" stroke-width="1.5"/>
           <text x="325" y="68" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="18">charge utile</text>
           <text x="325" y="86" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="11">1 460 octets</text>
-
           <path d="M60 122 L60 138 L480 138 L480 122" stroke="#f5c76e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <text x="270" y="166" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="20">paquet complet : 1 500 octets</text>
         </svg>
@@ -332,12 +374,10 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
           <rect x="70" y="42" width="300" height="40" fill="#3a4256" stroke="#ebe5d8" stroke-width="1.4"/>
           <text x="220" y="67" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="17">données utiles</text>
           <text x="392" y="67" fill="#a0a8be" font-family="Caveat, cursive" font-size="17">1,5 Mo</text>
-
           <rect x="70" y="106" width="308" height="40" fill="#2a3140" stroke="#ebe5d8" stroke-width="1.4"/>
           <rect x="378" y="106" width="10" height="40" fill="#f5c76e"/>
           <text x="220" y="131" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="17">volume réel</text>
           <text x="398" y="131" fill="#a0a8be" font-family="Caveat, cursive" font-size="17">1,542 Mo</text>
-
           <path d="M390 152 Q386 168 388 184" stroke="#f5c76e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <text x="388" y="202" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="16">surcoût 42 ko</text>
         </svg>
@@ -353,7 +393,6 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </div>
     </div>
 
-    <!-- 1.3 -->
     <div class="chapter">
       <h3><span class="num">§3.</span> Débit, volume et temps</h3>
       <p>Le <strong>débit</strong> mesure la quantité d'informations transmises par unité de temps. Trois formes d'une même relation :</p>
@@ -386,7 +425,6 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </div>
     </div>
 
-    <!-- 1.4 -->
     <div class="chapter">
       <h3><span class="num">§4.</span> Trois pièges à éviter</h3>
 
@@ -408,151 +446,184 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
         <p>Le temps T s'exprime <strong>toujours en secondes</strong> dans la formule.</p>
         <p>Pour convertir : <code>145 s = 2 min 25 s</code> (car 145 = 2×60 + 25).</p>
       </div>
-
-      <div class="inline-comment">le plus dur c'est pas la formule, c'est de ne pas oublier le ×8</div>
     </div>
-  </section>
 
-  <!-- ============ EXOS ============ -->
-  <section id="exos">
-    <h2><span class="num">2</span> Les exercices</h2>
-    <p class="sub">Valeurs aléatoires à chaque rechargement. Réponse acceptée avec ou sans unité, virgule ou point.</p>
+    <div class="exo-nav">
+      <a href="#accueil">← accueil</a>
+      <a href="#exo1" class="next">Exercice I →</a>
+    </div>
+  </div>
 
-    <article class="exo" id="exo1">
-      <div class="exo-label">Exercice I.</div>
-      <h3>Partage d'une photo HD</h3>
-      <p class="exo-sub">calcul du débit · TCP/IP</p>
-      <div class="enonce"></div>
+  <!-- ============================================ EXO 1 ============================================ -->
+  <div class="view" id="view-exo1">
+    <div class="page-head">
+      <div class="page-tag">exercice I · calcul du débit · TCP/IP</div>
+      <h1>Partage d'une photo HD</h1>
+    </div>
 
-      <div class="q">
-        <label><span class="n">1.</span> Nombre de paquets N</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 2877">
-          <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+    <div class="enonce" id="enonce1"></div>
+
+    <div class="q">
+      <label><span class="n">1.</span> Nombre de paquets N</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 2877">
+        <span class="unit">paquets</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en octets</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 4315500">
-          <span class="unit">octets</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en octets</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 4315500">
+        <span class="unit">octets</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">3.</span> Ce volume en Mbits</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 34,52">
-          <span class="unit">Mbits</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">3.</span> Ce volume en Mbits</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 34,52">
+        <span class="unit">Mbits</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">4.</span> Débit D en Mbit/s</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 12,33">
-          <span class="unit">Mbit/s</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">4.</span> Débit D en Mbit/s</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 12,33">
+        <span class="unit">Mbit/s</span>
+        <button class="btn">vérifier</button>
       </div>
+      <p class="feedback"></p>
+    </div>
 
-      <button class="solution-btn" data-sol="sol1">→ voir la correction</button>
-      <div class="solution" id="sol1"></div>
-    </article>
+    <button class="solution-btn" data-sol="sol1">→ voir la correction</button>
+    <div class="solution" id="sol1"></div>
 
-    <article class="exo" id="exo2">
-      <div class="exo-label">Exercice II.</div>
-      <h3>Mise à jour d'un logiciel</h3>
-      <p class="exo-sub">calcul du temps · IPv6 · ADSL</p>
-      <div class="enonce"></div>
+    <div class="exo-nav">
+      <a href="#cours">← cours</a>
+      <a href="#exo2" class="next">Exercice II →</a>
+    </div>
+  </div>
 
-      <div class="q">
-        <label><span class="n">1.</span> Nombre de paquets N</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 59860">
-          <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+  <!-- ============================================ EXO 2 ============================================ -->
+  <div class="view" id="view-exo2">
+    <div class="page-head">
+      <div class="page-tag">exercice II · calcul du temps · IPv6 · ADSL</div>
+      <h1>Mise à jour d'un logiciel</h1>
+    </div>
+
+    <div class="enonce" id="enonce2"></div>
+
+    <div class="q">
+      <label><span class="n">1.</span> Nombre de paquets N</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 59860">
+        <span class="unit">paquets</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en bits</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 708742400">
-          <span class="unit">bits</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">2.</span> Volume réel V<sub>réel</sub> en bits</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 708742400">
+        <span class="unit">bits</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">3.</span> Durée T en secondes</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 59,06">
-          <span class="unit">secondes</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">3.</span> Durée T en secondes</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 59,06">
+        <span class="unit">secondes</span>
+        <button class="btn">vérifier</button>
       </div>
+      <p class="feedback"></p>
+    </div>
 
-      <button class="solution-btn" data-sol="sol2">→ voir la correction</button>
-      <div class="solution" id="sol2"></div>
-    </article>
+    <button class="solution-btn" data-sol="sol2">→ voir la correction</button>
+    <div class="solution" id="sol2"></div>
 
-    <article class="exo" id="exo3">
-      <div class="exo-label">Exercice III.</div>
-      <h3>Visioconférence en direct</h3>
-      <p class="exo-sub">taille maximale transférable · UDP/IP</p>
-      <div class="enonce"></div>
+    <div class="exo-nav">
+      <a href="#exo1">← Exercice I</a>
+      <a href="#exo3" class="next">Exercice III →</a>
+    </div>
+  </div>
 
-      <div class="q">
-        <label><span class="n">1.</span> Volume maximal V<sub>max</sub> en octets</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 18750000">
-          <span class="unit">octets</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+  <!-- ============================================ EXO 3 ============================================ -->
+  <div class="view" id="view-exo3">
+    <div class="page-head">
+      <div class="page-tag">exercice III · taille maximale · UDP/IP</div>
+      <h1>Visioconférence en direct</h1>
+    </div>
+
+    <div class="enonce" id="enonce3"></div>
+
+    <div class="q">
+      <label><span class="n">1.</span> Volume maximal V<sub>max</sub> en octets</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 18750000">
+        <span class="unit">octets</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">2.</span> Nombre maximal de paquets N</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 12500">
-          <span class="unit">paquets</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">2.</span> Nombre maximal de paquets N</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 12500">
+        <span class="unit">paquets</span>
+        <button class="btn">vérifier</button>
       </div>
-      <div class="q">
-        <label><span class="n">3.</span> Taille maximale utile en Mo</label>
-        <div class="input-row">
-          <input type="text" inputmode="decimal" placeholder="ex : 18,4">
-          <span class="unit">Mo</span>
-          <button class="btn">vérifier</button>
-        </div>
-        <p class="feedback"></p>
+      <p class="feedback"></p>
+    </div>
+    <div class="q">
+      <label><span class="n">3.</span> Taille maximale utile en Mo</label>
+      <div class="input-row">
+        <input type="text" inputmode="decimal" placeholder="ex : 18,4">
+        <span class="unit">Mo</span>
+        <button class="btn">vérifier</button>
       </div>
+      <p class="feedback"></p>
+    </div>
 
-      <button class="solution-btn" data-sol="sol3">→ voir la correction</button>
-      <div class="solution" id="sol3"></div>
-    </article>
-  </section>
+    <button class="solution-btn" data-sol="sol3">→ voir la correction</button>
+    <div class="solution" id="sol3"></div>
 
-  <!-- ============ QCM ============ -->
-  <section id="qcm">
-    <h2><span class="num">3</span> QCM</h2>
-    <p class="sub">Cinq questions pièges, tirées au hasard à chaque rechargement. Attention aux conversions et aux arrondis.</p>
+    <div class="exo-nav">
+      <a href="#exo2">← Exercice II</a>
+      <a href="#qcm" class="next">QCM →</a>
+    </div>
+  </div>
+
+  <!-- ============================================ QCM ============================================ -->
+  <div class="view" id="view-qcm">
+    <div class="page-head">
+      <div class="page-tag">contrôle · 5 questions</div>
+      <h1>QCM</h1>
+    </div>
+
+    <p class="qcm-note">Cinq questions pièges, tirées au hasard à chaque rechargement. Attention aux conversions et aux arrondis.</p>
     <div id="qcmList"></div>
-  </section>
 
-  <!-- ============ SIMULATEUR ============ -->
-  <section id="sim">
-    <h2><span class="num">4</span> Simulateur</h2>
-    <p class="sub">Entre tes propres valeurs — le calcul est déroulé étape par étape.</p>
+    <div class="exo-nav">
+      <a href="#exo3">← Exercice III</a>
+      <a href="#sim" class="next">Simulateur →</a>
+    </div>
+  </div>
+
+  <!-- ============================================ SIMULATEUR ============================================ -->
+  <div class="view" id="view-sim">
+    <div class="page-head">
+      <div class="page-tag">outil · calcul pas à pas</div>
+      <h1>Simulateur</h1>
+      <p class="page-sub">Entre tes propres valeurs — le calcul est déroulé étape par étape.</p>
+    </div>
 
     <div class="panel">
       <div class="sim-grid">
@@ -563,12 +634,21 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </div>
       <div class="sim-out" id="simOut"></div>
     </div>
-  </section>
 
-  <!-- ============ CONVERTISSEUR ============ -->
-  <section id="conv">
-    <h2><span class="num">5</span> Convertisseur</h2>
-    <p class="sub">Octets ↔ bits et multiples SI.</p>
+    <div class="exo-nav">
+      <a href="#qcm">← QCM</a>
+      <a href="#conv" class="next">Convertisseur →</a>
+    </div>
+  </div>
+
+  <!-- ============================================ CONVERTISSEUR ============================================ -->
+  <div class="view" id="view-conv">
+    <div class="page-head">
+      <div class="page-tag">outil · octets ↔ bits</div>
+      <h1>Convertisseur d'unités</h1>
+      <p class="page-sub">Multiples SI : k = 10³, M = 10⁶, G = 10⁹.</p>
+    </div>
+
     <div class="panel">
       <div class="conv-grid">
         <input type="number" id="calcVal" value="4.2" step="any" placeholder="valeur">
@@ -585,12 +665,16 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </div>
       <div class="conv-out" id="calcOut"></div>
     </div>
-  </section>
 
-  <footer>
-    SNT · 2de · Internet &amp; le Web · 1 Mo = 10⁶ octets
-  </footer>
+    <div class="exo-nav">
+      <a href="#sim">← Simulateur</a>
+      <a href="#accueil" class="next">Accueil →</a>
+    </div>
+  </div>
+
 </main>
+
+<footer>SNT · 2de · Internet &amp; le Web · 1 Mo = 10⁶ octets</footer>
 
 <script>
 /* ===== utils ===== */
@@ -621,19 +705,67 @@ function parseNum(raw){
   return isNaN(n)?NaN:n;
 }
 
+/* ===== routing ===== */
+const VALID_VIEWS = ['accueil','cours','exo1','exo2','exo3','qcm','sim','conv'];
+const REROLLABLE = ['exo1','exo2','exo3','qcm'];
+
+function getViewFromHash(){
+  const h = location.hash.slice(1);
+  return VALID_VIEWS.includes(h) ? h : 'accueil';
+}
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>{
+    v.classList.toggle('active', v.id === 'view-'+id);
+  });
+  document.querySelectorAll('nav a').forEach(a=>{
+    a.classList.toggle('active', a.getAttribute('href') === '#'+id);
+  });
+  window.scrollTo(0,0);
+  document.getElementById('rerollBtn').style.display = REROLLABLE.includes(id) ? '' : 'none';
+  updateNavProgress();
+}
+
+function currentView(){
+  const active = document.querySelector('.view.active');
+  return active ? active.id.replace('view-','') : 'accueil';
+}
+
+window.addEventListener('hashchange', ()=> showView(getViewFromHash()));
+
 /* ===== score ===== */
 const solved = new Set();
 function updateScore(){
   const total = document.querySelectorAll('.q').length + document.querySelectorAll('.qcm-question').length;
   document.getElementById('score').textContent = solved.size;
   document.querySelector('.score .total').textContent = '/' + total;
+  updateNavProgress();
+}
+
+function updateNavProgress(){
+  document.querySelectorAll('nav a[data-page]').forEach(a=>{
+    const page = a.dataset.page;
+    const view = document.getElementById('view-'+page);
+    if(!view) return;
+    const items = view.querySelectorAll('.q, .qcm-question');
+    const total = items.length;
+    const correct = Array.from(items).filter(q=>solved.has(q)).length;
+    const np = a.querySelector('.np');
+    a.classList.remove('partial','done');
+    if(!np) return;
+    if(total===0){ np.textContent=''; return; }
+    if(correct === total){ np.textContent=' ✓'; a.classList.add('done'); }
+    else if(correct > 0){ np.textContent=' '+correct+'/'+total; a.classList.add('partial'); }
+    else { np.textContent=''; }
+  });
 }
 
 /* ===== exos handlers ===== */
 function attachExerciseHandlers(){
   document.querySelectorAll('.q').forEach(q=>{
     const input=q.querySelector('input'), btn=q.querySelector('button'), fb=q.querySelector('.feedback');
-    if(!input||!btn)return;
+    if(!input||!btn||btn.dataset.bound) return;
+    btn.dataset.bound='1';
     function check(){
       const answer=parseFloat(q.dataset.answer);
       const tol=parseFloat(q.dataset.tol||'0');
@@ -662,7 +794,7 @@ function attachExerciseHandlers(){
 
 function attachSolutionHandlers(){
   document.querySelectorAll('[data-sol]').forEach(btn=>{
-    if(btn.dataset.bound)return;
+    if(btn.dataset.bound) return;
     btn.dataset.bound='1';
     btn.addEventListener('click',()=>{
       const box=document.getElementById(btn.dataset.sol);
@@ -685,8 +817,7 @@ function renderExo1(){
   const VMbits=Vbits/1e6;
   const D=VMbits/duree;
 
-  const exo=document.getElementById('exo1');
-  exo.querySelector('.enonce').innerHTML=`
+  document.getElementById('enonce1').innerHTML=`
     Une photo de <strong>${fmt(tailleMo,1)} Mo</strong> est envoyée depuis un smartphone vers un serveur distant.
     <ul>
       <li>charge utile maximale par paquet : <strong>${nf.format(C)} octets</strong></li>
@@ -694,13 +825,14 @@ function renderExo1(){
       <li>durée du transfert complet : <strong>${fmt(duree,1)} s</strong></li>
     </ul>`;
 
+  const exo=document.getElementById('view-exo1');
   const qs=exo.querySelectorAll('.q');
   qs[0].dataset.answer=N; qs[0].dataset.tol=0;
   qs[1].dataset.answer=Vreel; qs[1].dataset.tol=0;
   qs[2].dataset.answer=VMbits; qs[2].dataset.tol=Math.max(0.02,VMbits*0.02);
   qs[3].dataset.answer=D; qs[3].dataset.tol=Math.max(0.2,D*0.02);
 
-  exo.querySelector('#sol1').innerHTML=`
+  document.getElementById('sol1').innerHTML=`
     <h4>correction</h4>
     <ol>
       <li>taille = ${fmt(tailleMo,1)} Mo = ${nf.format(tailleOctets)} octets</li>
@@ -724,8 +856,7 @@ function renderExo2(){
   const Vbits=VreelOctets*8;
   const T=Vbits/(debit*1e6);
 
-  const exo=document.getElementById('exo2');
-  exo.querySelector('.enonce').innerHTML=`
+  document.getElementById('enonce2').innerHTML=`
     Une mise à jour logicielle de <strong>${fmt(tailleMo,0)} Mo</strong> doit être téléchargée sur un ordinateur (IPv6).
     <ul>
       <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
@@ -733,12 +864,13 @@ function renderExo2(){
       <li>débit descendant : <strong>D = ${fmt(debit,0)} Mbit/s</strong></li>
     </ul>`;
 
+  const exo=document.getElementById('view-exo2');
   const qs=exo.querySelectorAll('.q');
   qs[0].dataset.answer=N; qs[0].dataset.tol=0;
   qs[1].dataset.answer=Vbits; qs[1].dataset.tol=0;
   qs[2].dataset.answer=T; qs[2].dataset.tol=Math.max(0.2,T*0.02);
 
-  exo.querySelector('#sol2').innerHTML=`
+  document.getElementById('sol2').innerHTML=`
     <h4>correction</h4>
     <ol>
       <li>taille = ${fmt(tailleMo,0)} Mo = ${nf.format(tailleOctets)} octets</li>
@@ -763,8 +895,7 @@ function renderExo3(){
   const utileOctets=N*C;
   const utileMo=utileOctets/1e6;
 
-  const exo=document.getElementById('exo3');
-  exo.querySelector('.enonce').innerHTML=`
+  document.getElementById('enonce3').innerHTML=`
     Flux vidéo continu diffusé via UDP/IP à <strong>D = ${fmt(debit,0)} Mbit/s</strong>.
     <ul>
       <li>charge utile par paquet : <strong>${nf.format(C)} octets</strong></li>
@@ -772,12 +903,13 @@ function renderExo3(){
       <li>durée de l'extrait : <strong>T = ${fmt(duree,0)} s</strong></li>
     </ul>`;
 
+  const exo=document.getElementById('view-exo3');
   const qs=exo.querySelectorAll('.q');
   qs[0].dataset.answer=VmaxOctets; qs[0].dataset.tol=0;
   qs[1].dataset.answer=N; qs[1].dataset.tol=0;
   qs[2].dataset.answer=utileMo; qs[2].dataset.tol=Math.max(0.2,utileMo*0.02);
 
-  exo.querySelector('#sol3').innerHTML=`
+  document.getElementById('sol3').innerHTML=`
     <h4>correction</h4>
     <ol>
       <li>Vmax = D × T = ${nf.format(debit*1e6)} × ${fmt(duree,0)} = ${nf.format(VmaxBits)} bits<br>
@@ -936,24 +1068,33 @@ function renderQCM(){
   });
 }
 
-/* ===== reset / reroll ===== */
-function resetAll(){
-  solved.clear();
-  document.querySelectorAll('.q').forEach(q=>{
+/* ===== reset per view ===== */
+function resetExercise(exoId, solId){
+  const exo=document.getElementById('view-'+exoId);
+  exo.querySelectorAll('.q').forEach(q=>{
+    solved.delete(q);
     const input=q.querySelector('input');
     if(input){input.value='';input.classList.remove('good','bad')}
     const fb=q.querySelector('.feedback');
     if(fb){fb.className='feedback';fb.textContent=''}
   });
-  document.querySelectorAll('.solution').forEach(s=>s.classList.remove('show'));
-  document.querySelectorAll('[data-sol]').forEach(b=>b.textContent='→ voir la correction');
-  updateScore();
+  const sol=document.getElementById(solId);
+  if(sol) sol.classList.remove('show');
+  const sbtn=exo.querySelector('[data-sol]');
+  if(sbtn) sbtn.textContent='→ voir la correction';
 }
 
-function reroll(){
-  resetAll();
-  renderExo1(); renderExo2(); renderExo3();
-  renderQCM();
+function resetQCM(){
+  document.querySelectorAll('.qcm-question').forEach(q=>solved.delete(q));
+}
+
+/* ===== reroll contextual ===== */
+function rerollCurrent(){
+  const v=currentView();
+  if(v==='exo1'){ resetExercise('exo1','sol1'); renderExo1(); }
+  else if(v==='exo2'){ resetExercise('exo2','sol2'); renderExo2(); }
+  else if(v==='exo3'){ resetExercise('exo3','sol3'); renderExo3(); }
+  else if(v==='qcm'){ resetQCM(); renderQCM(); }
   updateScore();
 }
 
@@ -998,14 +1139,6 @@ function simCalc(){
 [simTaille,simC,simE,simDuree].forEach(el=>el.addEventListener('input',simCalc));
 simCalc();
 
-/* ===== init ===== */
-document.getElementById('rerollBtn').addEventListener('click',reroll);
-renderExo1(); renderExo2(); renderExo3();
-attachExerciseHandlers();
-attachSolutionHandlers();
-renderQCM();
-updateScore();
-
 /* ===== convertisseur ===== */
 const cVal=document.getElementById('calcVal');
 const cUnit=document.getElementById('calcUnit');
@@ -1028,6 +1161,18 @@ function convert(){
 cVal.addEventListener('input',convert);
 cUnit.addEventListener('change',convert);
 convert();
+
+/* ===== init ===== */
+renderExo1(); renderExo2(); renderExo3();
+attachExerciseHandlers();
+attachSolutionHandlers();
+renderQCM();
+updateScore();
+
+document.getElementById('rerollBtn').addEventListener('click', rerollCurrent);
+
+/* initial view */
+showView(getViewFromHash());
 </script>
 </body>
 </html>

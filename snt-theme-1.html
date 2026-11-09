@@ -3,218 +3,571 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SNT · débit & paquets · notes de révision</title>
+<title>SNT · débit & paquets</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#2a3140;
-  --panel:#333b4d;
-  --panel-2:#3a4256;
-  --line:#474f66;
-  --line-2:#5a6382;
-  --txt:#ebe5d8;
-  --muted:#a0a8be;
-  --dim:#6e7691;
-  --amber:#f5c76e;
-  --amber-d:#d4a84e;
-  --teal:#7ecab0;
-  --coral:#e8948a;
-  --ok:#88d4a8;
-  --bad:#e88a80;
-  --hand:'Caveat','Segoe Script',cursive;
-  --mono:'IBM Plex Mono','Consolas',monospace;
-  --sans:'IBM Plex Sans','Segoe UI',sans-serif;
+  --bg:#0b1017;
+  --bg-sub:#0f1520;
+  --panel:#131a26;
+  --panel-2:#1a2230;
+  --border:#1f2937;
+  --border-2:#2d3748;
+  --text:#d1d9e3;
+  --text-dim:#8b97a8;
+  --text-faint:#5a6573;
+  --green:#4ade80;
+  --green-d:#22c55e;
+  --cyan:#22d3ee;
+  --blue:#60a5fa;
+  --orange:#fbbf24;
+  --red:#f87171;
+  --purple:#a78bfa;
+  --mono:'JetBrains Mono','SF Mono','Cascadia Code','Consolas',monospace;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:var(--sans);background-color:var(--bg);
-  background-image:radial-gradient(circle,rgba(255,255,255,0.045) 1px,transparent 1.2px);
-  background-size:22px 22px;color:var(--txt);line-height:1.65;
-  font-size:16px;min-height:100vh;padding-bottom:60px;
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  font-size:15px;
+  min-height:100vh;
+  padding-bottom:60px;
+  background-image:
+    linear-gradient(rgba(34,211,238,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.025) 1px,transparent 1px);
+  background-size:40px 40px;
 }
-main{max-width:820px;margin:0 auto;padding:0 22px}
+main{max-width:860px;margin:0 auto;padding:0 22px}
 
-/* header */
-header{position:sticky;top:0;z-index:50;background:rgba(42,49,64,0.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-.bar{max-width:820px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.file-tab{font-family:var(--mono);font-size:.82rem;color:var(--amber);padding:4px 9px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel)}
-.file-tab::before{content:'●';color:var(--coral);margin-right:6px;font-size:.7rem;vertical-align:middle}
-nav{display:flex;gap:1px;flex-wrap:wrap;margin-left:auto}
-nav a{color:var(--muted);text-decoration:none;font-size:.84rem;padding:5px 9px;border-radius:3px;transition:color .12s,background .12s;white-space:nowrap}
-nav a:hover{color:var(--txt);background:var(--panel)}
-nav a.active{color:var(--amber);background:var(--panel)}
-nav a.partial{color:var(--teal)}
-nav a.done{color:var(--ok)}
-nav a .np{font-family:var(--mono);font-size:.72rem;opacity:.85;margin-left:2px}
-.score{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding:4px 9px;border-left:1px solid var(--line)}
-.score b{color:var(--amber);font-weight:600}
-.score .total{color:var(--dim)}
-.reroll{font-family:var(--mono);font-size:.78rem;background:var(--panel);color:var(--teal);border:1px solid var(--line-2);border-radius:3px;padding:5px 10px;cursor:pointer;transition:background .12s,color .12s}
-.reroll:hover{background:var(--panel-2);color:var(--txt)}
+/* ===== header ===== */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,16,23,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.bar{
+  max-width:860px;margin:0 auto;padding:10px 22px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.8rem;
+}
+.file-tab{
+  display:flex;align-items:center;gap:8px;
+  color:var(--cyan);padding:4px 10px;
+  border:1px solid var(--border-2);border-radius:3px;
+  background:var(--panel);
+}
+.file-tab::before{content:'$';color:var(--green);font-weight:700}
+.file-tab::after{content:'_';color:var(--green);animation:blink 1.1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+nav{display:flex;gap:0;flex-wrap:wrap;margin-left:auto;align-items:center}
+nav a{
+  color:var(--text-dim);text-decoration:none;
+  padding:5px 10px;font-family:var(--mono);font-size:.78rem;
+  border-radius:3px;transition:color .12s,background .12s;
+  white-space:nowrap;
+}
+nav a::before{content:'·';color:var(--text-faint);margin-right:6px}
+nav a:hover{color:var(--text);background:var(--panel)}
+nav a.active{color:var(--green);background:var(--panel);box-shadow:inset 0 -2px 0 var(--green)}
+nav a.active::before{color:var(--green)}
+nav a.partial{color:var(--cyan)}
+nav a.done{color:var(--green)}
+nav a .np{font-size:.7rem;margin-left:4px;opacity:.9}
+.score{
+  font-family:var(--mono);font-size:.76rem;color:var(--text-dim);
+  padding:4px 10px;border-left:1px solid var(--border);
+  display:flex;align-items:center;gap:4px;
+}
+.score::before{content:'score:';color:var(--text-faint);font-size:.72rem}
+.score b{color:var(--green);font-weight:600}
+.score .total{color:var(--text-faint)}
+.reroll{
+  font-family:var(--mono);font-size:.75rem;
+  background:var(--panel);color:var(--cyan);
+  border:1px solid var(--border-2);border-radius:3px;
+  padding:5px 10px;cursor:pointer;transition:.12s;
+}
+.reroll:hover{background:var(--panel-2);color:var(--green);border-color:var(--green)}
 
-/* view switching */
+/* ===== views ===== */
 .view{display:none}
-.view.active{display:block;animation:fadein .2s ease}
-@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.view.active{display:block;animation:fadein .18s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-/* hero (accueil) */
-.hero{padding:52px 0 20px}
-.hero .tag{font-family:var(--hand);font-size:1.15rem;color:var(--amber);margin-bottom:10px}
-.hero h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.9rem,4.5vw,2.5rem);line-height:1.2;color:var(--txt);margin-bottom:18px;letter-spacing:-.5px}
-.hero h1 .hl{background:linear-gradient(180deg,transparent 45%,rgba(245,199,110,.35) 45%,rgba(245,199,110,.35) 90%,transparent 90%);padding:0 4px}
-.hero p{color:var(--muted);font-size:1rem;max-width:580px;margin-bottom:10px}
-.hero .note-line{font-family:var(--hand);font-size:1.1rem;color:var(--amber);margin:16px 0 22px}
-.hero .note-line::before{content:'↳ ';opacity:.7}
+/* ===== hero accueil ===== */
+.hero{padding:56px 0 24px}
+.hero .prompt-line{
+  font-family:var(--mono);font-size:.82rem;color:var(--text-dim);
+  margin-bottom:14px;
+}
+.hero .prompt-line::before{content:'$ ';color:var(--green)}
+.hero .prompt-line::after{content:'▊';color:var(--green);margin-left:4px;animation:blink 1.1s steps(2) infinite}
+.hero h1{
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(1.7rem,4.5vw,2.3rem);
+  line-height:1.2;color:var(--text);margin-bottom:18px;
+  letter-spacing:-.5px;
+}
+.hero h1 .hl{color:var(--green)}
+.hero p{color:var(--text-dim);font-size:.96rem;max-width:560px;margin-bottom:10px}
+.hero .comment{
+  font-family:var(--mono);font-size:.85rem;color:var(--text-faint);
+  margin-top:14px;
+}
+.hero .comment::before{content:'// '}
 
-/* quick nav grid on accueil */
-.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:32px}
-.quick-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px;text-decoration:none;color:var(--txt);transition:border-color .15s,transform .15s}
-.quick-card:hover{border-color:var(--amber);transform:translateY(-2px)}
-.quick-num{font-family:var(--hand);font-size:1.7rem;color:var(--amber);font-weight:600;margin-bottom:2px;line-height:1}
-.quick-title{font-weight:600;font-size:.96rem;margin-bottom:2px}
-.quick-desc{font-size:.82rem;color:var(--muted)}
+/* ===== quick cards ===== */
+.quick-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:10px;margin-top:36px;
+}
+.quick-card{
+  display:block;background:var(--panel);
+  border:1px solid var(--border);border-radius:3px;
+  padding:16px 18px;text-decoration:none;color:var(--text);
+  transition:border-color .12s,background .12s;
+  position:relative;
+}
+.quick-card:hover{border-color:var(--green);background:var(--panel-2)}
+.quick-card .qc-path{
+  font-family:var(--mono);font-size:.72rem;color:var(--cyan);
+  margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.quick-card .qc-path::before{content:'>';color:var(--green)}
+.quick-card .qc-title{font-weight:600;font-size:.94rem;margin-bottom:2px;color:var(--text)}
+.quick-card .qc-desc{font-size:.82rem;color:var(--text-dim);font-family:var(--mono)}
 
-/* page headers (interior views) */
-.page-head{padding:40px 0 20px;border-bottom:1px dashed var(--line);margin-bottom:24px}
-.page-tag{font-family:var(--hand);font-size:1.1rem;color:var(--amber);margin-bottom:4px}
-.page-head h1{font-family:var(--sans);font-weight:600;font-size:clamp(1.6rem,4vw,2.1rem);color:var(--txt);line-height:1.2;letter-spacing:-.3px}
-.page-sub{color:var(--muted);font-size:.92rem;margin-top:6px}
+/* ===== page head ===== */
+.page-head{padding:40px 0 20px;border-bottom:1px solid var(--border);margin-bottom:26px}
+.page-tag{
+  font-family:var(--mono);font-size:.76rem;color:var(--cyan);
+  margin-bottom:8px;letter-spacing:.3px;
+}
+.page-tag::before{content:'// ';color:var(--text-faint)}
+.page-head h1{
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(1.4rem,3.5vw,1.9rem);
+  color:var(--text);line-height:1.2;letter-spacing:-.4px;
+}
+.page-head h1 .num{color:var(--green);margin-right:10px}
+.page-sub{color:var(--text-dim);font-size:.9rem;margin-top:8px}
 
-/* cours */
+/* ===== cours ===== */
 .chapter{margin-bottom:40px}
-.chapter h3{font-family:var(--sans);font-weight:600;font-size:1.12rem;color:var(--txt);margin-bottom:12px}
-.chapter h3 .num{font-family:var(--hand);font-size:1.5rem;color:var(--amber);margin-right:4px;font-weight:600}
-.chapter p{font-size:.97rem;color:#d6d0c4;margin-bottom:12px;line-height:1.7}
-.chapter p strong{color:var(--txt);font-weight:600}
-.chapter .kw{font-style:italic;color:var(--teal)}
+.chapter h3{
+  font-family:var(--mono);font-weight:600;font-size:1rem;
+  color:var(--text);margin-bottom:14px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.chapter h3 .num{
+  font-family:var(--mono);font-size:.76rem;
+  color:var(--green);background:rgba(74,222,128,.08);
+  border:1px solid rgba(74,222,128,.3);border-radius:2px;
+  padding:1px 7px;
+}
+.chapter p{font-size:.94rem;color:var(--text);margin-bottom:12px;line-height:1.7}
+.chapter p strong{color:var(--green);font-weight:600;font-family:var(--mono);font-size:.92em}
+.chapter .kw{color:var(--cyan);font-style:normal;font-family:var(--mono);font-size:.92em}
 .chapter ul{list-style:none;margin:12px 0 14px;padding:0}
-.chapter ul li{padding-left:22px;position:relative;margin-bottom:6px;font-size:.94rem;color:#d6d0c4}
-.chapter ul li::before{content:'—';position:absolute;left:2px;color:var(--amber)}
-.chapter ul li strong{color:var(--txt);font-weight:600}
-.hl{background:linear-gradient(180deg,transparent 42%,rgba(245,199,110,.32) 42%,rgba(245,199,110,.32) 88%,transparent 88%);padding:0 3px;color:var(--txt)}
+.chapter ul li{
+  padding-left:22px;position:relative;margin-bottom:6px;
+  font-size:.92rem;color:var(--text);
+}
+.chapter ul li::before{
+  content:'▸';position:absolute;left:0;
+  color:var(--cyan);font-family:var(--mono);font-size:.75em;top:.3em;
+}
+.chapter ul li strong{color:var(--green);font-family:var(--mono);font-size:.92em}
 
-/* formules */
-.formula{margin:16px 0;padding:14px 18px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel);text-align:center;font-family:var(--mono);font-size:1.08rem;color:var(--amber)}
-.formula .small{display:block;font-family:var(--sans);font-size:.82rem;color:var(--muted);margin-top:6px;font-style:italic}
+/* ===== formules ===== */
+.formula{
+  margin:18px 0;padding:16px 22px;
+  background:var(--panel);
+  border:1px solid var(--border-2);
+  border-left:3px solid var(--green);
+  border-radius:2px;
+  font-family:var(--mono);font-size:.95rem;
+  color:var(--green);text-align:center;
+}
+.formula .small{
+  display:block;font-family:var(--sans);
+  font-size:.8rem;color:var(--text-dim);
+  margin-top:8px;padding-top:8px;
+  border-top:1px dashed var(--border-2);
+}
 .formula-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:16px 0}
-.formula-row .fc{padding:12px 8px;border:1px solid var(--line-2);border-radius:3px;background:var(--panel);text-align:center;font-family:var(--mono)}
-.formula-row .fc .who{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.formula-row .fc .expr{color:var(--amber);font-size:1rem;font-weight:600}
+.formula-row .fc{
+  padding:12px 10px;background:var(--panel);
+  border:1px solid var(--border-2);border-radius:2px;
+  text-align:center;font-family:var(--mono);
+}
+.formula-row .fc .who{
+  font-size:.68rem;color:var(--text-faint);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;
+}
+.formula-row .fc .expr{color:var(--green);font-size:.98rem;font-weight:600}
 
-/* exemples */
-.example{margin:18px 0;padding:14px 18px;border:1px dashed rgba(245,199,110,.4);border-radius:3px;background:rgba(245,199,110,.04)}
-.example-tag{font-family:var(--hand);font-size:1rem;color:var(--amber);margin-bottom:8px}
-.example-line{font-family:var(--mono);font-size:.87rem;line-height:1.7;color:#d6d0c4}
-.example-line b{color:var(--amber);font-weight:600}
-.example-line .s{color:var(--teal)}
+/* ===== exemple ===== */
+.example{
+  margin:18px 0;padding:14px 18px;
+  background:rgba(96,165,250,.04);
+  border:1px solid rgba(96,165,250,.2);
+  border-left:3px solid var(--blue);
+  border-radius:2px;
+}
+.example-tag{
+  font-family:var(--mono);font-size:.72rem;color:var(--blue);
+  margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;
+}
+.example-tag::before{content:'▸ '}
+.example-line{
+  font-family:var(--mono);font-size:.85rem;
+  color:var(--text);margin-bottom:4px;line-height:1.7;
+}
+.example-line b{color:var(--green);font-weight:600}
+.example-line .s{color:var(--cyan)}
 
-/* pièges */
-.piege{margin:14px 0;padding:12px 16px;border-left:3px solid var(--coral);background:rgba(232,148,138,.05);border-radius:0 3px 3px 0}
-.piege-tag{font-family:var(--mono);font-size:.78rem;color:var(--coral);margin-bottom:6px}
-.piege p{font-size:.92rem;color:#d6d0c4;margin-bottom:5px}
+/* ===== pièges ===== */
+.piege{
+  margin:14px 0;padding:12px 16px 12px 44px;
+  border:1px solid rgba(248,113,113,.25);
+  border-left:3px solid var(--red);
+  background:rgba(248,113,113,.04);
+  border-radius:2px;position:relative;
+}
+.piege::before{
+  content:'!';position:absolute;left:12px;top:12px;
+  width:20px;height:20px;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;
+  color:var(--red);border:1.5px solid var(--red);
+  border-radius:2px;font-size:.85rem;
+}
+.piege-tag{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--red);margin-bottom:6px;letter-spacing:.3px;
+}
+.piege-tag::before{content:'// ';opacity:.6}
+.piege p{font-size:.9rem;color:var(--text);margin-bottom:5px}
 .piege p:last-child{margin-bottom:0}
-.piege code{font-family:var(--mono);background:var(--bg);border:1px solid var(--line-2);border-radius:2px;padding:1px 5px;color:var(--amber);font-size:.88rem}
+.piege code{
+  font-family:var(--mono);background:var(--bg);
+  border:1px solid var(--border-2);border-radius:2px;
+  padding:1px 6px;color:var(--green);font-size:.88rem;
+}
+.piege.warn{border-color:rgba(251,191,36,.25);border-left-color:var(--orange);background:rgba(251,191,36,.04)}
+.piege.warn::before{color:var(--orange);border-color:var(--orange)}
+.piege.warn .piege-tag{color:var(--orange)}
+.piege.teal{border-color:rgba(34,211,238,.25);border-left-color:var(--cyan);background:rgba(34,211,238,.04)}
+.piege.teal::before{color:var(--cyan);border-color:var(--cyan)}
+.piege.teal .piege-tag{color:var(--cyan)}
 
-/* schémas */
-.schema{margin:22px 0;padding:18px 14px 10px;background:var(--panel);border:1px solid var(--line);border-radius:3px}
-.schema-tag{font-family:var(--hand);font-size:.95rem;color:var(--amber);margin-bottom:8px;padding-left:4px}
+/* ===== schémas ===== */
+.schema{
+  margin:22px 0;padding:16px 12px 10px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:2px;
+}
+.schema-tag{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--cyan);margin-bottom:10px;padding-left:4px;
+  text-transform:uppercase;letter-spacing:.8px;
+}
+.schema-tag::before{content:'▸ ';color:var(--text-faint)}
 .schema svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
-.schema figcaption{font-family:var(--sans);font-size:.85rem;font-style:italic;color:var(--muted);text-align:center;margin-top:10px;padding:0 4px}
+.schema figcaption{
+  font-family:var(--mono);font-size:.78rem;
+  color:var(--text-dim);text-align:center;
+  margin-top:12px;padding:0 4px;
+}
 
-/* enoncé & questions */
-.enonce{font-size:.94rem;color:#d6d0c4;padding:14px 16px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:3px;margin-bottom:20px}
-.enonce strong{color:var(--txt);font-weight:600}
+/* ===== énnoncé ===== */
+.enonce{
+  font-size:.92rem;color:var(--text);
+  padding:14px 16px 14px 18px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-left:3px solid var(--cyan);
+  border-radius:2px;margin-bottom:22px;
+  position:relative;
+}
+.enonce::before{
+  content:'énoncé';position:absolute;top:-9px;left:12px;
+  font-family:var(--mono);font-size:.65rem;font-weight:600;
+  letter-spacing:1.2px;text-transform:uppercase;
+  background:var(--bg);color:var(--cyan);
+  padding:1px 7px;border:1px solid var(--border-2);border-radius:2px;
+}
+.enonce strong{color:var(--green);font-weight:600;font-family:var(--mono);font-size:.92em}
 .enonce ul{list-style:none;margin:10px 0 0;padding:0}
-.enonce ul li{padding-left:20px;position:relative;margin-bottom:4px;font-size:.92rem}
-.enonce ul li::before{content:'·';position:absolute;left:6px;color:var(--amber);font-weight:700}
+.enonce ul li{
+  padding-left:20px;position:relative;
+  margin-bottom:4px;font-size:.88rem;
+}
+.enonce ul li::before{
+  content:'▸';position:absolute;left:0;top:.3em;
+  color:var(--amber,var(--orange));font-family:var(--mono);font-size:.75em;
+}
 
+/* ===== questions ===== */
 .q{margin-bottom:18px}
-.q > label{display:block;font-size:.94rem;color:var(--txt);margin-bottom:6px}
-.q > label .n{display:inline-block;min-width:22px;font-family:var(--hand);color:var(--amber);font-size:1.05rem;font-weight:600}
-.input-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.input-row input{flex:1;min-width:140px;background:var(--bg);border:1px solid var(--line-2);color:var(--txt);border-radius:3px;padding:8px 11px;font-family:var(--mono);font-size:.92rem;outline:none;transition:border-color .12s}
-.input-row input:focus{border-color:var(--amber)}
-.input-row input.good{border-color:var(--ok)}
-.input-row input.bad{border-color:var(--bad)}
-.unit{font-size:.85rem;color:var(--dim)}
-.btn{font-family:var(--sans);font-size:.86rem;font-weight:500;border:1px solid var(--line-2);background:var(--panel-2);color:var(--txt);border-radius:3px;padding:8px 14px;cursor:pointer;transition:background .12s}
-.btn:hover{background:#47506a}
-.feedback{font-size:.87rem;margin-top:6px;display:none}
+.q > label{
+  display:block;font-size:.9rem;color:var(--text);
+  margin-bottom:6px;font-family:var(--mono);
+}
+.q > label .n{
+  display:inline-block;min-width:26px;
+  color:var(--green);font-size:.8rem;font-weight:600;
+}
+.q > label .n::after{content:'·';color:var(--text-faint);margin-left:6px}
+.input-row{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  background:var(--bg);
+  border:1px solid var(--border-2);
+  border-radius:2px;padding:3px 10px;
+  transition:border-color .12s;
+  font-family:var(--mono);
+}
+.input-row:focus-within{border-color:var(--green)}
+.input-row::before{
+  content:'>';color:var(--green);font-weight:700;
+  font-family:var(--mono);font-size:.9rem;padding:0 2px;
+}
+.input-row input{
+  flex:1;min-width:120px;background:transparent;
+  border:none;color:var(--green);padding:7px 4px;
+  font-family:var(--mono);font-size:.88rem;outline:none;
+}
+.input-row input::placeholder{color:var(--text-faint)}
+.input-row input.good{color:var(--green)}
+.input-row input.bad{color:var(--red)}
+.input-row.good{border-color:var(--green)}
+.input-row.bad{border-color:var(--red)}
+.unit{font-size:.78rem;color:var(--text-faint);font-family:var(--mono)}
+.btn{
+  font-family:var(--mono);font-size:.76rem;font-weight:500;
+  border:1px solid var(--border-2);background:var(--panel-2);
+  color:var(--text);border-radius:2px;
+  padding:6px 11px;cursor:pointer;
+  transition:background .12s,border-color .12s,color .12s;
+}
+.btn:hover{background:#243044;border-color:var(--green);color:var(--green)}
+.feedback{
+  font-size:.82rem;margin-top:6px;display:none;
+  font-family:var(--mono);padding-left:22px;
+}
 .feedback.show{display:block}
-.feedback.ok{color:var(--ok)}
-.feedback.bad{color:var(--bad)}
+.feedback.ok{color:var(--green)}
+.feedback.bad{color:var(--red)}
+.feedback.ok::before{content:'✓ ';font-weight:700}
+.feedback.bad::before{content:'✗ ';font-weight:700}
 
-/* solution */
-.solution-btn{font-family:var(--hand);font-size:1.15rem;color:var(--teal);background:transparent;border:none;cursor:pointer;padding:8px 0;margin-top:6px}
-.solution-btn:hover{text-decoration:underline}
-.solution{display:none;margin-top:12px;padding:14px 16px;background:rgba(255,255,255,.02);border:1px dashed var(--line-2);border-radius:3px}
+/* ===== solution ===== */
+.solution-btn{
+  font-family:var(--mono);font-size:.78rem;
+  color:var(--cyan);background:transparent;
+  border:1px solid var(--border-2);border-radius:2px;
+  cursor:pointer;padding:7px 12px;margin-top:6px;
+  transition:background .12s,color .12s,border-color .12s;
+}
+.solution-btn:hover{background:var(--panel-2);color:var(--green);border-color:var(--green)}
+.solution{
+  display:none;margin-top:12px;padding:14px 16px;
+  background:var(--panel);border:1px solid var(--border);
+  border-top:2px solid var(--green);border-radius:2px;
+}
 .solution.show{display:block}
-.solution h4{font-family:var(--hand);font-size:1.1rem;color:var(--amber);margin-bottom:10px;font-weight:600}
-.solution ol{margin-left:18px;font-size:.9rem;color:#d6d0c4;line-height:1.7}
-.solution ol li{margin-bottom:6px}
-.solution .res{font-family:var(--mono);color:var(--amber);font-weight:600;background:var(--bg);padding:1px 6px;border-radius:2px;border:1px solid var(--line-2)}
+.solution h4{
+  font-family:var(--mono);font-size:.74rem;color:var(--green);
+  margin-bottom:10px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.solution h4::before{content:'▸ ';color:var(--text-faint)}
+.solution ol{
+  margin-left:20px;font-size:.86rem;
+  color:var(--text);line-height:1.75;
+}
+.solution ol li{margin-bottom:7px}
+.solution ol li::marker{color:var(--green);font-family:var(--mono);font-weight:600;font-size:.9em}
+.solution .res{
+  font-family:var(--mono);color:var(--green);font-weight:600;
+  background:var(--bg);padding:1px 6px;border-radius:2px;
+  border:1px solid rgba(74,222,128,.3);font-size:.92em;
+}
 
-/* qcm */
-.qcm-note{font-family:var(--hand);font-size:1.15rem;color:var(--amber);margin-bottom:16px}
-.qcm-question{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:18px 20px;margin-bottom:14px}
-.qcm-prompt{font-size:.94rem;color:#d6d0c4;margin-bottom:14px;line-height:1.6}
-.qcm-prompt strong{color:var(--txt);font-weight:600}
-.qcm-prompt .qn{font-family:var(--hand);font-size:1.15rem;color:var(--amber);font-weight:600;margin-right:6px}
+/* ===== qcm ===== */
+.qcm-note{
+  font-family:var(--mono);font-size:.82rem;color:var(--cyan);
+  margin-bottom:18px;padding:8px 12px;
+  border:1px solid var(--border-2);
+  border-left:3px solid var(--cyan);
+  border-radius:2px;background:rgba(34,211,238,.04);
+}
+.qcm-note::before{content:'// ';color:var(--text-faint)}
+.qcm-question{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:2px;padding:16px 18px;margin-bottom:12px;
+}
+.qcm-prompt{
+  font-size:.9rem;color:var(--text);
+  margin-bottom:14px;line-height:1.6;
+}
+.qcm-prompt strong{color:var(--green);font-weight:600;font-family:var(--mono);font-size:.92em}
+.qcm-prompt .qn{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--green);font-weight:600;
+  margin-right:8px;background:rgba(74,222,128,.08);
+  border:1px solid rgba(74,222,128,.3);
+  border-radius:2px;padding:1px 6px;
+}
 .qcm-options{display:grid;gap:6px}
-.opt{text-align:left;font-family:var(--sans);font-size:.9rem;background:var(--bg);color:var(--txt);border:1px solid var(--line-2);border-radius:3px;padding:9px 12px;cursor:pointer;transition:border-color .12s,background .12s;display:flex;align-items:center;gap:10px}
-.opt:hover{border-color:var(--teal);background:var(--panel-2)}
-.opt .letter{font-family:var(--hand);font-size:1.05rem;color:var(--teal);font-weight:600;flex:none;width:18px}
-.opt.good{border-color:var(--ok);background:rgba(136,212,168,.08)}
-.opt.good .letter{color:var(--ok)}
-.opt.bad{border-color:var(--bad);background:rgba(232,138,128,.06)}
-.opt.bad .letter{color:var(--bad)}
+.opt{
+  text-align:left;font-family:var(--sans);font-size:.88rem;
+  background:var(--bg);color:var(--text);
+  border:1px solid var(--border-2);border-radius:2px;
+  padding:9px 12px;cursor:pointer;
+  transition:border-color .12s,background .12s;
+  display:flex;align-items:center;gap:10px;
+}
+.opt:hover{border-color:var(--green);background:var(--panel-2)}
+.opt .letter{
+  font-family:var(--mono);font-size:.8rem;
+  color:var(--cyan);font-weight:600;flex:none;width:22px;
+}
+.opt.good{border-color:var(--green);background:rgba(74,222,128,.06)}
+.opt.good .letter{color:var(--green)}
+.opt.bad{border-color:var(--red);background:rgba(248,113,113,.05)}
+.opt.bad .letter{color:var(--red)}
 .opt:disabled{cursor:default}
-.qcm-feedback{font-size:.88rem;margin-top:10px;display:none;padding:10px 12px;border-radius:3px}
+.qcm-feedback{
+  font-size:.84rem;margin-top:10px;display:none;
+  padding:10px 12px;border-radius:2px;
+  font-family:var(--mono);
+}
 .qcm-feedback.show{display:block}
-.qcm-feedback.ok{color:var(--ok);background:rgba(136,212,168,.06);border-left:2px solid var(--ok)}
-.qcm-feedback.bad{color:var(--bad);background:rgba(232,138,128,.05);border-left:2px solid var(--bad)}
-.qcm-feedback .expl{display:block;margin-top:6px;color:var(--muted);font-size:.85rem;font-family:var(--mono)}
+.qcm-feedback.ok{
+  color:var(--green);background:rgba(74,222,128,.06);
+  border-left:2px solid var(--green);
+}
+.qcm-feedback.bad{
+  color:var(--red);background:rgba(248,113,113,.05);
+  border-left:2px solid var(--red);
+}
+.qcm-feedback .expl{
+  display:block;margin-top:6px;
+  color:var(--text-dim);font-size:.82rem;
+}
 
-/* panels sim/conv */
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:20px}
-.sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-.sim-field label{display:block;font-family:var(--hand);font-size:1rem;color:var(--muted);margin-bottom:4px}
-.sim-field input{width:100%;background:var(--bg);border:1px solid var(--line-2);color:var(--txt);border-radius:3px;padding:8px 11px;font-family:var(--mono);font-size:.9rem;outline:none}
-.sim-field input:focus{border-color:var(--amber)}
-.sim-out{background:var(--bg);border:1px solid var(--line-2);border-radius:3px;padding:14px 16px}
-.sim-out .step{font-size:.88rem;color:#d6d0c4;margin-bottom:6px;line-height:1.6;font-family:var(--mono)}
-.sim-out .step .n{color:var(--dim);margin-right:8px}
-.sim-out .step .r{color:var(--amber);font-weight:600}
-.sim-out .step .o{color:var(--teal)}
-.sim-out .final{border-top:1px solid var(--line-2);margin-top:12px;padding-top:12px;font-family:var(--hand);font-size:1.15rem;color:var(--amber);font-weight:600}
+/* ===== panels ===== */
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:2px;padding:20px;
+}
+.sim-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;margin-bottom:18px;
+}
+.sim-field label{
+  display:block;font-family:var(--mono);
+  font-size:.72rem;color:var(--text-dim);
+  margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;
+}
+.sim-field label::before{content:'▸ ';color:var(--text-faint)}
+.sim-field input{
+  width:100%;background:var(--bg);
+  border:1px solid var(--border-2);color:var(--green);
+  border-radius:2px;padding:8px 11px;
+  font-family:var(--mono);font-size:.88rem;
+  outline:none;transition:border-color .12s;
+}
+.sim-field input:focus{border-color:var(--green)}
+.sim-out{
+  background:var(--bg);border:1px solid var(--border-2);
+  border-radius:2px;padding:14px 16px;
+}
+.sim-out .step{
+  font-size:.84rem;color:var(--text);
+  margin-bottom:6px;line-height:1.6;font-family:var(--mono);
+}
+.sim-out .step .n{color:var(--text-faint);margin-right:8px;font-weight:600}
+.sim-out .step .n::before{content:'['}
+.sim-out .step .n::after{content:']'}
+.sim-out .step .r{color:var(--green);font-weight:600}
+.sim-out .step .o{color:var(--cyan)}
+.sim-out .final{
+  border-top:1px solid var(--border-2);
+  margin-top:12px;padding-top:12px;
+  font-family:var(--mono);font-size:.92rem;
+  color:var(--green);font-weight:600;
+}
+.sim-out .final::before{content:'>>> ';color:var(--cyan)}
 
-.conv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.conv-grid input,.conv-grid select{width:100%;background:var(--bg);border:1px solid var(--line-2);color:var(--txt);border-radius:3px;padding:8px 11px;font-family:var(--mono);font-size:.9rem;outline:none}
-.conv-grid input:focus,.conv-grid select:focus{border-color:var(--amber)}
-.conv-out{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-.conv-out div{background:var(--bg);border:1px solid var(--line-2);border-radius:3px;padding:8px 10px;font-family:var(--mono);font-size:.88rem;text-align:center;color:var(--amber)}
-.conv-out span{display:block;font-size:.7rem;color:var(--muted);font-family:var(--sans);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px}
+.conv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.conv-grid input,.conv-grid select{
+  width:100%;background:var(--bg);
+  border:1px solid var(--border-2);color:var(--green);
+  border-radius:2px;padding:8px 11px;
+  font-family:var(--mono);font-size:.88rem;
+  outline:none;transition:border-color .12s;
+}
+.conv-grid input:focus,.conv-grid select:focus{border-color:var(--green)}
+.conv-out{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:8px;
+}
+.conv-out div{
+  background:var(--bg);border:1px solid var(--border-2);
+  border-radius:2px;padding:8px 10px;
+  font-family:var(--mono);font-size:.84rem;
+  text-align:center;color:var(--green);
+}
+.conv-out span{
+  display:block;font-size:.66rem;color:var(--text-faint);
+  font-family:var(--sans);letter-spacing:.5px;
+  text-transform:uppercase;margin-bottom:3px;
+}
 
-/* nav entre pages */
-.exo-nav{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:22px;border-top:1px solid var(--line);flex-wrap:wrap}
-.exo-nav a{font-family:var(--hand);font-size:1.15rem;color:var(--teal);text-decoration:none;padding:4px 0;font-weight:600}
-.exo-nav a:hover{color:var(--amber)}
+/* ===== nav entre pages ===== */
+.exo-nav{
+  display:flex;justify-content:space-between;gap:12px;
+  margin-top:40px;padding-top:22px;
+  border-top:1px solid var(--border);flex-wrap:wrap;
+}
+.exo-nav a{
+  font-family:var(--mono);font-size:.82rem;
+  color:var(--text-dim);text-decoration:none;
+  padding:6px 12px;border:1px solid var(--border-2);
+  border-radius:2px;transition:.12s;
+}
+.exo-nav a:hover{background:var(--panel-2);color:var(--green);border-color:var(--green)}
 .exo-nav a.next{margin-left:auto;text-align:right}
 
-footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px solid var(--line);text-align:center;font-family:var(--hand);font-size:1.05rem;color:var(--dim)}
+footer{
+  max-width:860px;margin:60px auto 0;
+  padding:24px 22px 0;
+  border-top:1px solid var(--border);
+  text-align:center;
+  font-family:var(--mono);font-size:.76rem;
+  color:var(--text-faint);
+}
+footer::before{content:'// '}
 
 @media(max-width:560px){
   main{padding:0 16px}
   .bar{padding:10px 16px;gap:8px}
-  nav{width:100%;order:3;margin-left:0;justify-content:flex-start}
-  nav a{padding:4px 7px;font-size:.8rem}
+  nav{width:100%;order:3;margin-left:0}
+  nav a{padding:4px 7px;font-size:.75rem}
   .conv-grid{grid-template-columns:1fr}
   .chapter,.panel,.schema{padding:16px}
   .qcm-question{padding:14px 16px}
-  body{font-size:15px}
+  body{font-size:14px}
 }
 </style>
 </head>
@@ -226,73 +579,73 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
     <nav>
       <a href="#accueil">accueil</a>
       <a href="#cours">cours</a>
-      <a href="#exo1" data-page="exo1">exo I<span class="np"></span></a>
-      <a href="#exo2" data-page="exo2">exo II<span class="np"></span></a>
-      <a href="#exo3" data-page="exo3">exo III<span class="np"></span></a>
+      <a href="#exo1" data-page="exo1">exo_01<span class="np"></span></a>
+      <a href="#exo2" data-page="exo2">exo_02<span class="np"></span></a>
+      <a href="#exo3" data-page="exo3">exo_03<span class="np"></span></a>
       <a href="#qcm" data-page="qcm">qcm<span class="np"></span></a>
-      <a href="#sim">simu</a>
-      <a href="#conv">convert</a>
+      <a href="#sim">sim</a>
+      <a href="#conv">conv</a>
     </nav>
-    <div class="score">score <b id="score">0</b><span class="total">/15</span></div>
-    <button class="reroll" id="rerollBtn">↻ nouvelles valeurs</button>
+    <div class="score"><b id="score">0</b><span class="total">/15</span></div>
+    <button class="reroll" id="rerollBtn">↻ regénérer</button>
   </div>
 </header>
 
 <main>
 
-  <!-- ============================================ ACCUEIL ============================================ -->
+  <!-- ACCUEIL -->
   <div class="view" id="view-accueil">
     <div class="hero">
-      <div class="tag">~ notes de cours · SNT 2de ~</div>
+      <div class="prompt-line">./snt_notes --read</div>
       <h1>Débit, paquets & <span class="hl">volume réel</span></h1>
-      <p>Un fichier de 1,5 Mo traverse un réseau. On le découpe en paquets, on ajoute des en-têtes, on mesure le débit. Voilà l'histoire.</p>
-      <p class="note-line">(les valeurs changent à chaque rechargement)</p>
+      <p>Un fichier de 1,5 Mo traverse un réseau. On le découpe en paquets, on ajoute des en-têtes, on mesure le débit.</p>
+      <p class="comment">les valeurs se régénèrent à chaque chargement</p>
     </div>
 
     <div class="quick-grid">
       <a href="#cours" class="quick-card">
-        <div class="quick-num">§</div>
-        <div class="quick-title">Le cours</div>
-        <div class="quick-desc">4 chapitres + schémas</div>
+        <div class="qc-path">/cours</div>
+        <div class="qc-title">Le cours</div>
+        <div class="qc-desc">4 chapitres + schémas</div>
       </a>
       <a href="#exo1" class="quick-card">
-        <div class="quick-num">I</div>
-        <div class="quick-title">Photo HD</div>
-        <div class="quick-desc">calcul du débit</div>
+        <div class="qc-path">/exo_01</div>
+        <div class="qc-title">Photo HD</div>
+        <div class="qc-desc">calcul du débit</div>
       </a>
       <a href="#exo2" class="quick-card">
-        <div class="quick-num">II</div>
-        <div class="quick-title">Mise à jour</div>
-        <div class="quick-desc">calcul du temps</div>
+        <div class="qc-path">/exo_02</div>
+        <div class="qc-title">Mise à jour</div>
+        <div class="qc-desc">calcul du temps</div>
       </a>
       <a href="#exo3" class="quick-card">
-        <div class="quick-num">III</div>
-        <div class="quick-title">Visio</div>
-        <div class="quick-desc">taille maximale</div>
+        <div class="qc-path">/exo_03</div>
+        <div class="qc-title">Visio</div>
+        <div class="qc-desc">taille maximale</div>
       </a>
       <a href="#qcm" class="quick-card">
-        <div class="quick-num">?</div>
-        <div class="quick-title">QCM</div>
-        <div class="quick-desc">5 questions pièges</div>
+        <div class="qc-path">/qcm</div>
+        <div class="qc-title">QCM</div>
+        <div class="qc-desc">5 questions pièges</div>
       </a>
       <a href="#sim" class="quick-card">
-        <div class="quick-num">→</div>
-        <div class="quick-title">Simulateur</div>
-        <div class="quick-desc">calcul pas à pas</div>
+        <div class="qc-path">/sim</div>
+        <div class="qc-title">Simulateur</div>
+        <div class="qc-desc">calcul pas à pas</div>
       </a>
     </div>
   </div>
 
-  <!-- ============================================ COURS ============================================ -->
+  <!-- COURS -->
   <div class="view" id="view-cours">
     <div class="page-head">
-      <div class="page-tag">§ le cours</div>
-      <h1>Quatre chapitres, un fil rouge</h1>
+      <div class="page-tag">cours</div>
+      <h1><span class="num">§</span>Quatre chapitres, un fil rouge</h1>
       <p class="page-sub">Un fichier de 1,5 Mo, charge utile 1 460 octets, en-tête 40 octets, transfert en 4 secondes.</p>
     </div>
 
     <div class="chapter">
-      <h3><span class="num">§1.</span> Découpage en paquets</h3>
+      <h3><span class="num">§1</span> Découpage en paquets</h3>
       <p>Sur Internet, un fichier n'est <strong>jamais envoyé d'un seul bloc</strong>. Il est découpé en <span class="kw">paquets</span>, chacun transportant une portion des données. Cette portion s'appelle la <strong>charge utile</strong>.</p>
       <ul>
         <li><strong>Charge utile</strong> — maximum de données réelles dans un paquet. Souvent 1 460 octets sur Ethernet.</li>
@@ -300,25 +653,24 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       </ul>
 
       <figure class="schema">
-        <div class="schema-tag">schéma 1</div>
+        <div class="schema-tag">schéma 01</div>
         <svg viewBox="0 0 520 240" aria-label="Découpage d'un fichier en paquets">
-          <path d="M196 24 Q194 20 200 19 L320 20 Q326 20 325 25 L324 78 Q325 82 320 82 L198 81 Q193 81 194 77 Z"
-                fill="none" stroke="#ebe5d8" stroke-width="1.5" opacity="0.85"/>
-          <text x="260" y="50" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="22" font-weight="600">fichier</text>
-          <text x="260" y="70" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="12">1,5 Mo</text>
-          <path d="M258 90 Q256 102 260 114" stroke="#f5c76e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <path d="M253 108 L260 116 L267 108" stroke="#f5c76e" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="278" y="108" fill="#f5c76e" font-family="Caveat, cursive" font-size="17">découpage</text>
-          <g fill="#3a4256" stroke="#8a92a8" stroke-width="1.3">
-            <rect x="52" y="146" width="62" height="48" rx="1"/>
-            <rect x="122" y="146" width="62" height="48" rx="1"/>
-            <rect x="192" y="146" width="62" height="48" rx="1"/>
-            <rect x="262" y="146" width="62" height="48" rx="1"/>
-            <rect x="332" y="146" width="62" height="48" rx="1"/>
+          <rect x="196" y="20" width="128" height="60" fill="none" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="260" y="48" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600">fichier</text>
+          <text x="260" y="66" text-anchor="middle" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="11">1,5 Mo</text>
+          <line x1="260" y1="90" x2="260" y2="118" stroke="#22d3ee" stroke-width="1.5"/>
+          <polygon points="260,124 254,114 266,114" fill="#22d3ee"/>
+          <text x="272" y="108" fill="#22d3ee" font-family="JetBrains Mono, monospace" font-size="11">découpage</text>
+          <g fill="#1a2230" stroke="#60a5fa" stroke-width="1.2">
+            <rect x="52" y="146" width="62" height="48"/>
+            <rect x="122" y="146" width="62" height="48"/>
+            <rect x="192" y="146" width="62" height="48"/>
+            <rect x="262" y="146" width="62" height="48"/>
+            <rect x="332" y="146" width="62" height="48"/>
           </g>
-          <text x="410" y="176" fill="#a0a8be" font-family="Caveat, cursive" font-size="24">…</text>
-          <rect x="440" y="146" width="62" height="48" rx="1" fill="#3a4256" stroke="#8a92a8" stroke-width="1.3"/>
-          <text x="260" y="222" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="20" font-weight="600">N = 1 028 paquets</text>
+          <text x="410" y="177" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="16">…</text>
+          <rect x="440" y="146" width="62" height="48" fill="#1a2230" stroke="#60a5fa" stroke-width="1.2"/>
+          <text x="260" y="222" text-anchor="middle" fill="#4ade80" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600">N = 1 028 paquets</text>
         </svg>
         <figcaption>Un fichier de 1,5 Mo découpé en 1 028 paquets de 1 460 octets.</figcaption>
       </figure>
@@ -331,27 +683,27 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p>Si la division ne tombe pas juste, on <strong>arrondit à l'entier supérieur</strong> : le dernier paquet contient le reste des données.</p>
 
       <div class="example">
-        <div class="example-tag">exemple — fil rouge</div>
+        <div class="example-tag">exemple fil rouge</div>
         <div class="example-line">V = <span class="s">1,5 Mo</span> = <span class="s">1 500 000 octets</span></div>
         <div class="example-line">N = ⌈1 500 000 ÷ 1 460⌉ = ⌈1 027,4⌉ = <b>1 028 paquets</b></div>
       </div>
     </div>
 
     <div class="chapter">
-      <h3><span class="num">§2.</span> Volume réellement transféré</h3>
+      <h3><span class="num">§2</span> Volume réellement transféré</h3>
       <p>Chaque paquet contient la charge utile, mais aussi un <strong>en-tête</strong> qui transporte les adresses de provenance, de destination et le numéro du paquet. Cet en-tête pèse sur le volume total transmis.</p>
 
       <figure class="schema">
-        <div class="schema-tag">schéma 2</div>
-        <svg viewBox="0 0 520 200" aria-label="Structure d'un paquet : en-tête et charge utile">
-          <rect x="60" y="42" width="110" height="60" fill="#3a4256" stroke="#ebe5d8" stroke-width="1.5"/>
-          <text x="115" y="68" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="18">en-tête</text>
-          <text x="115" y="86" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="11">40 octets</text>
-          <rect x="170" y="42" width="310" height="60" fill="#2a3140" stroke="#ebe5d8" stroke-width="1.5"/>
-          <text x="325" y="68" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="18">charge utile</text>
-          <text x="325" y="86" text-anchor="middle" fill="#a0a8be" font-family="IBM Plex Mono, monospace" font-size="11">1 460 octets</text>
-          <path d="M60 122 L60 138 L480 138 L480 122" stroke="#f5c76e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <text x="270" y="166" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="20">paquet complet : 1 500 octets</text>
+        <div class="schema-tag">schéma 02</div>
+        <svg viewBox="0 0 520 200" aria-label="Structure d'un paquet">
+          <rect x="60" y="42" width="110" height="60" fill="#1a2230" stroke="#60a5fa" stroke-width="1.5"/>
+          <text x="115" y="68" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="13">en-tête</text>
+          <text x="115" y="86" text-anchor="middle" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="11">40 octets</text>
+          <rect x="170" y="42" width="310" height="60" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+          <text x="325" y="68" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="13">charge utile</text>
+          <text x="325" y="86" text-anchor="middle" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="11">1 460 octets</text>
+          <path d="M60 122 L60 138 L480 138 L480 122" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+          <text x="270" y="166" text-anchor="middle" fill="#4ade80" font-family="JetBrains Mono, monospace" font-size="13">paquet complet : 1 500 octets</text>
         </svg>
         <figcaption>Un paquet complet = charge utile + en-tête.</figcaption>
       </figure>
@@ -369,23 +721,23 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p>La différence entre le volume réel et la taille du fichier s'appelle le <strong>surcoût réseau</strong> (ou <em>overhead</em>). Il correspond à tout ce que transportent les en-têtes.</p>
 
       <figure class="schema">
-        <div class="schema-tag">schéma 3</div>
-        <svg viewBox="0 0 520 220" aria-label="Surcoût réseau entre données utiles et volume réel">
-          <rect x="70" y="42" width="300" height="40" fill="#3a4256" stroke="#ebe5d8" stroke-width="1.4"/>
-          <text x="220" y="67" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="17">données utiles</text>
-          <text x="392" y="67" fill="#a0a8be" font-family="Caveat, cursive" font-size="17">1,5 Mo</text>
-          <rect x="70" y="106" width="308" height="40" fill="#2a3140" stroke="#ebe5d8" stroke-width="1.4"/>
-          <rect x="378" y="106" width="10" height="40" fill="#f5c76e"/>
-          <text x="220" y="131" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="17">volume réel</text>
-          <text x="398" y="131" fill="#a0a8be" font-family="Caveat, cursive" font-size="17">1,542 Mo</text>
-          <path d="M390 152 Q386 168 388 184" stroke="#f5c76e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <text x="388" y="202" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="16">surcoût 42 ko</text>
+        <div class="schema-tag">schéma 03</div>
+        <svg viewBox="0 0 520 220" aria-label="Surcoût réseau">
+          <rect x="70" y="42" width="300" height="40" fill="#1a2230" stroke="#60a5fa" stroke-width="1.3"/>
+          <text x="220" y="67" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="12">données utiles</text>
+          <text x="392" y="67" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="12">1,5 Mo</text>
+          <rect x="70" y="106" width="308" height="40" fill="none" stroke="#60a5fa" stroke-width="1.3"/>
+          <rect x="378" y="106" width="10" height="40" fill="#4ade80"/>
+          <text x="220" y="131" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="12">volume réel</text>
+          <text x="398" y="131" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="12">1,542 Mo</text>
+          <line x1="388" y1="152" x2="388" y2="184" stroke="#4ade80" stroke-width="1.4"/>
+          <text x="388" y="202" text-anchor="middle" fill="#4ade80" font-family="JetBrains Mono, monospace" font-size="12">surcoût 42 ko</text>
         </svg>
         <figcaption>Les en-têtes ajoutent 42 ko au volume transmis.</figcaption>
       </figure>
 
       <div class="example">
-        <div class="example-tag">exemple — suite</div>
+        <div class="example-tag">exemple suite</div>
         <div class="example-line">en-tête E = <span class="s">40 octets</span> (TCP + IP)</div>
         <div class="example-line">paquet complet = 1 460 + 40 = <span class="s">1 500 octets</span></div>
         <div class="example-line">V<sub>réel</sub> = 1 028 × 1 500 = <b>1 542 000 octets</b></div>
@@ -394,19 +746,19 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
     </div>
 
     <div class="chapter">
-      <h3><span class="num">§3.</span> Débit, volume et temps</h3>
+      <h3><span class="num">§3</span> Débit, volume et temps</h3>
       <p>Le <strong>débit</strong> mesure la quantité d'informations transmises par unité de temps. Trois formes d'une même relation :</p>
 
       <figure class="schema">
-        <div class="schema-tag">schéma 4</div>
+        <div class="schema-tag">schéma 04</div>
         <svg viewBox="0 0 380 240" style="max-width:340px" aria-label="Triangle D = V / T">
-          <path d="M190 28 L340 195 L40 195 Z" fill="#3a4256" stroke="#ebe5d8" stroke-width="1.5" stroke-linejoin="round"/>
-          <line x1="115" y1="111" x2="265" y2="111" stroke="#ebe5d8" stroke-width="1.3"/>
-          <line x1="190" y1="111" x2="190" y2="195" stroke="#ebe5d8" stroke-width="1.3"/>
-          <text x="190" y="88" text-anchor="middle" fill="#ebe5d8" font-family="Caveat, cursive" font-size="28" font-weight="600">V</text>
-          <text x="152" y="160" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="28" font-weight="600">D</text>
-          <text x="228" y="160" text-anchor="middle" fill="#f5c76e" font-family="Caveat, cursive" font-size="28" font-weight="600">T</text>
-          <text x="190" y="228" text-anchor="middle" fill="#a0a8be" font-family="Caveat, cursive" font-size="16">D = V ÷ T   ·   V = D × T   ·   T = V ÷ D</text>
+          <polygon points="190,28 340,195 40,195" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+          <line x1="115" y1="111" x2="265" y2="111" stroke="#60a5fa" stroke-width="1.2"/>
+          <line x1="190" y1="111" x2="190" y2="195" stroke="#60a5fa" stroke-width="1.2"/>
+          <text x="190" y="90" text-anchor="middle" fill="#d1d9e3" font-family="JetBrains Mono, monospace" font-size="22" font-weight="600">V</text>
+          <text x="152" y="160" text-anchor="middle" fill="#4ade80" font-family="JetBrains Mono, monospace" font-size="22" font-weight="600">D</text>
+          <text x="228" y="160" text-anchor="middle" fill="#4ade80" font-family="JetBrains Mono, monospace" font-size="22" font-weight="600">T</text>
+          <text x="190" y="228" text-anchor="middle" fill="#8b97a8" font-family="JetBrains Mono, monospace" font-size="11">D = V ÷ T   ·   V = D × T   ·   T = V ÷ D</text>
         </svg>
         <figcaption>Cache la valeur à trouver, la relation apparaît.</figcaption>
       </figure>
@@ -419,30 +771,30 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p>Pour un débit en <strong>Mbit/s</strong>, on divise un volume en <strong>Mbit</strong> (et non en Mo) par un temps en <strong>secondes</strong>.</p>
 
       <div class="example">
-        <div class="example-tag">exemple — fin du fil rouge</div>
+        <div class="example-tag">exemple fin du fil rouge</div>
         <div class="example-line">V = 1,542 Mo → × 8 = <span class="s">12,336 Mbit</span></div>
         <div class="example-line">D = 12,336 ÷ 4 = <b>3,084 Mbit/s</b></div>
       </div>
     </div>
 
     <div class="chapter">
-      <h3><span class="num">§4.</span> Trois pièges à éviter</h3>
+      <h3><span class="num">§4</span> Trois pièges à éviter</h3>
 
       <div class="piege">
-        <div class="piege-tag">// piège n°1</div>
+        <div class="piege-tag">piège 01</div>
         <p><code>1 octet = 8 bits</code> (en anglais : 1 Byte = 8 bits).</p>
         <p>Les tailles de fichiers sont en <em>octets</em>, les débits en <em>bits par seconde</em>. × 8 dans un sens, ÷ 8 dans l'autre.</p>
         <p>1 Mo = 8 Mbit &nbsp;·&nbsp; 800 Mbit/s = 100 Mo/s.</p>
       </div>
 
-      <div class="piege" style="border-left-color:var(--amber);background:rgba(245,199,110,.05)">
-        <div class="piege-tag" style="color:var(--amber)">// piège n°2</div>
+      <div class="piege warn">
+        <div class="piege-tag">piège 02</div>
         <p>En SNT, on suit les normes SI : <code>k = 10³</code> · <code>M = 10⁶</code> · <code>G = 10⁹</code>.</p>
         <p>1 ko = 1 000 o · 1 Mo = 1 000 000 o · 1 Go = 1 000 000 000 o.</p>
       </div>
 
-      <div class="piege" style="border-left-color:var(--teal);background:rgba(126,202,176,.05)">
-        <div class="piege-tag" style="color:var(--teal)">// piège n°3</div>
+      <div class="piege teal">
+        <div class="piege-tag">piège 03</div>
         <p>Le temps T s'exprime <strong>toujours en secondes</strong> dans la formule.</p>
         <p>Pour convertir : <code>145 s = 2 min 25 s</code> (car 145 = 2×60 + 25).</p>
       </div>
@@ -450,15 +802,15 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
 
     <div class="exo-nav">
       <a href="#accueil">← accueil</a>
-      <a href="#exo1" class="next">Exercice I →</a>
+      <a href="#exo1" class="next">exercice 01 →</a>
     </div>
   </div>
 
-  <!-- ============================================ EXO 1 ============================================ -->
+  <!-- EXO 1 -->
   <div class="view" id="view-exo1">
     <div class="page-head">
-      <div class="page-tag">exercice I · calcul du débit · TCP/IP</div>
-      <h1>Partage d'une photo HD</h1>
+      <div class="page-tag">exercice 01 · calcul du débit · TCP/IP</div>
+      <h1><span class="num">01.</span>Partage d'une photo HD</h1>
     </div>
 
     <div class="enonce" id="enonce1"></div>
@@ -500,20 +852,20 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p class="feedback"></p>
     </div>
 
-    <button class="solution-btn" data-sol="sol1">→ voir la correction</button>
+    <button class="solution-btn" data-sol="sol1">▸ afficher la correction</button>
     <div class="solution" id="sol1"></div>
 
     <div class="exo-nav">
       <a href="#cours">← cours</a>
-      <a href="#exo2" class="next">Exercice II →</a>
+      <a href="#exo2" class="next">exercice 02 →</a>
     </div>
   </div>
 
-  <!-- ============================================ EXO 2 ============================================ -->
+  <!-- EXO 2 -->
   <div class="view" id="view-exo2">
     <div class="page-head">
-      <div class="page-tag">exercice II · calcul du temps · IPv6 · ADSL</div>
-      <h1>Mise à jour d'un logiciel</h1>
+      <div class="page-tag">exercice 02 · calcul du temps · IPv6 · ADSL</div>
+      <h1><span class="num">02.</span>Mise à jour d'un logiciel</h1>
     </div>
 
     <div class="enonce" id="enonce2"></div>
@@ -546,20 +898,20 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p class="feedback"></p>
     </div>
 
-    <button class="solution-btn" data-sol="sol2">→ voir la correction</button>
+    <button class="solution-btn" data-sol="sol2">▸ afficher la correction</button>
     <div class="solution" id="sol2"></div>
 
     <div class="exo-nav">
-      <a href="#exo1">← Exercice I</a>
-      <a href="#exo3" class="next">Exercice III →</a>
+      <a href="#exo1">← exercice 01</a>
+      <a href="#exo3" class="next">exercice 03 →</a>
     </div>
   </div>
 
-  <!-- ============================================ EXO 3 ============================================ -->
+  <!-- EXO 3 -->
   <div class="view" id="view-exo3">
     <div class="page-head">
-      <div class="page-tag">exercice III · taille maximale · UDP/IP</div>
-      <h1>Visioconférence en direct</h1>
+      <div class="page-tag">exercice 03 · taille maximale · UDP/IP</div>
+      <h1><span class="num">03.</span>Visioconférence en direct</h1>
     </div>
 
     <div class="enonce" id="enonce3"></div>
@@ -592,36 +944,36 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
       <p class="feedback"></p>
     </div>
 
-    <button class="solution-btn" data-sol="sol3">→ voir la correction</button>
+    <button class="solution-btn" data-sol="sol3">▸ afficher la correction</button>
     <div class="solution" id="sol3"></div>
 
     <div class="exo-nav">
-      <a href="#exo2">← Exercice II</a>
-      <a href="#qcm" class="next">QCM →</a>
+      <a href="#exo2">← exercice 02</a>
+      <a href="#qcm" class="next">qcm →</a>
     </div>
   </div>
 
-  <!-- ============================================ QCM ============================================ -->
+  <!-- QCM -->
   <div class="view" id="view-qcm">
     <div class="page-head">
       <div class="page-tag">contrôle · 5 questions</div>
-      <h1>QCM</h1>
+      <h1><span class="num">?</span>QCM</h1>
     </div>
 
     <p class="qcm-note">Cinq questions pièges, tirées au hasard à chaque rechargement. Attention aux conversions et aux arrondis.</p>
     <div id="qcmList"></div>
 
     <div class="exo-nav">
-      <a href="#exo3">← Exercice III</a>
-      <a href="#sim" class="next">Simulateur →</a>
+      <a href="#exo3">← exercice 03</a>
+      <a href="#sim" class="next">simulateur →</a>
     </div>
   </div>
 
-  <!-- ============================================ SIMULATEUR ============================================ -->
+  <!-- SIMULATEUR -->
   <div class="view" id="view-sim">
     <div class="page-head">
       <div class="page-tag">outil · calcul pas à pas</div>
-      <h1>Simulateur</h1>
+      <h1><span class="num">↻</span>Simulateur</h1>
       <p class="page-sub">Entre tes propres valeurs — le calcul est déroulé étape par étape.</p>
     </div>
 
@@ -636,16 +988,16 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
     </div>
 
     <div class="exo-nav">
-      <a href="#qcm">← QCM</a>
-      <a href="#conv" class="next">Convertisseur →</a>
+      <a href="#qcm">← qcm</a>
+      <a href="#conv" class="next">convertisseur →</a>
     </div>
   </div>
 
-  <!-- ============================================ CONVERTISSEUR ============================================ -->
+  <!-- CONVERTISSEUR -->
   <div class="view" id="view-conv">
     <div class="page-head">
       <div class="page-tag">outil · octets ↔ bits</div>
-      <h1>Convertisseur d'unités</h1>
+      <h1><span class="num">↔</span>Convertisseur</h1>
       <p class="page-sub">Multiples SI : k = 10³, M = 10⁶, G = 10⁹.</p>
     </div>
 
@@ -667,14 +1019,14 @@ footer{max-width:820px;margin:60px auto 0;padding:24px 22px 0;border-top:1px sol
     </div>
 
     <div class="exo-nav">
-      <a href="#sim">← Simulateur</a>
-      <a href="#accueil" class="next">Accueil →</a>
+      <a href="#sim">← simulateur</a>
+      <a href="#accueil" class="next">accueil →</a>
     </div>
   </div>
 
 </main>
 
-<footer>SNT · 2de · Internet &amp; le Web · 1 Mo = 10⁶ octets</footer>
+<footer>snt · 2de · internet &amp; le web · 1 Mo = 10⁶ octets</footer>
 
 <script>
 /* ===== utils ===== */
@@ -754,35 +1106,40 @@ function updateNavProgress(){
     a.classList.remove('partial','done');
     if(!np) return;
     if(total===0){ np.textContent=''; return; }
-    if(correct === total){ np.textContent=' ✓'; a.classList.add('done'); }
-    else if(correct > 0){ np.textContent=' '+correct+'/'+total; a.classList.add('partial'); }
+    if(correct === total){ np.textContent='✓'; a.classList.add('done'); }
+    else if(correct > 0){ np.textContent=correct+'/'+total; a.classList.add('partial'); }
     else { np.textContent=''; }
   });
 }
 
-/* ===== exos handlers ===== */
+/* ===== exos ===== */
 function attachExerciseHandlers(){
   document.querySelectorAll('.q').forEach(q=>{
     const input=q.querySelector('input'), btn=q.querySelector('button'), fb=q.querySelector('.feedback');
+    const row=q.querySelector('.input-row');
     if(!input||!btn||btn.dataset.bound) return;
     btn.dataset.bound='1';
     function check(){
       const answer=parseFloat(q.dataset.answer);
       const tol=parseFloat(q.dataset.tol||'0');
       const val=parseNum(input.value);
+      if(row) row.classList.remove('good','bad');
       if(isNaN(val)){
         input.classList.remove('good'); input.classList.add('bad');
-        fb.className='feedback show bad'; fb.textContent='Entre un nombre valide.';
+        if(row) row.classList.add('bad');
+        fb.className='feedback show bad'; fb.textContent='entrer un nombre valide';
         solved.delete(q); updateScore(); return;
       }
       if(Math.abs(val-answer)<=tol){
         input.classList.remove('bad'); input.classList.add('good');
-        fb.className='feedback show ok'; fb.textContent='Bonne réponse.';
+        if(row) row.classList.add('good');
+        fb.className='feedback show ok'; fb.textContent='correct';
         solved.add(q);
       } else {
         input.classList.remove('good'); input.classList.add('bad');
+        if(row) row.classList.add('bad');
         fb.className='feedback show bad';
-        fb.textContent = val<answer ? 'Trop petit — vérifie l\'arrondi et les conversions.' : 'Trop grand — vérifie l\'arrondi et les conversions.';
+        fb.textContent = val<answer ? 'trop petit — vérifie l\'arrondi et les conversions' : 'trop grand — vérifie l\'arrondi et les conversions';
         solved.delete(q);
       }
       updateScore();
@@ -799,12 +1156,11 @@ function attachSolutionHandlers(){
     btn.addEventListener('click',()=>{
       const box=document.getElementById(btn.dataset.sol);
       const open=box.classList.toggle('show');
-      btn.textContent = open ? '← masquer la correction' : '→ voir la correction';
+      btn.textContent = open ? '▾ masquer la correction' : '▸ afficher la correction';
     });
   });
 }
 
-/* ===== exo 1 ===== */
 function renderExo1(){
   const tailleMo=rndStep(2.5,8.5,0.1);
   const C=Math.round(rndStep(1200,1500,10));
@@ -844,7 +1200,6 @@ function renderExo1(){
     </ol>`;
 }
 
-/* ===== exo 2 ===== */
 function renderExo2(){
   const tailleMo=rndStep(50,200,5);
   const C=Math.round(rndStep(1300,1500,10));
@@ -882,7 +1237,6 @@ function renderExo2(){
     </ol>`;
 }
 
-/* ===== exo 3 ===== */
 function renderExo3(){
   const debit=rndStep(4,10,1);
   const C=Math.round(rndStep(1400,1480,4));
@@ -1024,7 +1378,7 @@ function renderQCM(){
   const questions=buildQCM();
   const list=document.getElementById('qcmList');
   list.innerHTML='';
-  const letters=['a.','b.','c.','d.'];
+  const letters=['a','b','c','d'];
 
   questions.forEach((q,qi)=>{
     const correctVal=q.correct;
@@ -1035,11 +1389,11 @@ function renderQCM(){
     el.className='qcm-question';
 
     const optsHtml=shuffled.map((o,i)=>
-      `<button class="opt" data-i="${i}"><span class="letter">${letters[i]}</span><span>${o.display}</span></button>`
+      `<button class="opt" data-i="${i}"><span class="letter">${letters[i]}.</span><span>${o.display}</span></button>`
     ).join('');
 
     el.innerHTML=`
-      <p class="qcm-prompt"><span class="qn">${qi+1}.</span>${q.prompt}</p>
+      <p class="qcm-prompt"><span class="qn">Q${qi+1}</span>${q.prompt}</p>
       <div class="qcm-options">${optsHtml}</div>
       <div class="qcm-feedback"></div>`;
 
@@ -1051,13 +1405,13 @@ function renderQCM(){
         if(i===correctIndex){
           btn.classList.add('good');
           fb.className='qcm-feedback show ok';
-          fb.innerHTML=`Bonne réponse.<span class="expl">${q.expl}</span>`;
+          fb.innerHTML=`correct<span class="expl">${q.expl}</span>`;
           solved.add(el);
         } else {
           btn.classList.add('bad');
           el.querySelectorAll('.opt')[correctIndex].classList.add('good');
           fb.className='qcm-feedback show bad';
-          fb.innerHTML=`Raté.<span class="expl">${q.expl}</span>`;
+          fb.innerHTML=`raté<span class="expl">${q.expl}</span>`;
           solved.delete(el);
         }
         updateScore();
@@ -1068,27 +1422,28 @@ function renderQCM(){
   });
 }
 
-/* ===== reset per view ===== */
+/* ===== reset ===== */
 function resetExercise(exoId, solId){
   const exo=document.getElementById('view-'+exoId);
   exo.querySelectorAll('.q').forEach(q=>{
     solved.delete(q);
     const input=q.querySelector('input');
     if(input){input.value='';input.classList.remove('good','bad')}
+    const row=q.querySelector('.input-row');
+    if(row) row.classList.remove('good','bad');
     const fb=q.querySelector('.feedback');
     if(fb){fb.className='feedback';fb.textContent=''}
   });
   const sol=document.getElementById(solId);
   if(sol) sol.classList.remove('show');
   const sbtn=exo.querySelector('[data-sol]');
-  if(sbtn) sbtn.textContent='→ voir la correction';
+  if(sbtn) sbtn.textContent='▸ afficher la correction';
 }
 
 function resetQCM(){
   document.querySelectorAll('.qcm-question').forEach(q=>solved.delete(q));
 }
 
-/* ===== reroll contextual ===== */
 function rerollCurrent(){
   const v=currentView();
   if(v==='exo1'){ resetExercise('exo1','sol1'); renderExo1(); }
@@ -1111,7 +1466,7 @@ function simCalc(){
   const E=parseFloat(simE.value);
   const T=parseFloat(simDuree.value);
   if([tailleMo,C,E,T].some(isNaN)||C<=0||T<=0||E<0){
-    simOut.innerHTML='<div class="step" style="color:var(--bad)">Entre des valeurs valides (C &gt; 0, T &gt; 0).</div>';
+    simOut.innerHTML='<div class="step" style="color:var(--red)">valeurs invalides (C &gt; 0, T &gt; 0)</div>';
     return;
   }
   const tailleOctets=Math.round(tailleMo*1e6);
@@ -1132,7 +1487,7 @@ function simCalc(){
     <div class="step"><span class="n">05</span>surcoût = ${nf.format(Vreel)} − ${nf.format(tailleOctets)} = <span class="o">${nf.format(overhead)} octets</span> (${fmt(overhead/1e3,1)} ko)</div>
     <div class="step"><span class="n">06</span>en bits = ${nf.format(Vreel)} × 8 = <span class="o">${nf.format(Vbits)} bits</span> = ${fmt(VMbits,3)} Mbits</div>
     <div class="step"><span class="n">07</span>débit = ${fmt(VMbits,3)} ÷ ${fmt(T,2)} = <span class="r">${fmt(D,3)} Mbit/s</span></div>
-    <div class="step" style="color:var(--dim);font-size:.84rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
+    <div class="step" style="color:var(--text-faint);font-size:.8rem;">info : le dernier paquet transporte ${nf.format(reste)} octets utiles sur ${nf.format(C)}</div>
     <div class="final">D = ${fmt(D,3)} Mbit/s  ·  Vréel = ${fmt(Vreel/1e6,3)} Mo  ·  N = ${nf.format(N)}</div>
   `;
 }
@@ -1169,9 +1524,8 @@ attachSolutionHandlers();
 renderQCM();
 updateScore();
 
-document.getElementById('rerollBtn').addEventListener('click', rerollCurrent);
-
-/* initial view */
+document.getElementById('rerollBtn').addEventListener('click', rerollClick);
+function rerollClick(){ rerollCurrent(); }
 showView(getViewFromHash());
 </script>
 </body>

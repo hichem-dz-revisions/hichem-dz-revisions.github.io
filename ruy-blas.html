@@ -20,7 +20,6 @@
     --track:rgba(255,255,255,.10);
     --glow:rgba(124,108,255,.25);
 
-    /* Motif "français / littérature" — version sombre */
     --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23b8a4ff' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.10'%3E%3Cpath d='M120 24 q22 14 10 46 q-8 -14 -22 -16 q8 -16 12 -30 z'/%3E%3Cpath d='M122 26 l12 42'/%3E%3Cpath d='M10 30 q40 -5 80 0 t80 0'/%3E%3Cpath d='M10 44 q40 -5 80 0 t80 0'/%3E%3Cpath d='M10 58 q40 -5 80 0 t80 0'/%3E%3Cpath d='M40 120 q10 -6 24 0 q14 -6 24 0'/%3E%3Cpath d='M40 120 v14 q10 -6 24 0 q14 -6 24 0 v-14'/%3E%3Cpath d='M64 120 v14'/%3E%3C/g%3E%3Cpath d='M126 130 q5 7 0 12 q-5 -5 0 -12 z' fill='%23b8a4ff' fill-opacity='0.10' stroke='none'/%3E%3C/svg%3E");
   }
   [data-theme="light"]{
@@ -38,7 +37,6 @@
     --track:rgba(0,0,0,.08);
     --glow:rgba(91,75,255,.18);
 
-    /* Motif "français / littérature" — version claire (encre sépia) */
     --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%239a7b4f' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.09'%3E%3Cpath d='M120 24 q22 14 10 46 q-8 -14 -22 -16 q8 -16 12 -30 z'/%3E%3Cpath d='M122 26 l12 42'/%3E%3Cpath d='M10 30 q40 -5 80 0 t80 0'/%3E%3Cpath d='M10 44 q40 -5 80 0 t80 0'/%3E%3Cpath d='M10 58 q40 -5 80 0 t80 0'/%3E%3Cpath d='M40 120 q10 -6 24 0 q14 -6 24 0'/%3E%3Cpath d='M40 120 v14 q10 -6 24 0 q14 -6 24 0 v-14'/%3E%3Cpath d='M64 120 v14'/%3E%3C/g%3E%3Cpath d='M126 130 q5 7 0 12 q-5 -5 0 -12 z' fill='%239a7b4f' fill-opacity='0.09' stroke='none'/%3E%3C/svg%3E");
   }
 
@@ -50,7 +48,6 @@
     color:var(--text);
     min-height:100vh;
     line-height:1.55;
-
     background-color:var(--bg);
     background-image:
       var(--pattern),
@@ -60,16 +57,13 @@
     background-position: 0 0, 0 0, 0 0;
     background-size: 180px 180px, auto, auto;
     background-attachment: fixed;
-
     transition:background-color .35s ease, color .35s ease;
   }
 
-  /* ---------- HEADER ---------- */
   header{
     position:sticky;top:0;z-index:50;
     display:flex;align-items:center;justify-content:space-between;
     padding:12px 20px;
-    background:var(--panel);
     background:color-mix(in srgb, var(--bg) 82%, transparent);
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
@@ -98,13 +92,11 @@
   }
   .icon-btn:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 6px 18px var(--glow);}
 
-  /* ---------- LAYOUT ---------- */
   main{max-width:900px;margin:0 auto;padding:26px 18px 70px;}
   .page{display:none;animation:fade .28s ease;}
   .page.active{display:block;}
   @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 
-  /* ---------- HERO ---------- */
   .hero{text-align:center;padding:22px 0 30px;}
   .hero h1{
     font-size:clamp(2.2rem,7vw,3.4rem);
@@ -116,7 +108,6 @@
   .hero .sub{margin:0 0 10px;font-weight:600;color:var(--muted);letter-spacing:.4px;}
   .hero .muted{max-width:520px;margin:0 auto;color:var(--muted);font-size:.95rem;}
 
-  /* ---------- BUTTONS ---------- */
   .btn{
     display:flex;align-items:center;gap:14px;
     padding:16px 18px;
@@ -142,6 +133,13 @@
   }
   .btn.primary .txt small{color:rgba(255,255,255,.85);}
   .btn.primary:hover{box-shadow:0 14px 34px var(--glow);}
+  .btn.danger{
+    border-color:var(--bad);
+    background:linear-gradient(135deg,color-mix(in srgb,var(--bad) 16%,var(--panel)),var(--panel));
+    box-shadow:0 6px 20px rgba(255,92,122,.12);
+  }
+  .btn.danger:hover{border-color:var(--bad);box-shadow:0 12px 30px rgba(255,92,122,.28);}
+  .btn.danger .ico{filter:drop-shadow(0 0 6px rgba(255,92,122,.6));}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:13px;}
   .grid .btn.wide{grid-column:1/-1;}
@@ -153,7 +151,6 @@
   }
   .back:hover{color:var(--text);border-color:var(--accent);}
 
-  /* ---------- CARDS / COURS ---------- */
   .card{
     background:var(--panel);
     border:1px solid var(--border);
@@ -188,7 +185,6 @@
     font-style:italic;color:var(--muted);font-size:.93rem;
   }
 
-  /* ---------- QUIZ ---------- */
   .quiz-head{
     display:flex;align-items:center;gap:10px;flex-wrap:wrap;
     margin-bottom:6px;
@@ -202,6 +198,7 @@
     border-radius:99px;
     transition:width .35s ease;
   }
+  .progress.hard > div{background:linear-gradient(90deg,#ff8a5c,#ff5c7a);}
   #quizCard h2{font-size:1.15rem;line-height:1.45;margin:0 0 18px;font-weight:700;}
   .options{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
   .opt{
@@ -231,7 +228,6 @@
   .result .msg{font-size:1.02rem;font-weight:600;margin-bottom:24px;}
   .result .quiz-actions{justify-content:center;}
 
-  /* ---------- FOOTER / TRADEMARK ---------- */
   footer{
     text-align:center;color:var(--muted);font-size:.8rem;
     padding:0 18px 34px;
@@ -241,11 +237,7 @@
     margin-bottom:8px;
     font-weight:800;font-size:.98rem;letter-spacing:.5px;
   }
-  footer .foot-brand .copy{
-    color:var(--muted);
-    font-weight:600;
-    font-size:1rem;
-  }
+  footer .foot-brand .copy{color:var(--muted);font-weight:600;font-size:1rem;}
   footer .foot-brand .name{
     background:linear-gradient(90deg,var(--accent),var(--accent2));
     -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -285,6 +277,11 @@
       <button class="btn primary wide" onclick="startQuiz('all')">
         <span class="ico">🎯</span>
         <span class="txt"><strong>QCM complet</strong><small>29 questions — tous les actes mélangés</small></span>
+      </button>
+
+      <button class="btn danger wide" onclick="startQuiz('hard')">
+        <span class="ico">🔥</span>
+        <span class="txt"><strong>QCM difficile — niveau Simoncello</strong><small>24 questions pièges pour les plus courageux</small></span>
       </button>
 
       <button class="btn" onclick="startQuiz('gen')">
@@ -401,7 +398,7 @@
       <div class="quiz-score" id="quizScore"></div>
       <button class="icon-btn" style="width:38px;height:38px;font-size:1rem" title="Recommencer" onclick="restartQuiz()">🔄</button>
     </div>
-    <div class="progress"><div id="quizBar"></div></div>
+    <div class="progress" id="quizProgress"><div id="quizBar"></div></div>
     <div class="card" id="quizCard"></div>
   </section>
 
@@ -412,16 +409,17 @@
     <span class="copy">©</span>
     <span class="name">HichemDZ Révisions</span>
   </div>
-  <p>Fait pour réviser <strong>Ruy Blas</strong> de Victor Hugo · 29 questions · Bon courage !</p>
+  <p>Réviser <strong>Ruy Blas</strong> de Victor Hugo · Niveau normal &amp; niveau difficile · Bon courage !</p>
 </footer>
 
 <script>
 /* ============================================================
    BANQUE DE QUESTIONS
-   acte : 0 = général, 1 à 5 = acte
+   acte : 0 = général, 1 à 5 = acte, 'hard' = QCM difficile
    c    : index de la bonne réponse dans le tableau a[]
    ============================================================ */
 const QUESTIONS = [
+
   /* ---------- GÉNÉRAL ---------- */
   { acte:0, q:"Qui a écrit Ruy Blas ?",
     a:["Victor Hugo","Alfred de Musset","Alexandre Dumas","Alfred de Vigny"], c:0,
@@ -542,7 +540,108 @@ const QUESTIONS = [
 
   { acte:5, q:"Que fait la reine à la fin ?",
     a:["Elle pardonne à Ruy Blas et l'aime toujours","Elle le maudit","Elle s'enfuit avec Don César","Elle épouse Don Salluste"], c:0,
-    e:"Le pardon final donne à la pièce toute sa dimension tragique et romantique." }
+    e:"Le pardon final donne à la pièce toute sa dimension tragique et romantique." },
+
+  /* ============================================================
+     QCM DIFFICILE — « NIVEAU SIMONCELLO »
+     24 questions pièges, plus précises, mais toutes répondues
+     dans le résumé de la page Cours.
+     ============================================================ */
+  { acte:'hard', q:"Dans l'acte I, scène 3, qui surprend la confession de Ruy Blas ?",
+    a:["Don Salluste","Don Guritan","La reine","Un page"], c:0,
+    e:"Salluste a tout entendu : c'est ce qui lui permet de faire arrêter Don César et de manipuler Ruy Blas." },
+
+  { acte:'hard', q:"Quel risque Ruy Blas prend-il en apportant chaque jour une fleur à la reine ?",
+    a:["Sa vie","Sa fortune","Son titre","Aucun risque"], c:0,
+    e:"Le résumé précise qu'il le fait « au péril de sa vie » : sa passion est totale." },
+
+  { acte:'hard', q:"Quel objet accroché aux grilles trahit les visites nocturnes de Ruy Blas ?",
+    a:["Une dentelle ensanglantée","Un gant","Une lettre","Une bague"], c:0,
+    e:"La reine remarque cette dentelle ensanglantée à l'acte II, scène 2 : c'est l'indice matériel de la blessure de Ruy Blas." },
+
+  { acte:'hard', q:"Que doit signer Ruy Blas dans le contrat de l'acte I, scène 4 ?",
+    a:["Une promesse d'obéir à Salluste comme un domestique","Un aveu de trahison","Un contrat de mariage","Une lettre à la reine"], c:0,
+    e:"Ce contrat le lie totalement à Salluste : c'est le nœud juridique de toute la pièce." },
+
+  { acte:'hard', q:"Quelle est la véritable identité de « Don César » à la cour ?",
+    a:["Ruy Blas, un laquais","Don César revenu des Indes","Don Guritan","Le duc d'Albe"], c:0,
+    e:"Salluste fait passer son valet Ruy Blas pour son cousin Don César : c'est toute l'usurpation d'identité." },
+
+  { acte:'hard', q:"Que refuse catégoriquement Don César à l'acte I, scène 2 ?",
+    a:["Faire du mal à une femme","Payer ses dettes","Quitter l'Espagne","Aider son cousin"], c:0,
+    e:"Ce refus moral le distingue de Salluste et annonce son rôle de contrepoint comique et généreux." },
+
+  { acte:'hard', q:"Que fait Salluste du vrai Don César à l'acte I ?",
+    a:["Il le fait arrêter et envoyer aux galères","Il le tue","Il l'enferme dans un couvent","Il l'exile en France"], c:0,
+    e:"Cela libère l'identité « Don César » pour que Ruy Blas puisse l'usurper." },
+
+  { acte:'hard', q:"Qui est Don Guritan ?",
+    a:["Un seigneur jaloux qui provoque Ruy Blas en duel","Le confesseur de la reine","Le frère du roi","Un ami de Don César"], c:0,
+    e:"Il est amoureux de la reine et voit en Ruy Blas un rival : c'est un prétendant éconduit." },
+
+  { acte:'hard', q:"Où la reine envoie-t-elle Don Guritan pour éviter le duel ?",
+    a:["À Madrid","Aux Indes","En France","Dans un couvent"], c:0,
+    e:"C'est la première preuve concrète de son amour pour Ruy Blas." },
+
+  { acte:'hard', q:"Comment la reine reconnaît-elle son adorateur secret à l'acte II ?",
+    a:["Elle reconnaît l'écriture de la lettre","Il porte un masque","Un page le lui révèle","Il s'agenouille devant elle"], c:0,
+    e:"L'écriture de la lettre d'amour est la même que celle du message du roi : c'est le déclic." },
+
+  { acte:'hard', q:"Pourquoi Ruy Blas s'évanouit-il à l'acte II, scène 3 ?",
+    a:["Il est blessé à la main et submergé par l'émotion","Il est empoisonné","Il est épuisé","Il est malade"], c:0,
+    e:"Sa blessure et l'émotion d'être si près de la reine le font défaillir." },
+
+  { acte:'hard', q:"Que dénonce Ruy Blas dans la tirade « Bon appétit, messieurs ! » ?",
+    a:["La corruption des ministres qui pillent l'Espagne","La guerre contre la France","L'amour de la reine","La paresse du peuple"], c:0,
+    e:"C'est le sommet politique de la pièce : Ruy Blas y révèle sa grandeur morale." },
+
+  { acte:'hard', q:"Quelle distinction Ruy Blas obtient-il sous le nom de César ?",
+    a:["La Toison d'or","Le titre de duc","Le collier de la reine","Une épée d'honneur"], c:0,
+    e:"La Toison d'or est la plus haute distinction espagnole : elle marque son ascension." },
+
+  { acte:'hard', q:"Comment Don Salluste humilie-t-il Ruy Blas à la fin de l'acte III ?",
+    a:["Il réapparaît déguisé en valet et lui rappelle qu'il n'est qu'un domestique","Il le gifle en public","Il révèle tout à la cour","Il lui retire son titre"], c:0,
+    e:"Le retour de Salluste en valet inverse les rôles : c'est le coup de théâtre de l'acte III." },
+
+  { acte:'hard', q:"Par où le vrai Don César surgit-il à l'acte IV ?",
+    a:["Par la cheminée","Par la porte","Par la fenêtre","Par le toit"], c:0,
+    e:"Son entrée burlesque tranche avec le désespoir de Ruy Blas : c'est le versant comique du drame." },
+
+  { acte:'hard', q:"Que fait Don César de la sacoche d'argent à l'acte IV ?",
+    a:["Il la distribue aux pauvres","Il la garde pour lui","Il l'offre à la reine","Il la rend à Salluste"], c:0,
+    e:"Générosité spontanée qui montre son caractère insouciant et noble." },
+
+  { acte:'hard', q:"Qui vient donner un rendez-vous à l'acte IV, scène 4 ?",
+    a:["Une duègne","La reine elle-même","Un page","Don Guritan"], c:0,
+    e:"Elle croit parler à Ruy Blas, mais c'est le vrai César qui répond : c'est le quiproquo central de l'acte." },
+
+  { acte:'hard', q:"Que propose Don Salluste à la reine pour la piéger à l'acte V ?",
+    a:["Signer une lettre accusant Ruy Blas","Fuir avec lui","Renoncer au trône","Trahir le roi"], c:0,
+    e:"C'est le chantage final : la reine refuse de signer." },
+
+  { acte:'hard', q:"Comment Ruy Blas tue-t-il Don Salluste ?",
+    a:["D'un coup d'épée, « comme un laquais »","D'un coup de pistolet","En duel régulier","Avec du poison"], c:0,
+    e:"Il refuse le duel noble : il agit en laquais, sa seule façon de reprendre le dessus." },
+
+  { acte:'hard', q:"Que révèle Ruy Blas à la reine avant de mourir ?",
+    a:["Il n'est pas Don César, il est un laquais","Qu'il l'a toujours trompée","Que Salluste est mort","Qu'il doit partir"], c:0,
+    e:"Cet aveu est le cœur du dénouement tragique." },
+
+  { acte:'hard', q:"Que fait la reine à la toute fin de la pièce ?",
+    a:["Elle pardonne à Ruy Blas et l'aime toujours","Elle le maudit","Elle s'enfuit avec Don César","Elle épouse Don Salluste"], c:0,
+    e:"Le pardon final donne à la pièce toute sa dimension tragique et romantique." },
+
+  { acte:'hard', q:"À quoi renvoie le titre de l'acte V, « Le tigre et le lion » ?",
+    a:["À l'affrontement entre Salluste et Ruy Blas","À une scène de chasse","Au roi et à la reine","À Don César et Don Guritan"], c:0,
+    e:"Le tigre, c'est Salluste ; le lion, c'est Ruy Blas : leur affrontement final." },
+
+  { acte:'hard', q:"Quelle est la structure « en miroir » de la pièce ?",
+    a:["Acte I : Salluste manipule → Acte III : Ruy Blas brille → Acte V : Ruy Blas se sacrifie","Acte I : Ruy Blas brille → Acte III : Salluste manipule → Acte V : tout le monde meurt","Acte I : la reine aime → Acte III : le roi revient → Acte V : mariage","Acte I : Don César s'échappe → Acte III : il revient → Acte V : il épouse la reine"], c:0,
+    e:"La pièce repose sur une symétrie : manipulation, triomphe, chute." },
+
+  { acte:'hard', q:"Que demande Ruy Blas à un page à l'acte IV, scène 1 ?",
+    a:["De veiller sur la reine","De prévenir Salluste","De lui apporter du poison","De l'aider à fuir"], c:0,
+    e:"Même désespéré, il pense à protéger celle qu'il aime." }
 ];
 
 /* ============================================================
@@ -590,13 +689,13 @@ function toggleTheme(){
    ============================================================ */
 function startQuiz(filter){
   let pool;
-  if(filter === 'all')      pool = QUESTIONS.slice();
-  else if(filter === 'gen') pool = QUESTIONS.filter(q => q.acte === 0);
-  else                      pool = QUESTIONS.filter(q => q.acte === Number(filter));
+  if(filter === 'all')       pool = QUESTIONS.filter(q => q.acte !== 'hard');
+  else if(filter === 'gen')  pool = QUESTIONS.filter(q => q.acte === 0);
+  else if(filter === 'hard') pool = QUESTIONS.filter(q => q.acte === 'hard');
+  else                       pool = QUESTIONS.filter(q => q.acte === Number(filter));
 
   if(pool.length === 0){ alert('Aucune question pour cette partie.'); return; }
 
-  // Mélange des questions ET des réponses
   quiz.pool = shuffle(pool).map(q => {
     const opts = shuffle(q.a.map((txt, i) => ({ txt, ok: i === q.c })));
     return { q: q.q, opts, e: q.e };
@@ -606,6 +705,11 @@ function startQuiz(filter){
   quiz.score = 0;
   quiz.answered = false;
   quiz.filter = filter;
+
+  // Barre de progression en rouge/feu pour le mode difficile
+  const prog = document.getElementById('quizProgress');
+  if(filter === 'hard') prog.classList.add('hard');
+  else prog.classList.remove('hard');
 
   go('quiz');
   renderQuestion();
@@ -625,7 +729,8 @@ function renderQuestion(){
   const item = quiz.pool[quiz.idx];
   quiz.answered = false;
 
-  document.getElementById('quizMeta').textContent  = 'Question ' + (quiz.idx + 1) + ' / ' + total;
+  const prefix = (quiz.filter === 'hard') ? '🔥 Difficile — ' : '';
+  document.getElementById('quizMeta').textContent  = prefix + 'Question ' + (quiz.idx + 1) + ' / ' + total;
   document.getElementById('quizScore').textContent = 'Score : ' + quiz.score;
   document.getElementById('quizBar').style.width   = (quiz.idx / total * 100) + '%';
 
@@ -675,7 +780,6 @@ function answer(btn, opt){
     exp.className = 'exp good-txt';
   } else {
     btn.classList.add('bad');
-    // On met en évidence la bonne réponse
     Array.from(box.children).forEach((b, i) => {
       if(item.opts[i].ok) b.classList.add('good');
     });
@@ -693,14 +797,15 @@ function answer(btn, opt){
 function renderResult(){
   const total = quiz.pool.length;
   const pct   = Math.round(quiz.score / total * 100);
+  const hard  = quiz.filter === 'hard';
 
   let emoji, msg;
-  if(pct >= 90){ emoji = '🏆'; msg = 'Excellent ! Tu maîtrises la pièce, tu peux y aller tranquille.'; }
-  else if(pct >= 70){ emoji = '🔥'; msg = 'Bien joué ! Il reste quelques détails à revoir.'; }
-  else if(pct >= 50){ emoji = '💪'; msg = 'Pas mal, mais relis le résumé avant le contrôle.'; }
-  else { emoji = '📚'; msg = 'Courage ! Retourne voir le cours, puis recommence : les questions changent.'; }
+  if(pct >= 90){ emoji = '🏆'; msg = hard ? 'Impressionnant ! Même Simoncello ne pourra pas te piéger.' : 'Excellent ! Tu maîtrises la pièce, tu peux y aller tranquille.'; }
+  else if(pct >= 70){ emoji = '🔥'; msg = hard ? 'Très solide sur le mode difficile ! Encore quelques détails à fixer.' : 'Bien joué ! Il reste quelques détails à revoir.'; }
+  else if(pct >= 50){ emoji = '💪'; msg = hard ? 'Pas mal pour du niveau difficile. Relis le résumé pour viser plus haut.' : 'Pas mal, mais relis le résumé avant le contrôle.'; }
+  else { emoji = '📚'; msg = hard ? 'Le mode difficile est corsé ! Retourne voir le cours, puis retente : les questions changent.' : 'Courage ! Retourne voir le cours, puis recommence : les questions changent.'; }
 
-  document.getElementById('quizMeta').textContent  = 'Terminé';
+  document.getElementById('quizMeta').textContent  = hard ? '🔥 Mode difficile — Terminé' : 'Terminé';
   document.getElementById('quizScore').textContent = 'Score : ' + quiz.score;
   document.getElementById('quizBar').style.width   = '100%';
 

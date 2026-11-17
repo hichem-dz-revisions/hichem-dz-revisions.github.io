@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révisions Physique : Les Signaux Sonores</title>
+    <title>⚛️ HichemDZ Revisions : Les Signaux Sonores</title>
     <style>
-        /* --- VARIABLES DE THÈMES --- */
+        /* --- VARIABLES DE THÈMES (Sombre par défaut) --- */
         :root {
-            --bg-color: #f3f4f6;
-            --text-main: #374151;
-            --text-light: #6b7280;
+            /* Thème Sombre "Laboratoire" */
+            --bg-color: #0b1120; /* Bleu nuit très foncé */
+            --text-main: #e2e8f0;
+            --text-light: #94a3b8;
+            --card-bg: #1e293b;
+            --primary: #0ea5e9; /* Cyan électrique */
+            --primary-hover: #38bdf8;
+            --accent: #f59e0b;
+            --success: #10b981; /* Vert néon */
+            --danger: #ef4444;
+            --border-color: #334155;
+            --shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.15);
+            
+            /* Grille de fond scientifique */
+            --grid-line: rgba(255, 255, 255, 0.03);
+        }
+
+        body.light-mode {
+            /* Thème Clair (Optionnel) */
+            --bg-color: #f8fafc;
+            --text-main: #0f172a;
+            --text-light: #64748b;
             --card-bg: #ffffff;
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --accent: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --border-color: #e5e7eb;
+            --accent: #d97706;
+            --success: #059669;
+            --danger: #dc2626;
+            --border-color: #e2e8f0;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark-mode {
-            --bg-color: #111827;
-            --text-main: #f3f4f6;
-            --text-light: #9ca3af;
-            --card-bg: #1f2937;
-            --primary: #3b82f6;
-            --primary-hover: #60a5fa;
-            --accent: #fbbf24;
-            --success: #34d399;
-            --danger: #f87171;
-            --border-color: #374151;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --grid-line: rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -39,49 +45,72 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
         body {
             background-color: var(--bg-color);
+            /* Effet de grille de cahier / oscilloscope */
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 30px 30px;
             color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- WATERMARK (HichemDZ) --- */
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-light);
+            opacity: 0.4;
+            pointer-events: none; /* Ne gêne pas les clics */
+            z-index: 1000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* --- HEADER & NAV --- */
         header {
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: white;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(139, 92, 246, 0.2));
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            color: var(--text-main);
             padding: 2rem 1rem;
             text-align: center;
             position: relative;
         }
 
-        header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        header p { font-size: 1.1rem; opacity: 0.9; }
+        header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        header p { font-size: 1.1rem; color: var(--text-light); }
 
         #theme-toggle {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: white;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            transition: all 0.2s;
         }
-        #theme-toggle:hover { background: rgba(255, 255, 255, 0.4); }
+        #theme-toggle:hover { background: var(--card-bg); border-color: var(--primary); }
 
         .nav-tabs {
             display: flex;
             justify-content: center;
-            background: var(--card-bg);
-            box-shadow: var(--shadow);
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -110,8 +139,14 @@
             margin: 2rem auto;
             padding: 0 1rem;
             display: none;
+            flex: 1;
         }
-        .container.active { display: block; }
+        .container.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- COURS --- */
         .course-card {
@@ -141,13 +176,16 @@
 
         .details-content {
             padding: 1.5rem;
-            background: var(--bg-color);
+            background: rgba(0, 0, 0, 0.1);
         }
+        body.light-mode .details-content { background: rgba(0,0,0,0.02); }
 
         .highlight { font-weight: bold; color: var(--primary); }
+        
+        /* Style "Formule de Physique" */
         .formula {
-            background: var(--card-bg);
-            border: 1px dashed var(--primary);
+            background: var(--bg-color);
+            border: 1px solid var(--primary);
             padding: 1rem;
             border-radius: 8px;
             text-align: center;
@@ -155,10 +193,14 @@
             font-weight: bold;
             margin: 1rem 0;
             color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+            box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.1);
         }
-        table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--card-bg); }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
         th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
-        th { background-color: var(--primary); color: white; }
+        th { background-color: rgba(14, 165, 233, 0.1); color: var(--primary); }
 
         /* --- EXOS --- */
         .exo-header {
@@ -170,17 +212,18 @@
 
         .btn {
             background: var(--primary);
-            color: white;
+            color: #fff;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
         }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-success { background: var(--success); }
-        .btn-success:hover { background: #059669; }
+        .btn:hover { background: var(--primary-hover); box-shadow: 0 0 15px rgba(14, 165, 233, 0.5); }
+        .btn-success { background: var(--success); box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+        .btn-success:hover { background: #059669; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
 
         .exo-item {
             background: var(--card-bg);
@@ -189,21 +232,23 @@
             margin-bottom: 1.2rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
         }
 
         .exo-item p.question-text { font-weight: bold; margin-bottom: 1rem; font-size: 1.1rem; }
 
         .qcm-option {
             display: block;
-            background: var(--bg-color);
+            background: rgba(255, 255, 255, 0.02);
             padding: 0.8rem 1rem;
             margin-bottom: 0.5rem;
             border-radius: 6px;
             border: 1px solid var(--border-color);
             cursor: pointer;
         }
-        .qcm-option:hover { border-color: var(--primary); }
-        .qcm-option input[type="radio"] { margin-right: 10px; }
+        body.light-mode .qcm-option { background: #f8fafc; }
+        .qcm-option:hover { border-color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+        .qcm-option input[type="radio"] { margin-right: 10px; accent-color: var(--primary); }
 
         .exo-input {
             width: 100%;
@@ -214,7 +259,7 @@
             background: var(--bg-color);
             color: var(--text-main);
         }
-        .exo-input:focus { outline: none; border-color: var(--primary); }
+        .exo-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 5px rgba(14, 165, 233, 0.3); }
 
         .feedback { margin-top: 0.8rem; font-weight: bold; font-size: 0.95rem; }
         .feedback.correct { color: var(--success); }
@@ -230,22 +275,25 @@
             border-radius: 12px;
             background: var(--card-bg);
             box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Les Signaux Sonores</h1>
+        <h1>⚛️ Les Signaux Sonores</h1>
         <p>Fiche de révision & Exercices interactifs</p>
-        <button id="theme-toggle" onclick="toggleTheme()">🌙 Mode Sombre</button>
+        <button id="theme-toggle" onclick="toggleTheme()">☀️ Mode Clair</button>
     </header>
 
     <div class="nav-tabs">
-        <!-- Ajout de 'this' pour passer l'élément cliqué -->
-        <button class="tab-btn active" onclick="switchTab('cours', this)">📖 Le Cours (Résumé)</button>
-        <button class="tab-btn" onclick="switchTab('exos', this)">✏️ 5 Exercices Aléatoires</button>
+        <button class="tab-btn active" onclick="switchTab('cours', this)">📖 Le Cours</button>
+        <button class="tab-btn" onclick="switchTab('exos', this)">✏️ 5 Exercices</button>
     </div>
+
+    <!-- WATERMARK -->
+    <div class="watermark">© HichemDZ Revisions</div>
 
     <!-- ================= SECTION COURS ================= -->
     <div id="cours" class="container active">
@@ -253,9 +301,9 @@
             <details>
                 <summary>1. Émission et propagation du son</summary>
                 <div class="details-content">
-                    <p>Un son est produit par la <span class="highlight">mise en vibration</span> d'un objet (la source). Cette vibration est transmise par un <strong>milieu matériel</strong> (air, eau, solide) jusqu'à l'oreille.</p>
+                    <p>Un son est produit par la <span class="highlight">mise en vibration</span> d'un objet. Cette vibration est transmise par un <strong>milieu matériel</strong> (air, eau, solide).</p>
                     <p>Le son est une <strong>onde mécanique</strong> : il transporte de l'énergie mais <strong>pas de matière</strong>.</p>
-                    <p><em>Conséquence :</em> Dans le vide, le son ne se propage pas.</p>
+                    <p><em>Conséquence :</em> Dans le vide, le son ne se propage pas (pas de son sur la Lune).</p>
                 </div>
             </details>
         </div>
@@ -286,7 +334,7 @@
                         <li><strong>T</strong> : Période en secondes (s)</li>
                         <li><strong>f</strong> : Fréquence en Hertz (Hz)</li>
                     </ul>
-                    <p><em>Attention :</em> Convertir les ms en s (1 ms = 0,001 s).</p>
+                    <p><em>Rappel :</em> 1 ms = 0,001 s.</p>
                     <p>Domaine audible humain : <span class="highlight">20 Hz à 20 000 Hz</span>.</p>
                 </div>
             </details>
@@ -315,7 +363,7 @@
                         <li>0 dB : Seuil d'audibilité.</li>
                         <li><span class="highlight">85 dB</span> : Seuil de danger pour une exposition prolongée.</li>
                     </ul>
-                    <p>⚠️ Les cellules ciliées détruites <strong>ne se régénèrent pas</strong>.</p>
+                    <p>⚠️ Les cellules ciliées détruites <strong>ne se régénèrent pas</strong> (la perte auditive est définitive).</p>
                 </div>
             </details>
         </div>
@@ -330,7 +378,6 @@
         
         <div id="exo-list">
             <!-- Les exercices apparaîtront ici -->
-            <p style="text-align:center; color: var(--text-light);">Chargement des exercices...</p>
         </div>
 
         <div style="text-align: center; margin-top: 2rem; margin-bottom: 3rem;">
@@ -342,41 +389,42 @@
 
     <!-- ================= JAVASCRIPT ================= -->
     <script>
-        // --- GESTION DU THÈME ---
+        // --- GESTION DU THÈME (Sombre par défaut) ---
         const themeToggleBtn = document.getElementById('theme-toggle');
-        if(localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-mode');
+        
+        // On vérifie si l'utilisateur a déjà choisi un thème, sinon on force le sombre
+        if(localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            themeToggleBtn.textContent = '🌙 Mode Sombre';
+        } else {
+            // Par défaut, on s'assure qu'il n'y a pas de class light-mode
+            document.body.classList.remove('light-mode');
             themeToggleBtn.textContent = '☀️ Mode Clair';
         }
 
         function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            if(document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-                themeToggleBtn.textContent = '☀️ Mode Clair';
-            } else {
+            document.body.classList.toggle('light-mode');
+            if(document.body.classList.contains('light-mode')) {
                 localStorage.setItem('theme', 'light');
                 themeToggleBtn.textContent = '🌙 Mode Sombre';
+            } else {
+                localStorage.setItem('theme', 'dark');
+                themeToggleBtn.textContent = '☀️ Mode Clair';
             }
         }
 
-        // --- NAVIGATION (Corrigée) ---
+        // --- NAVIGATION ---
         function switchTab(tabId, element) {
-            // Cacher tous les conteneurs
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            // Désactiver tous les boutons
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
-            // Afficher le conteneur cible
             const targetContainer = document.getElementById(tabId);
             if(targetContainer) targetContainer.classList.add('active');
             
-            // Activer le bouton cliqué
             if (element) {
                 element.classList.add('active');
             }
 
-            // Générer les exos si on clique sur l'onglet et qu'il n'y en a pas
             if(tabId === 'exos' && exercicesActuels.length === 0) {
                 genererExercices();
             }
@@ -453,7 +501,7 @@
             try {
                 let copieBanque = [...banqueQuestions];
                 shuffle(copieBanque);
-                exercicesActuels = copieBanque.slice(0, 5); // 5 questions
+                exercicesActuels = copieBanque.slice(0, 5); // 5 questions par session
 
                 const container = document.getElementById('exo-list');
                 container.innerHTML = ''; 
@@ -487,7 +535,7 @@
                 });
             } catch(e) {
                 console.error("Erreur de génération :", e);
-                document.getElementById('exo-list').innerHTML = "<p style='color:red'>Erreur lors du chargement des exercices. Vérifie que Javascript est activé.</p>";
+                document.getElementById('exo-list').innerHTML = "<p style='color:red'>Erreur lors du chargement des exercices.</p>";
             }
         }
 
@@ -507,7 +555,7 @@
             
             exercicesActuels.forEach((exo, index) => {
                 let feedback = document.getElementById(`fb_${index}`);
-                if(!feedback) return; // Sécurité
+                if(!feedback) return; 
                 
                 let estCorrect = false;
 
@@ -542,15 +590,15 @@
             scoreDiv.style.display = 'block';
             
             let msg = "";
-            if (score === 5) msg = "Parfait ! 5/5 🎉";
-            else if (score >= 3) msg = `Pas mal ! ${score}/5 👍`;
-            else msg = `Aïe... ${score}/5 📚 Relis le cours !`;
+            if (score === 5) msg = "Parfait ! 5/5 🎉 Excellent travail.";
+            else if (score >= 3) msg = `Pas mal ! ${score}/5 👍 Continue !`;
+            else msg = `Aïe... ${score}/5 📚 Relis le cours et recommence.`;
             
             scoreDiv.innerHTML = msg;
             scoreDiv.style.color = score >= 3 ? "var(--success)" : "var(--danger)";
         }
 
-        // Lancer une première génération au démarrage pour que ce soit prêt
+        // Lancer une première génération au démarrage
         document.addEventListener('DOMContentLoaded', () => {
             genererExercices();
         });

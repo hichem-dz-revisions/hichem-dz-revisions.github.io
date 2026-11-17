@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révisions Physique : Les Signaux Sonores</title>
+    <style>
+        /* --- VARIABLES DE THÈMES --- */
+        :root {
+            --bg-color: #f3f4f6;
+            --text-main: #374151;
+            --text-light: #6b7280;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-main: #f3f4f6;
+            --text-light: #9ca3af;
+            --card-bg: #1f2937;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --accent: #fbbf24;
+            --success: #34d399;
+            --danger: #f87171;
+            --border-color: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        header p { font-size: 1.1rem; opacity: 0.9; }
+
+        #theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        #theme-toggle:hover { background: rgba(255, 255, 255, 0.4); }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: none;
+        }
+        .container.active { display: block; }
+
+        /* --- COURS --- */
+        .course-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        details { cursor: pointer; }
+        summary {
+            padding: 1.2rem 1.5rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; font-size: 1.5rem; }
+        details[open] summary::after { content: '−'; }
+        details[open] summary { border-bottom: 1px solid var(--border-color); }
+
+        .details-content {
+            padding: 1.5rem;
+            background: var(--bg-color);
+        }
+
+        .highlight { font-weight: bold; color: var(--primary); }
+        .formula {
+            background: var(--card-bg);
+            border: 1px dashed var(--primary);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--card-bg); }
+        th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
+        th { background-color: var(--primary); color: white; }
+
+        /* --- EXOS --- */
+        .exo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: #059669; }
+
+        .exo-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .exo-item p.question-text { font-weight: bold; margin-bottom: 1rem; font-size: 1.1rem; }
+
+        .qcm-option {
+            display: block;
+            background: var(--bg-color);
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        .qcm-option:hover { border-color: var(--primary); }
+        .qcm-option input[type="radio"] { margin-right: 10px; }
+
+        .exo-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: var(--bg-color);
+            color: var(--text-main);
+        }
+        .exo-input:focus { outline: none; border-color: var(--primary); }
+
+        .feedback { margin-top: 0.8rem; font-weight: bold; font-size: 0.95rem; }
+        .feedback.correct { color: var(--success); }
+        .feedback.incorrect { color: var(--danger); }
+
+        #score-display {
+            display: none;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Les Signaux Sonores</h1>
+        <p>Fiche de révision & Exercices interactifs</p>
+        <button id="theme-toggle" onclick="toggleTheme()">🌙 Mode Sombre</button>
+    </header>
+
+    <div class="nav-tabs">
+        <!-- Ajout de 'this' pour passer l'élément cliqué -->
+        <button class="tab-btn active" onclick="switchTab('cours', this)">📖 Le Cours (Résumé)</button>
+        <button class="tab-btn" onclick="switchTab('exos', this)">✏️ 5 Exercices Aléatoires</button>
+    </div>
+
+    <!-- ================= SECTION COURS ================= -->
+    <div id="cours" class="container active">
+        <div class="course-card">
+            <details>
+                <summary>1. Émission et propagation du son</summary>
+                <div class="details-content">
+                    <p>Un son est produit par la <span class="highlight">mise en vibration</span> d'un objet (la source). Cette vibration est transmise par un <strong>milieu matériel</strong> (air, eau, solide) jusqu'à l'oreille.</p>
+                    <p>Le son est une <strong>onde mécanique</strong> : il transporte de l'énergie mais <strong>pas de matière</strong>.</p>
+                    <p><em>Conséquence :</em> Dans le vide, le son ne se propage pas.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="course-card">
+            <details>
+                <summary>2. La vitesse (célérité) du son</summary>
+                <div class="details-content">
+                    <div class="formula">v = d / Δt</div>
+                    <p><strong>v</strong> en m/s, <strong>d</strong> en m, <strong>Δt</strong> en s.</p>
+                    <p>La vitesse dépend du milieu : <strong>Solide > Liquide > Gaz</strong>.</p>
+                    <ul>
+                        <li>Dans l'air : <strong>v ≈ 340 m/s</strong></li>
+                        <li>Dans l'eau : v ≈ 1500 m/s</li>
+                        <li>Dans l'acier : v ≈ 5800 m/s</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+
+        <div class="course-card">
+            <details>
+                <summary>3. Période et Fréquence</summary>
+                <div class="details-content">
+                    <p>Un signal est <strong>périodique</strong> s'il se répète identique à lui-même.</p>
+                    <div class="formula">f = 1 / T &nbsp; &nbsp;&nbsp; T = 1 / f</div>
+                    <ul>
+                        <li><strong>T</strong> : Période en secondes (s)</li>
+                        <li><strong>f</strong> : Fréquence en Hertz (Hz)</li>
+                    </ul>
+                    <p><em>Attention :</em> Convertir les ms en s (1 ms = 0,001 s).</p>
+                    <p>Domaine audible humain : <span class="highlight">20 Hz à 20 000 Hz</span>.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="course-card">
+            <details>
+                <summary>4. Les 3 caractéristiques d'un son</summary>
+                <div class="details-content">
+                    <table>
+                        <tr><th>Physique</th><th>Physiologique</th><th>Explication</th></tr>
+                        <tr><td><strong>Fréquence</strong></td><td>Hauteur</td><td>Grave (f faible) ou Aigu (f élevée).</td></tr>
+                        <tr><td><strong>Amplitude</strong></td><td>Intensité</td><td>Fort ou faible. Se mesure en <strong>dB</strong>.</td></tr>
+                        <tr><td><strong>Forme du signal</strong></td><td>Timbre</td><td>Couleur du son (ex: distinguer un piano d'une guitare).</td></tr>
+                    </table>
+                </div>
+            </details>
+        </div>
+
+        <div class="course-card" style="border-left: 4px solid var(--danger);">
+            <details>
+                <summary style="color: var(--danger);">5. Niveau sonore et Dangers</summary>
+                <div class="details-content">
+                    <p>Le niveau se mesure en <strong>décibels (dB)</strong> avec un sonomètre. L'échelle est <strong>non linéaire</strong> (+3 dB = intensité x2, +10 dB = intensité x10).</p>
+                    <ul>
+                        <li>0 dB : Seuil d'audibilité.</li>
+                        <li><span class="highlight">85 dB</span> : Seuil de danger pour une exposition prolongée.</li>
+                    </ul>
+                    <p>⚠️ Les cellules ciliées détruites <strong>ne se régénèrent pas</strong>.</p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- ================= SECTION EXOS ================= -->
+    <div id="exos" class="container">
+        <div class="exo-header">
+            <h2>Entraînement</h2>
+            <button class="btn" onclick="genererExercices()">🔄 Nouveaux exercices</button>
+        </div>
+        
+        <div id="exo-list">
+            <!-- Les exercices apparaîtront ici -->
+            <p style="text-align:center; color: var(--text-light);">Chargement des exercices...</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem; margin-bottom: 3rem;">
+            <button class="btn btn-success" style="font-size: 1.2rem; padding: 1rem 2rem;" onclick="verifierReponses()">✅ Valider mes réponses</button>
+        </div>
+
+        <div id="score-display"></div>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // --- GESTION DU THÈME ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        if(localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleBtn.textContent = '☀️ Mode Clair';
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            if(document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggleBtn.textContent = '☀️ Mode Clair';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggleBtn.textContent = '🌙 Mode Sombre';
+            }
+        }
+
+        // --- NAVIGATION (Corrigée) ---
+        function switchTab(tabId, element) {
+            // Cacher tous les conteneurs
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            // Désactiver tous les boutons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Afficher le conteneur cible
+            const targetContainer = document.getElementById(tabId);
+            if(targetContainer) targetContainer.classList.add('active');
+            
+            // Activer le bouton cliqué
+            if (element) {
+                element.classList.add('active');
+            }
+
+            // Générer les exos si on clique sur l'onglet et qu'il n'y en a pas
+            if(tabId === 'exos' && exercicesActuels.length === 0) {
+                genererExercices();
+            }
+        }
+
+        // --- BANQUE DE 50 QUESTIONS ---
+        const banqueQuestions = [
+            { type: "qcm", q: "Dans quel milieu le son se propage-t-il le plus vite ?", options: ["L'air", "L'eau", "L'acier"], correct: 2 },
+            { type: "texte", q: "Quelle est la vitesse approximative du son dans l'air ? (en m/s)", answer: "340" },
+            { type: "texte", q: "Complétez : Le son a besoin d'un milieu...", answer: "matériel" },
+            { type: "qcm", q: "Le son peut-il se propager dans le vide ?", options: ["Oui", "Non"], correct: 1 },
+            { type: "texte", q: "Quel type d'onde est un signal sonore ?", answer: "mécanique" },
+            { type: "qcm", q: "Le son transporte de la matière.", options: ["Vrai", "Faux"], correct: 1 },
+            { type: "texte", q: "Quel est le nom de la grandeur physique représentée par 'v' ?", answer: "vitesse" },
+            { type: "qcm", q: "La vitesse du son dans l'eau est de...", options: ["340 m/s", "1500 m/s", "5800 m/s"], correct: 1 },
+            { type: "texte", q: "Quelle est l'unité de la période T ?", answer: "seconde" },
+            { type: "texte", q: "Quelle est l'unité de la fréquence f ?", answer: "hertz" },
+            { type: "qcm", q: "Si la période T augmente, la fréquence f...", options: ["Augmente", "Diminue", "Ne change pas"], correct: 1 },
+            { type: "texte", q: "Calculez f si T = 0,005 s (en Hz)", answer: "200" },
+            { type: "texte", q: "Calculez T si f = 50 Hz (en s)", answer: "0.02" },
+            { type: "qcm", q: "Quel est le domaine des fréquences audibles par l'Homme ?", options: ["0 à 100 Hz", "20 Hz à 20 000 Hz", "20 000 Hz à 50 000 Hz"], correct: 1 },
+            { type: "texte", q: "Comment appelle-t-on les sons < 20 Hz ?", answer: "infrasons" },
+            { type: "texte", q: "Comment appelle-t-on les sons > 20 000 Hz ?", answer: "ultrasons" },
+            { type: "qcm", q: "Un signal périodique est un signal qui...", options: ["Est très fort", "Se répète identique à lui-même", "Est toujours audible"], correct: 1 },
+            { type: "texte", q: "Combien de ms y a-t-il dans 1 seconde ?", answer: "1000" },
+            { type: "qcm", q: "Un son avec une fréquence élevée est un son...", options: ["Grave", "Aigu", "Fort"], correct: 1 },
+            { type: "texte", q: "Quelle grandeur physiologique correspond à la fréquence ?", answer: "hauteur" },
+            { type: "qcm", q: "L'amplitude du signal correspond à...", options: ["La hauteur", "Le timbre", "L'intensité"], correct: 2 },
+            { type: "texte", q: "Quelle grandeur permet de distinguer deux instruments jouant la même note ?", answer: "timbre" },
+            { type: "qcm", q: "Le timbre est lié à la forme du signal.", options: ["Vrai", "Faux"], correct: 0 },
+            { type: "texte", q: "Une fréquence faible produit un son... (grave ou aigu ?)", answer: "grave" },
+            { type: "qcm", q: "Deux sons peuvent différer par :", options: ["La hauteur, l'intensité et le timbre", "La vitesse et le poids", "La distance et le temps"], correct: 0 },
+            { type: "texte", q: "Quelle est l'unité du niveau d'intensité sonore ?", answer: "décibel" },
+            { type: "qcm", q: "Que signifie une augmentation de +3 dB ?", options: ["L'intensité x2", "L'intensité x10", "Le son est 3 fois plus fort"], correct: 0 },
+            { type: "qcm", q: "Que signifie une augmentation de +10 dB ?", options: ["L'intensité x2", "L'intensité x10", "Le son est 10 fois plus rapide"], correct: 1 },
+            { type: "texte", q: "À partir de quel niveau sonore (en dB) les dommages sont-ils réels en exposition prolongée ?", answer: "85" },
+            { type: "qcm", q: "Que deviennent les cellules ciliées détruites ?", options: ["Elles guérissent", "Elles se régénèrent", "Elles ne se régénèrent pas"], correct: 2 },
+            { type: "qcm", q: "À 0 dB, il n'y a aucun son émis.", options: ["Vrai", "Faux (c'est le seuil d'audibilité)"], correct: 1 },
+            { type: "texte", q: "Quel appareil mesure le niveau sonore ?", answer: "sonomètre" },
+            { type: "qcm", q: "L'échelle des décibels est linéaire.", options: ["Vrai", "Faux"], correct: 1 },
+            { type: "texte", q: "Comment s'appelle le phénomène qui produit un son à la base ? (ex: corde)", answer: "vibration" },
+            { type: "qcm", q: "Quel est le rôle d'une caisse de résonance ?", options: ["Modifier la hauteur", "Augmenter l'intensité", "Changer le timbre uniquement"], correct: 1 },
+            { type: "texte", q: "La caisse de résonance modifie-t-elle la fréquence du son ? (oui/non)", answer: "non" },
+            { type: "texte", q: "Le son met 3s pour atteindre un mur. La vitesse est 340m/s. Quelle est la distance ? (en m)", answer: "1020" },
+            { type: "texte", q: "Vous voyez un éclair, 3s plus tard vous entendez le tonnerre. À quelle distance (en m) est l'orage ? (v=340m/s)", answer: "1020" },
+            { type: "qcm", q: "L'échographie utilise :", options: ["Les infrasons", "Les sons audibles", "Les ultrasons"], correct: 2 },
+            { type: "qcm", q: "Les chauves-souris utilisent pour se repérer :", options: ["Les ultrasons", "Les infrasons", "Les sons graves"], correct: 0 },
+            { type: "texte", q: "Convertir 50 ms en secondes (en s)", answer: "0.05" },
+            { type: "texte", q: "Si v = 1500 m/s et d = 3000 m, combien de temps met le son ? (en s)", answer: "2" },
+            { type: "qcm", q: "Sur un oscillogramme, une période correspond à :", options: ["La hauteur du motif", "La largeur du motif qui se répète", "Le nombre de motifs"], correct: 1 },
+            { type: "qcm", q: "Pourquoi mesurer plusieurs périodes sur un graphique ?", options: ["Pour faire joli", "Pour réduire l'erreur de lecture", "Parce que c'est obligatoire"], correct: 1 },
+            { type: "texte", q: "Comment nomme-t-on la vitesse de propagation d'une onde sonore ? (Commence par C)", answer: "célérité" },
+            { type: "qcm", q: "Le niveau sonore dépend de la distance à la source.", options: ["Vrai", "Faux"], correct: 0 },
+            { type: "texte", q: "La vitesse du son augmente-t-elle avec la température de l'air ? (oui/non)", answer: "oui" },
+            { type: "qcm", q: "Un son de 120 dB (avion au décollage) :", options: ["Est inaudible", "Est agréable", "Peut détruire immédiatement des cellules"], correct: 2 },
+            { type: "texte", q: "Quel organe reçoit le signal sonore ? (Un des 5 sens)", answer: "oreille" }
+        ];
+
+        let exercicesActuels = [];
+
+        // --- LOGIQUE DU HASARD ---
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // --- GÉNÉRATION DES EXOS ---
+        function genererExercices() {
+            try {
+                let copieBanque = [...banqueQuestions];
+                shuffle(copieBanque);
+                exercicesActuels = copieBanque.slice(0, 5); // 5 questions
+
+                const container = document.getElementById('exo-list');
+                container.innerHTML = ''; 
+                document.getElementById('score-display').style.display = 'none'; 
+
+                exercicesActuels.forEach((exo, index) => {
+                    let div = document.createElement('div');
+                    div.className = 'exo-item';
+                    
+                    let contenuHtml = `<p class="question-text">Q${index + 1}. ${exo.q}</p>`;
+
+                    if (exo.type === "qcm") {
+                        contenuHtml += `<div>`;
+                        exo.options.forEach((option, optIndex) => {
+                            contenuHtml += `
+                                <label class="qcm-option">
+                                    <input type="radio" name="q_${index}" value="${optIndex}">
+                                    ${option}
+                                </label>
+                            `;
+                        });
+                        contenuHtml += `</div>`;
+                    } else if (exo.type === "texte") {
+                        contenuHtml += `<input type="text" class="exo-input" id="rep_${index}" placeholder="Écris ta réponse ici...">`;
+                    }
+
+                    contenuHtml += `<div class="feedback" id="fb_${index}"></div>`;
+                    
+                    div.innerHTML = contenuHtml;
+                    container.appendChild(div);
+                });
+            } catch(e) {
+                console.error("Erreur de génération :", e);
+                document.getElementById('exo-list').innerHTML = "<p style='color:red'>Erreur lors du chargement des exercices. Vérifie que Javascript est activé.</p>";
+            }
+        }
+
+        // --- VÉRIFICATION ---
+        function normaliser(str) {
+            if(!str) return "";
+            return str.toLowerCase().trim()
+                      .replace(/\s+/g, '')
+                      .replace(/,/g, '.')
+                      .replace(/é/g, 'e')
+                      .replace(/è/g, 'e')
+                      .replace(/à/g, 'a');
+        }
+
+        function verifierReponses() {
+            let score = 0;
+            
+            exercicesActuels.forEach((exo, index) => {
+                let feedback = document.getElementById(`fb_${index}`);
+                if(!feedback) return; // Sécurité
+                
+                let estCorrect = false;
+
+                if (exo.type === "qcm") {
+                    let selected = document.querySelector(`input[name="q_${index}"]:checked`);
+                    if (selected && parseInt(selected.value) === exo.correct) {
+                        estCorrect = true;
+                    }
+                } else if (exo.type === "texte") {
+                    let inputElement = document.getElementById(`rep_${index}`);
+                    let inputVal = inputElement ? inputElement.value : "";
+                    let repUser = normaliser(inputVal);
+                    let repAttendue = normaliser(exo.answer);
+                    
+                    if (repUser.includes(repAttendue) || (repAttendue.includes(repUser) && repUser.length > 1)) {
+                        estCorrect = true;
+                    }
+                }
+
+                if (estCorrect) {
+                    score++;
+                    feedback.textContent = "✅ Correct !";
+                    feedback.className = "feedback correct";
+                } else {
+                    let bonneReponse = exo.type === "qcm" ? exo.options[exo.correct] : exo.answer;
+                    feedback.textContent = `❌ Incorrect. Réponse : ${bonneReponse}`;
+                    feedback.className = "feedback incorrect";
+                }
+            });
+
+            let scoreDiv = document.getElementById('score-display');
+            scoreDiv.style.display = 'block';
+            
+            let msg = "";
+            if (score === 5) msg = "Parfait ! 5/5 🎉";
+            else if (score >= 3) msg = `Pas mal ! ${score}/5 👍`;
+            else msg = `Aïe... ${score}/5 📚 Relis le cours !`;
+            
+            scoreDiv.innerHTML = msg;
+            scoreDiv.style.color = score >= 3 ? "var(--success)" : "var(--danger)";
+        }
+
+        // Lancer une première génération au démarrage pour que ce soit prêt
+        document.addEventListener('DOMContentLoaded', () => {
+            genererExercices();
+        });
+    </script>
+</body>
+</html>

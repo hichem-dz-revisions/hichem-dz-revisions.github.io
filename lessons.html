@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail de Révisions | Hichem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Thème Sombre (Par défaut) */
+            --bg: #0b1120;
+            --bg-grid: rgba(56, 189, 248, 0.05);
+            --card: rgba(30, 41, 59, 0.7);
+            --card-hover: rgba(30, 41, 59, 0.9);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --border: rgba(255, 255, 255, 0.1);
+            --icon-opacity: 0.1;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        [data-theme="light"] {
+            /* Thème Clair */
+            --bg: #f8fafc;
+            --bg-grid: rgba(14, 165, 233, 0.08);
+            --card: rgba(255, 255, 255, 0.8);
+            --card-hover: rgba(255, 255, 255, 1);
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #0284c7;
+            --secondary: #4f46e5;
+            --border: rgba(0, 0, 0, 0.1);
+            --icon-opacity: 0.05;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        /* Background Animé */
+        .bg-animations {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .bg-animations::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .floating-icon { position: absolute; font-size: 3rem; opacity: var(--icon-opacity); animation: float 20s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-40px) rotate(15deg); } 100% { transform: translateY(0) rotate(0deg); } }
+        .icon-1 { top: 10%; left: 10%; animation-duration: 25s; }
+        .icon-2 { top: 70%; left: 80%; animation-duration: 30s; font-size: 4rem; }
+        .icon-3 { top: 40%; left: 85%; animation-duration: 22s; }
+        .icon-4 { top: 80%; left: 15%; animation-duration: 28s; font-size: 5rem; }
+        .icon-5 { top: 20%; left: 50%; animation-duration: 35s; font-size: 2rem; }
+
+        body {
+            background-color: var(--bg); color: var(--text); min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 2rem 1rem; transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header */
+        header { 
+            text-align: center; margin-bottom: 3rem; width: 100%; max-width: 900px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+        .title-group { text-align: left; }
+        h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 10px;}
+        .subtitle { color: var(--muted); font-size: 1rem; font-weight: 500; }
+        
+        .btn-icon {
+            background: var(--card); border: 1px solid var(--border); color: var(--text);
+            padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); 
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .btn-icon:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px);}
+
+        /* Grille des catégories */
+        .main-container { width: 100%; max-width: 900px; z-index: 10; display: flex; flex-direction: column; gap: 3rem; }
+        
+        .category-section { animation: fadeIn 0.6s ease both; }
+        .category-section:nth-child(2) { animation-delay: 0.1s; }
+        .category-section:nth-child(3) { animation-delay: 0.2s; }
+
+        .category-title { 
+            font-size: 1.4rem; color: var(--text); margin-bottom: 1.5rem; 
+            display: flex; align-items: center; gap: 10px; font-weight: 700;
+            border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;
+        }
+
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+        /* Cartes de révision */
+        .revision-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 15px;
+            padding: 1.5rem; text-decoration: none; color: var(--text);
+            display: flex; flex-direction: column; gap: 10px;
+            box-shadow: var(--shadow); backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+        }
+        
+        .revision-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary); transition: 0.3s;
+        }
+
+        .revision-card:hover {
+            transform: translateY(-5px); background: var(--card-hover);
+            border-color: var(--primary); box-shadow: 0 15px 30px rgba(56, 189, 248, 0.15);
+        }
+        .revision-card:hover::before { width: 100%; opacity: 0.05; }
+
+        .card-icon { font-size: 2rem; margin-bottom: 5px; }
+        .card-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+        .card-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+        
+        .card-arrow {
+            margin-top: auto; align-self: flex-end; font-size: 1.2rem; color: var(--muted);
+            transition: 0.3s;
+        }
+        .revision-card:hover .card-arrow { color: var(--primary); transform: translateX(5px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 15px; text-align: center; }
+            .title-group { text-align: center; }
+            .grid-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animé -->
+    <div class="bg-animations">
+        <div class="floating-icon icon-1">⚛️</div>
+        <div class="floating-icon icon-2">📚</div>
+        <div class="floating-icon icon-3">💻</div>
+        <div class="floating-icon icon-4">🔬</div>
+        <div class="floating-icon icon-5">📝</div>
+    </div>
+
+    <header>
+        <div class="title-group">
+            <h1>🎓 Mon Portail de Révisions</h1>
+            <p class="subtitle">Toutes mes fiches et exercices au même endroit</p>
+        </div>
+        <button class="btn-icon" onclick="toggleTheme()" title="Changer de thème">
+            <span id="theme-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- Catégorie : Physique-Chimie -->
+        <section class="category-section">
+            <h2 class="category-title">⚛️ Physique-Chimie</h2>
+            <div class="grid-cards">
+                
+                <!-- Lien 1 -->
+                <a href="https://hichem-dz-revisions.github.io/chapitre-3.1-pc.html" class="revision-card" target="_blank">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">Chapitre 3.1 - PC</div>
+                    <div class="card-desc">Fiche de révision et exercices interactifs sur le chapitre 3.1.</div>
+                    <div class="card-arrow">➔</div>
+                </a>
+
+                <!-- Lien 2 -->
+                <a href="https://hichem-dz-revisions.github.io/phyisque-chimie-frequences.html" class="revision-card" target="_blank">
+                    <div class="card-icon">〰️</div>
+                    <div class="card-title">Fréquences et Signaux</div>
+                    <div class="card-desc">Motif élémentaire, période, calculs de fréquence et graphiques.</div>
+                    <div class="card-arrow">➔</div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Catégorie : Français -->
+        <section class="category-section">
+            <h2 class="category-title">📖 Français</h2>
+            <div class="grid-cards">
+                
+                <!-- Lien 3 -->
+                <a href="https://hichem-dz-revisions.github.io/ruy-blas.html" class="revision-card" target="_blank">
+                    <div class="card-icon">🎭</div>
+                    <div class="card-title">Ruy Blas</div>
+                    <div class="card-desc">Fiches de lecture, analyses et révisions sur l'œuvre de Victor Hugo.</div>
+                    <div class="card-arrow">➔</div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Catégorie : SNT -->
+        <section class="category-section">
+            <h2 class="category-title">💻 SNT (Sciences Numériques)</h2>
+            <div class="grid-cards">
+                
+                <!-- Lien 4 -->
+                <a href="https://hichem-dz-revisions.github.io/snt-theme-1.html" class="revision-card" target="_blank">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title">SNT - Thème 1</div>
+                    <div class="card-desc">Révisions et activités sur le premier thème de Sciences Numériques et Technologie.</div>
+                    <div class="card-arrow">➔</div>
+                </a>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Gestion du thème clair / sombre
+        const root = document.documentElement;
+        const themeBtn = document.getElementById('theme-icon');
+
+        // Vérifier si un thème est déjà enregistré dans le navigateur
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            root.setAttribute('data-theme', 'light');
+            themeBtn.textContent = '☀️';
+        }
+
+        function toggleTheme() {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                themeBtn.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                root.setAttribute('data-theme', 'light');
+                themeBtn.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</body>
+</html>

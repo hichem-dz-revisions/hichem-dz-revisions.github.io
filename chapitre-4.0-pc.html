@@ -7,31 +7,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Thème clair par défaut (Laboratoire clair) */
+            /* Thème clair */
             --bg: #f4f7f9;
             --bg-gradient: radial-gradient(circle at 50% -20%, #e0f2fe 0%, #f4f7f9 80%);
             --card: #ffffff;
             --text: #0f172a;
             --muted: #64748b;
-            --primary: #0284c7; /* Bleu eau */
+            --primary: #0284c7;
             --primary-hover: #0369a1;
-            --secondary: #0d9488; /* Teal */
+            --secondary: #0d9488;
             --border: #e2e8f0;
             --input-bg: #f8fafc;
             --input-border: #cbd5e1;
-            
             --success-bg: #dcfce7;
             --success-text: #166534;
             --error-bg: #fee2e2;
             --error-text: #991b1b;
-            
             --math-bg: #f0f9ff;
             --math-border: #bae6fd;
             --math-text: #0369a1;
         }
 
         [data-theme="dark"] {
-            /* Thème sombre (Laboratoire nocturne) */
+            /* Thème sombre */
             --bg: #0f172a;
             --bg-gradient: radial-gradient(circle at 50% -20%, #1e3a5f 0%, #0f172a 80%);
             --card: #1e293b;
@@ -43,23 +41,16 @@
             --border: #334155;
             --input-bg: #0f172a;
             --input-border: #475569;
-            
             --success-bg: rgba(22, 101, 52, 0.2);
             --success-text: #4ade80;
             --error-bg: rgba(153, 27, 27, 0.2);
             --error-text: #f87171;
-            
             --math-bg: rgba(14, 165, 233, 0.1);
             --math-border: rgba(56, 189, 248, 0.3);
             --math-text: #7dd3fc;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
         body {
             background-color: var(--bg);
@@ -74,356 +65,108 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* En-tête */
         header {
-            width: 100%;
-            max-width: 850px;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
+            width: 100%; max-width: 850px; margin-bottom: 2rem;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        h1 { font-size: 1.8rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .subtitle { color: var(--muted); font-size: 1rem; font-weight: 500; margin-top: 5px; }
 
-        .subtitle {
-            color: var(--muted);
-            font-size: 1rem;
-            font-weight: 500;
-            margin-top: 5px;
-        }
-
-        /* Bouton Mode Sombre */
         .theme-toggle {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            cursor: pointer;
+            background: var(--card); border: 1px solid var(--border); color: var(--text);
+            width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
         }
+        .theme-toggle:hover { transform: scale(1.05); border-color: var(--primary); color: var(--primary); }
 
-        .theme-toggle:hover {
-            transform: scale(1.05);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Onglets */
-        .nav-tabs {
-            display: flex;
-            width: 100%;
-            max-width: 850px;
-            margin-bottom: 2rem;
-            gap: 10px;
-            z-index: 10;
-        }
-
+        .nav-tabs { display: flex; width: 100%; max-width: 850px; margin-bottom: 2rem; gap: 10px; }
         .tab-btn {
-            background: transparent;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--muted);
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: transparent; border: none; padding: 10px 20px;
+            font-size: 1rem; font-weight: 600; color: var(--muted);
+            cursor: pointer; border-radius: 8px; transition: 0.2s;
         }
-
-        .tab-btn:hover {
-            background: rgba(128, 128, 128, 0.1);
-            color: var(--text);
-        }
-
+        .tab-btn:hover { background: rgba(128, 128, 128, 0.1); color: var(--text); }
         .tab-btn.active {
-            background: var(--card);
-            color: var(--primary);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
+            background: var(--card); color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid var(--border);
         }
 
-        /* Conteneurs */
-        .container {
-            width: 100%;
-            max-width: 850px;
-            display: none;
-            z-index: 10;
-        }
+        .container { width: 100%; max-width: 850px; display: none; }
+        .container.active { display: block; animation: fadeIn 0.4s ease; }
 
-        .container.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        /* Cartes */
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -4px rgba(0,0,0,0.05);
-            transition: background-color 0.3s, border-color 0.3s;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 2rem; margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
         }
 
-        h2 {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.8rem;
-            color: var(--text);
-        }
+        h2 { font-size: 1.4rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.8rem; }
+        h3 { font-size: 1.1rem; margin: 1.5rem 0 0.8rem 0; color: var(--primary); }
+        p, ul { line-height: 1.7; color: var(--muted); margin-bottom: 1rem; font-size: 1.05rem; }
+        ul { margin-left: 1.5rem; }
+        .highlight { color: var(--text); font-weight: 600; }
 
-        h3 {
-            font-size: 1.1rem;
-            margin: 1.5rem 0 0.8rem 0;
-            color: var(--primary);
-        }
-
-        p, ul {
-            line-height: 1.7;
-            color: var(--muted);
-            margin-bottom: 1rem;
-            font-size: 1.05rem;
-        }
-
-        ul {
-            margin-left: 1.5rem;
-        }
-
-        .highlight {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        /* Formules */
         .formula-box {
-            background: var(--math-bg);
-            border: 1px solid var(--math-border);
-            color: var(--math-text);
-            padding: 15px;
-            text-align: center;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin: 1.5rem 0;
-            border-radius: 8px;
+            background: var(--math-bg); border: 1px solid var(--math-border);
+            color: var(--math-text); padding: 15px; text-align: center;
+            font-family: 'Fira Code', monospace; font-size: 1.4rem; font-weight: 700;
+            margin: 1.5rem 0; border-radius: 8px;
         }
 
-        /* Boutons */
         .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
+            background: var(--primary); color: white; border: none;
+            padding: 12px 24px; font-size: 1rem; font-weight: 600;
+            cursor: pointer; border-radius: 8px; transition: 0.2s;
             box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
         }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-refresh { background: var(--secondary); box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.3); }
 
-        .btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 15px; }
+        .toolbar h2 { border: none; margin: 0; padding: 0; }
 
-        .btn-refresh {
-            background: var(--secondary);
-            box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-refresh:hover {
-            background: #0f766e;
-        }
+        .exercise-card { margin-bottom: 2rem; border-left: 5px solid var(--primary); }
+        .exo-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+        .question-text { font-size: 1.1rem; font-weight: 500; margin-bottom: 1.5rem; color: var(--text); line-height: 1.6; }
 
-        /* Toolbar */
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .toolbar h2 {
-            border: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Exercices */
-        .exercise-card {
-            margin-bottom: 2rem;
-            border-left: 5px solid var(--primary);
-        }
-
-        .exo-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 1rem;
-        }
-
-        .question-text {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        /* Zone de réponse */
-        .answer-zone {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
+        .answer-zone { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         input[type="number"] {
-            padding: 12px 15px;
-            border: 2px solid var(--input-border);
-            background: var(--input-bg);
-            color: var(--text);
-            border-radius: 8px;
-            font-size: 1.1rem;
-            width: 160px;
-            font-family: 'Fira Code', monospace;
-            font-weight: 600;
-            outline: none;
-            transition: 0.2s;
+            padding: 12px 15px; border: 2px solid var(--input-border);
+            background: var(--input-bg); color: var(--text);
+            border-radius: 8px; font-size: 1.1rem; width: 160px;
+            font-family: 'Fira Code', monospace; font-weight: 600; outline: none; transition: 0.2s;
         }
+        input[type="number"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
+        .unit { font-weight: 700; font-family: 'Fira Code', monospace; font-size: 1.2rem; color: var(--primary); }
 
-        input[type="number"]:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
-        }
-
-        .unit {
-            font-weight: 700;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.2rem;
-            color: var(--primary);
-        }
-
-        /* QCM */
-        .qcm-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        .qcm-options { display: flex; flex-direction: column; gap: 10px; }
         .qcm-btn {
-            background: var(--input-bg);
-            border: 2px solid var(--border);
-            padding: 15px;
-            text-align: left;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
-            color: var(--text);
-            font-weight: 500;
+            background: var(--input-bg); border: 2px solid var(--border);
+            padding: 15px; text-align: left; font-size: 1rem;
+            cursor: pointer; border-radius: 8px; transition: 0.2s;
+            color: var(--text); font-weight: 500;
         }
+        .qcm-btn:hover:not(:disabled) { border-color: var(--primary); background: var(--card); }
+        .qcm-btn.correct { background: var(--success-bg); border-color: var(--success-text); font-weight: 600; color: var(--success-text); }
+        .qcm-btn.incorrect { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+        .qcm-btn:disabled { cursor: not-allowed; }
 
-        .qcm-btn:hover:not(:disabled) {
-            border-color: var(--primary);
-            background: var(--card);
-        }
+        .feedback { display: none; margin-top: 1.5rem; padding: 20px; border-radius: 8px; font-size: 1rem; line-height: 1.6; animation: fadeIn 0.3s; border-left: 4px solid; }
+        .feedback.show { display: block; }
+        .feedback.success { background: var(--success-bg); border-color: var(--success-text); color: var(--success-text); }
+        .feedback.error { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
 
-        .qcm-btn.correct {
-            background: var(--success-bg);
-            border-color: var(--success-text);
-            font-weight: 600;
-            color: var(--success-text);
-        }
-
-        .qcm-btn.incorrect {
-            background: var(--error-bg);
-            border-color: var(--error-text);
-            color: var(--error-text);
-        }
-
-        .qcm-btn:disabled {
-            cursor: not-allowed;
-        }
-
-        /* Corrections */
-        .feedback {
-            display: none;
-            margin-top: 1.5rem;
-            padding: 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            line-height: 1.6;
-            animation: fadeIn 0.3s;
-            border-left: 4px solid;
-        }
-
-        .feedback.show {
-            display: block;
-        }
-
-        .feedback.success {
-            background: var(--success-bg);
-            border-color: var(--success-text);
-            color: var(--success-text);
-        }
-
-        .feedback.error {
-            background: var(--error-bg);
-            border-color: var(--error-text);
-            color: var(--error-text);
-        }
-
-        /* Détail des calculs */
         .math-detail {
-            background: rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.1);
-            padding: 15px;
-            margin-top: 15px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.95rem;
-            color: var(--text);
-            white-space: pre-wrap;
-            border-radius: 6px;
+            background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);
+            padding: 15px; margin-top: 15px; font-family: 'Fira Code', monospace;
+            font-size: 0.95rem; color: var(--text); white-space: pre-wrap; border-radius: 6px;
         }
+        [data-theme="dark"] .math-detail { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); }
 
-        [data-theme="dark"] .math-detail {
-            background: rgba(0,0,0,0.3);
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 600px) {
             header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .theme-toggle { position: absolute; top: 20px; right: 20px; }
@@ -461,13 +204,13 @@
                 <li>Le soluté est dispersé dans le solvant, il n'a pas disparu de la matière.</li>
             </ul>
 
-            <h3>II. Concentration en masse (Cm)</h3>
+            <h3>II. Concentration en masse (C<sub>m</sub>)</h3>
             <p>C'est la masse de soluté dissoute par litre de solution.</p>
-            <div class="formula-box">Cm = m / V</div>
+            <div class="formula-box">C<sub>m</sub> = m / V</div>
             <ul>
                 <li><strong>m</strong> : masse du soluté en grammes (g)</li>
                 <li><strong>V</strong> : volume de la solution en Litres (L)</li>
-                <li><strong>Cm</strong> : concentration en masse en g/L (ou g.L⁻¹)</li>
+                <li><strong>C<sub>m</sub></strong> : concentration en masse en g/L (ou g.L⁻¹)</li>
             </ul>
             <p><em>⚠️ Attention : Il faut utiliser le volume final de solution, pas le volume d'eau ajouté.</em></p>
 
@@ -475,8 +218,8 @@
             <p>On ne peut dissoudre qu'une quantité limitée de soluté. La <span class="highlight">solubilité</span> est la concentration maximale qu'on peut dissoudre dans un solvant donné. Au-delà, la solution est dite <span class="highlight">saturée</span>.</p>
 
             <h3>IV. Préparation par dissolution</h3>
-            <p>Pour préparer une solution de concentration Cm et de volume V, on doit d'abord calculer la masse de soluté à peser :</p>
-            <div class="formula-box">m = Cm × V</div>
+            <p>Pour préparer une solution de concentration C<sub>m</sub> et de volume V, on doit d'abord calculer la masse de soluté à peser :</p>
+            <div class="formula-box">m = C<sub>m</sub> × V</div>
             <p><strong>Protocole :</strong> Peser la masse m, la transférer dans une fiole jaugée avec un entonnoir, rincer, ajouter de l'eau aux 2/3, agiter, compléter jusqu'au trait de jauge, boucher et homogénéiser.</p>
         </div>
     </div>
@@ -495,7 +238,6 @@
         const root = document.documentElement;
         const themeBtn = document.getElementById('theme-btn');
         
-        // Vérifier si un thème est déjà enregistré (optionnel)
         if (localStorage.getItem('theme') === 'dark') {
             root.setAttribute('data-theme', 'dark');
             themeBtn.textContent = '☀️';
@@ -527,55 +269,55 @@
             }
         }
 
-        // BANQUE DE QCM
+        // BANQUE DE QCM (Variables standardisées : question, ans, opts, explanation)
         const qcmBank = [
             {
-                q: "Lors de la préparation d'une solution par dissolution, quelle verrerie doit-on utiliser pour prélever le volume final avec précision ?",
+                question: "Lors de la préparation d'une solution par dissolution, quelle verrerie doit-on utiliser pour prélever le volume final avec précision ?",
                 ans: "Une fiole jaugée",
                 opts: ["Un bécher", "Une éprouvette graduée", "Une fiole jaugée", "Un erlenmeyer"],
-                exp: "La fiole jaugée possède un trait de jauge qui permet de mesurer un volume avec une grande précision."
+                explanation: "La fiole jaugée possède un trait de jauge qui permet de mesurer un volume avec une grande précision."
             },
             {
-                q: "Quelle est la première étape de la préparation d'une solution par dissolution ?",
+                question: "Quelle est la première étape de la préparation d'une solution par dissolution ?",
                 ans: "Peser la masse calculée de soluté",
                 opts: ["Verser l'eau dans la fiole", "Peser la masse calculée de soluté", "Agiter la solution", "Boucher la fiole"],
-                exp: "Il faut d'abord calculer la masse (m = Cm x V) puis la peser avec une balance."
+                explanation: "Il faut d'abord calculer la masse (m = Cm x V) puis la peser avec une balance."
             },
             {
-                q: "Comment doit-on lire le niveau de liquide dans une fiole jaugée pour être précis ?",
+                question: "Comment doit-on lire le niveau de liquide dans une fiole jaugée pour être précis ?",
                 ans: "En plaçant l'œil au niveau du bas du ménisque",
                 opts: ["En regardant d'en haut", "En plaçant l'œil au niveau du bas du ménisque", "En regardant d'en bas", "Peu importe la position"],
-                exp: "Pour éviter les erreurs, l'œil doit être aligné avec le bas du ménisque (la courbure du liquide)."
+                explanation: "Pour éviter les erreurs, l'œil doit être aligné avec le bas du ménisque (la courbure du liquide)."
             },
             {
-                q: "Dans une solution aqueuse d'eau salée, quel est le solvant ?",
+                question: "Dans une solution aqueuse d'eau salée, quel est le solvant ?",
                 ans: "L'eau",
                 opts: ["Le sel", "L'eau", "Le mélange", "Le soluté"],
-                exp: "Une solution est aqueuse quand le solvant est l'eau."
+                explanation: "Une solution est aqueuse quand le solvant est l'eau."
             },
             {
-                q: "Quelle est l'unité de la concentration en masse (Cm) ?",
+                question: "Quelle est l'unité de la concentration en masse (C<sub>m</sub>) ?",
                 ans: "g/L",
                 opts: ["g", "L", "g/L", "mol/L"],
-                exp: "La concentration en masse s'exprime en grammes par litre (g/L)."
+                explanation: "La concentration en masse s'exprime en grammes par litre (g/L)."
             },
             {
-                q: "On ajoute du sucre dans un verre d'eau. Au bout d'un moment, le sucre ne se dissout plus et s'accumule au fond. Comment appelle-t-on cet état ?",
+                question: "On ajoute du sucre dans un verre d'eau. Au bout d'un moment, le sucre ne se dissout plus et s'accumule au fond. Comment appelle-t-on cet état ?",
                 ans: "Une solution saturée",
                 opts: ["Une solution aqueuse", "Une solution saturée", "Un mélange hétérogène", "Une solution concentrée"],
-                exp: "Lorsque la concentration atteint la solubilité maximale, la solution est saturée."
+                explanation: "Lorsque la concentration atteint la solubilité maximale, la solution est saturée."
             },
             {
-                q: "Qu'est-ce que la solubilité d'un soluté ?",
+                question: "Qu'est-ce que la solubilité d'un soluté ?",
                 ans: "La masse maximale de soluté qu'on peut dissoudre dans 1 L de solvant",
                 opts: ["La vitesse à laquelle le soluté se dissout", "La masse maximale de soluté qu'on peut dissoudre dans 1 L de solvant", "La température de fusion du soluté", "Le volume d'eau pour dissoudre 1g"],
-                exp: "La solubilité est la concentration maximale. Au-delà, la solution est saturée."
+                explanation: "La solubilité est la concentration maximale. Au-delà, la solution est saturée."
             }
         ];
 
         let exercisesData = [];
 
-        // Utilitaires aléatoires
+        // Utilitaires
         function rand(min, max, decimals = 1) {
             let val = Math.random() * (max - min) + min;
             return parseFloat(val.toFixed(decimals));
@@ -597,6 +339,7 @@
             container.innerHTML = ""; 
             exercisesData = []; 
 
+            // Générateurs de calculs (Utilisation de <sub> pour m et Cm pour éviter la confusion)
             let calcGenerators = [
                 // Calcul 1 : Trouver Cm
                 () => {
@@ -606,11 +349,11 @@
                     let ans = parseFloat((m / V_L).toFixed(2));
                     return {
                         title: "Calcul de concentration", unitDisplay: "g/L", correctAns: ans,
-                        question: `On dissout une masse <strong>m = ${m} g</strong> de soluté dans de l'eau pour obtenir un volume final de solution <strong>V = ${V_ml} mL</strong>.<br>Quelle est la concentration en masse Cm de cette solution ?`,
-                        explanation: `Méthode : Cm = m / V.\n⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.\nCalcul : Cm = ${m} / ${V_L} = ${ans} g/L.`
+                        question: `On dissout une masse <strong>m = ${m} g</strong> de soluté dans de l'eau pour obtenir un volume final de solution <strong>V = ${V_ml} mL</strong>.<br>Quelle est la concentration en masse <strong>C<sub>m</sub></strong> de cette solution ?`,
+                        explanation: `Méthode : C_m = m / V.\n⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.\nCalcul : C_m = ${m} / ${V_L} = ${ans} g/L.`
                     };
                 },
-                // Calcul 2 : Trouver la masse
+                // Calcul 2 : Trouver la masse m
                 () => {
                     let Cm = [5, 10, 15, 20, 25, 40, 50][Math.floor(Math.random()*7)];
                     let V_ml = [50, 100, 250, 500][Math.floor(Math.random()*4)];
@@ -618,8 +361,8 @@
                     let ans = parseFloat((Cm * V_L).toFixed(2));
                     return {
                         title: "Préparation par dissolution", unitDisplay: "g", correctAns: ans,
-                        question: `On souhaite préparer <strong>${V_ml} mL</strong> d'une solution de concentration <strong>Cm = ${Cm} g/L</strong>.<br>Quelle masse m de soluté faut-il peser ?`,
-                        explanation: `Méthode : m = Cm × V.\n⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.\nCalcul : m = ${Cm} × ${V_L} = ${ans} g.`
+                        question: `On souhaite préparer <strong>${V_ml} mL</strong> d'une solution de concentration <strong>C<sub>m</sub> = ${Cm} g/L</strong>.<br>Quelle masse <strong>m</strong> (en g) de soluté faut-il peser ?`,
+                        explanation: `Méthode : m = C_m × V.\n⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.\nCalcul : m = ${Cm} × ${V_L} = ${ans} g.`
                     };
                 },
                 // Calcul 3 : Trouver le Volume
@@ -630,18 +373,30 @@
                     let V_ml = parseFloat((V_L * 1000).toFixed(0));
                     return {
                         title: "Calcul de Volume", unitDisplay: "mL", correctAns: V_ml,
-                        question: `On a pesé une masse <strong>m = ${m} g</strong> de soluté. On veut préparer une solution de concentration <strong>Cm = ${Cm} g/L</strong>.<br>Quel volume V de solution (en mL) doit-on préparer ?`,
-                        explanation: `Méthode : V = m / Cm.\nCalcul en Litres : V = ${m} / ${Cm} = ${V_L} L.\n⚠️ On demande des mL : ${V_L} L × 1000 = ${V_ml} mL.`
+                        question: `On a pesé une masse <strong>m = ${m} g</strong> de soluté. On veut préparer une solution de concentration <strong>C<sub>m</sub> = ${Cm} g/L</strong>.<br>Quel volume V de solution (en mL) doit-on préparer ?`,
+                        explanation: `Méthode : V = m / C_m.\nCalcul en Litres : V = ${m} / ${Cm} = ${V_L} L.\n⚠️ On demande des mL : ${V_L} L × 1000 = ${V_ml} mL.`
                     };
                 }
             ];
 
+            // On sélectionne 3 calculs et 2 QCM
             let selectedCalcs = shuffle([...calcGenerators]).slice(0, 3);
             let selectedQcms = shuffle([...qcmBank]).slice(0, 2);
 
+            // Standardisation des objets QCM pour correspondre au reste du code
+            let qcmObjects = selectedQcms.map(q => ({
+                title: "Question de cours",
+                question: q.question,
+                opts: q.opts,
+                correctAns: q.ans,
+                explanation: q.explanation,
+                isQcm: true
+            }));
+
+            // On mélange le tout
             let finalQuestions = shuffle([
                 ...selectedCalcs.map(fn => fn()),
-                ...selectedQcms.map(q => ({ ...q, isQcm: true }))
+                ...qcmObjects
             ]);
 
             finalQuestions.forEach((exo, i) => {
@@ -657,8 +412,10 @@
 
                 if(exo.isQcm) {
                     html += `<div class="qcm-options" id="qcm-${cardId}">`;
-                    shuffle(exo.opts).forEach((opt) => {
-                        html += `<button class="qcm-btn" onclick="checkQcm(${i}, '${opt}', this)">${opt}</button>`;
+                    let shuffledOpts = shuffle(exo.opts);
+                    // On passe l'index de l'option (optIndex) pour éviter les bugs d'apostrophes
+                    shuffledOpts.forEach((opt, optIndex) => {
+                        html += `<button class="qcm-btn" onclick="checkQcm(${i}, ${optIndex}, this)">${opt}</button>`;
                     });
                     html += `</div>`;
                 } else {
@@ -676,21 +433,25 @@
             });
         }
 
-        function checkQcm(index, btnText, btnElement) {
+        function checkQcm(index, optIndex, btnElement) {
             let exo = exercisesData[index];
             let fb = document.getElementById(`feedback-${exo.id}`);
-            document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => b.disabled = true);
+            let allBtns = document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn');
+            
+            allBtns.forEach(b => b.disabled = true);
 
-            if (btnText === exo.ans) {
+            let selectedText = btnElement.textContent;
+
+            if (selectedText === exo.correctAns) {
                 btnElement.classList.add('correct');
-                fb.innerHTML = `✅ <strong>Bonne réponse !</strong><div class="math-detail">${exo.exp}</div>`;
+                fb.innerHTML = `✅ <strong>Bonne réponse !</strong><div class="math-detail">${exo.explanation}</div>`;
                 fb.className = "feedback success show";
             } else {
                 btnElement.classList.add('incorrect');
-                document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => {
-                    if(b.textContent === exo.ans) b.classList.add('correct');
+                allBtns.forEach(b => {
+                    if(b.textContent === exo.correctAns) b.classList.add('correct');
                 });
-                fb.innerHTML = `❌ <strong>Raté.</strong> La bonne réponse était : ${exo.ans}.<div class="math-detail">${exo.exp}</div>`;
+                fb.innerHTML = `❌ <strong>Raté.</strong> La bonne réponse était : ${exo.correctAns}.<div class="math-detail">${exo.explanation}</div>`;
                 fb.className = "feedback error show";
             }
         }

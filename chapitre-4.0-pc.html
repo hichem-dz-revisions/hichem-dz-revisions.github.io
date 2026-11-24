@@ -4,9 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapitre 4 : Solutions Aqueuses | TDH</title>
-    <!-- Lien vers le fichier CSS -->
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Thème Sombre (Labo) */
+            --bg: #0b1120;
+            --bg-grid: rgba(56, 189, 248, 0.05);
+            --card: #1e293b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary: #38bdf8;
+            --secondary: #10b981;
+            --border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --math-bg: rgba(251, 191, 36, 0.1);
+            --math-text: #fcd34d;
+            --error-bg: rgba(248, 113, 113, 0.15);
+            --error-text: #f87171;
+            --success-bg: rgba(74, 222, 128, 0.15);
+            --success-text: #4ade80;
+            --icon-opacity: 0.1;
+        }
+
+        [data-theme="light"] {
+            /* Thème Clair (Cahier) */
+            --bg: #f8fafc;
+            --bg-grid: rgba(14, 165, 233, 0.08);
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --primary: #0284c7;
+            --secondary: #059669;
+            --border: rgba(0, 0, 0, 0.1);
+            --input-bg: #f1f5f9;
+            --math-bg: #fef3c7;
+            --math-text: #b45309;
+            --error-bg: #fee2e2;
+            --error-text: #b91c1c;
+            --success-bg: #dcfce7;
+            --success-text: #15803d;
+            --icon-opacity: 0.05;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        /* Background Animé */
+        .bg-animations {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .bg-animations::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--bg-grid) 1px, transparent 1px), linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .floating-icon { position: absolute; font-size: 3rem; opacity: var(--icon-opacity); animation: float 15s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(10deg); } 100% { transform: translateY(0) rotate(0deg); } }
+        .icon-1 { top: 10%; left: 10%; animation-duration: 20s; }
+        .icon-2 { top: 70%; left: 80%; animation-duration: 25s; font-size: 4rem; }
+        .icon-3 { top: 40%; left: 85%; animation-duration: 18s; }
+        .icon-4 { top: 80%; left: 15%; animation-duration: 22s; font-size: 5rem; }
+
+        body {
+            background-color: var(--bg); color: var(--text); min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 2rem 1rem; transition: background-color 0.3s, color 0.3s;
+        }
+
+        header { 
+            text-align: center; margin-bottom: 2rem; width: 100%; max-width: 800px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+        .title-group { text-align: left; }
+        h1 { font-size: 1.6rem; color: var(--primary); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 10px;}
+        .subtitle { color: var(--muted); font-size: 0.95rem; font-weight: 600; }
+        
+        .btn-icon {
+            background: var(--card); border: 1px solid var(--border); color: var(--text);
+            padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+        .btn-icon:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px);}
+
+        .nav-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; background: var(--card); padding: 0.5rem; border-radius: 50px; border: 1px solid var(--border); z-index: 10;}
+        .tab-btn { background: transparent; border: none; color: var(--muted); padding: 0.8rem 2rem; font-size: 1rem; font-weight: 600; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);}
+
+        .container { width: 100%; max-width: 800px; display: none; z-index: 10;}
+        .container.active { display: block; animation: fadeIn 0.4s ease; }
+
+        .card { background: var(--card); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); font-size: 1.4rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { color: var(--text); margin: 1.2rem 0 0.5rem 0; font-size: 1.1rem;}
+        p, ul { color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+        ul { margin-left: 1.5rem; }
+        .highlight { color: var(--text); font-weight: 600; }
+        
+        .formula-box { background: var(--input-bg); padding: 1rem; border-left: 4px solid var(--secondary); border-radius: 0 8px 8px 0; font-family: 'Fira Code', monospace; font-size: 1.2rem; color: var(--text); margin: 1rem 0; display: inline-block;}
+
+        /* Exercices List */
+        .exercise-card { margin-bottom: 3rem; border-top: 4px solid var(--primary); }
+        .exo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .exo-number { background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;}
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text); line-height: 1.5; }
+
+        /* Inputs */
+        .answer-zone { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        input[type="number"] { padding: 12px 20px; border-radius: 8px; border: 2px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 1.2rem; width: 160px; text-align: center; outline: none; transition: 0.3s;}
+        input[type="number"]:focus { border-color: var(--primary); }
+        .unit-label { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+
+        .qcm-zone { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        .qcm-btn { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 15px; border-radius: 8px; font-size: 1rem; cursor: pointer; text-align: left; transition: 0.2s; }
+        .qcm-btn:hover:not(:disabled) { border-color: var(--primary); }
+        .qcm-btn.correct { background: var(--success-bg); border-color: var(--success-text); color: var(--success-text); font-weight: 600;}
+        .qcm-btn.incorrect { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+        .qcm-btn:disabled { cursor: not-allowed; opacity: 0.8;}
+
+        .btn { padding: 12px 25px; border-radius: 8px; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; background: var(--primary); color: #fff; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        .btn-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;}
+        .btn-refresh { background: var(--secondary); color: #fff; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
+
+        /* Correction */
+        .feedback { display: none; margin-top: 25px; padding: 20px; border-radius: 12px; font-size: 1rem; line-height: 1.7; border-left: 5px solid transparent; animation: slideDown 0.3s ease; }
+        .feedback.show { display: block; }
+        .feedback.success { background: var(--success-bg); border-color: var(--success-text); color: var(--success-text); }
+        .feedback.error { background: var(--error-bg); border-color: var(--error-text); color: var(--error-text); }
+        
+        .math-box { background: var(--math-bg); color: var(--math-text); font-family: 'Fira Code', monospace; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 1rem; border: 1px dashed var(--math-text); white-space: pre-wrap; line-height: 1.6; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 15px; text-align: center; }
+            .title-group { text-align: center; }
+            .nav-tabs { width: 100%; }
+            .tab-btn { flex: 1; padding: 0.8rem 1rem; text-align: center; }
+            .answer-zone { flex-direction: column; align-items: stretch; }
+            input[type="number"] { width: 100%; }
+            .unit-label { text-align: center; }
+            .btn-toolbar { flex-direction: column; }
+            .btn-refresh { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 <body>
 
@@ -74,7 +217,253 @@
         <div id="exercises-list"></div>
     </div>
 
-    <!-- Lien vers le fichier JavaScript -->
-    <script src="script.js" defer></script>
+    <script>
+        // --- GESTION THÈME ---
+        const root = document.documentElement;
+        const themeBtn = document.getElementById('theme-icon');
+        function toggleTheme() {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme'); themeBtn.textContent = '🌙';
+            } else {
+                root.setAttribute('data-theme', 'light'); themeBtn.textContent = '☀️';
+            }
+        }
+
+        // --- GESTION ONGLETS ---
+        let exosGenerated = false;
+        function switchTab(id) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+            
+            if(id === 'exos' && !exosGenerated) { generateTDH(); exosGenerated = true; }
+        }
+
+        // ==========================================
+        // --- BANQUE DE QUESTIONS QCM (Très large) ---
+        // ==========================================
+        const qcmBank = [
+            // Protocole
+            {
+                q: "Lors de la préparation d'une solution par dissolution, quelle verrerie doit-on utiliser pour prélever le volume final avec précision ?",
+                ans: "Une fiole jaugée",
+                opts: ["Un bécher", "Une éprouvette graduée", "Une fiole jaugée", "Un erlenmeyer"],
+                exp: "La fiole jaugée possède un trait de jauge qui permet de mesurer un volume avec une grande précision (contrairement au bécher qui n'est pas précis)."
+            },
+            {
+                q: "Quelle est la première étape de la préparation d'une solution par dissolution ?",
+                ans: "Peser la masse calculée de soluté",
+                opts: ["Verser l'eau dans la fiole", "Peser la masse calculée de soluté", "Agiter la solution", "Boucher la fiole"],
+                exp: "Avant de manipuler, il faut toujours calculer la masse (m = Cm x V) puis la peser avec une balance de précision."
+            },
+            {
+                q: "Comment doit-on lire le niveau de liquide dans une fiole jaugée pour être précis ?",
+                ans: "En plaçant l'œil au niveau du bas du ménisque",
+                opts: ["En regardant d'en haut", "En plaçant l'œil au niveau du bas du ménisque", "En regardant d'en bas", "Peu importe la position"],
+                exp: "Pour éviter les erreurs de parallaxe, l'œil doit être aligné avec le bas du ménisque (la courbure du liquide)."
+            },
+            // Vocabulaire / Concepts
+            {
+                q: "Dans une solution aqueuse d'eau salée, quel est le solvant ?",
+                ans: "L'eau",
+                opts: ["Le sel", "L'eau", "Le mélange", "Le soluté"],
+                exp: "Une solution est aqueuse quand le solvant est l'eau. Le sel est le soluté dissous."
+            },
+            {
+                q: "Que signifie le mot 'homogène' pour une solution ?",
+                ans: "On ne distingue pas les constituants à l'œil nu",
+                opts: ["Le liquide est transparent", "On ne distingue pas les constituants à l'œil nu", "Le mélange est froid", "Il y a plusieurs phases visibles"],
+                exp: "Un mélange homogène est un mélange dans lequel on ne peut pas distinguer les différents constituants à l'œil nu."
+            },
+            {
+                q: "Quelle est l'unité de la concentration en masse (Cm) ?",
+                ans: "g/L",
+                opts: ["g", "L", "g/L", "mol/L"],
+                exp: "La concentration en masse s'exprime en grammes par litre (g/L ou g.L⁻¹)."
+            },
+            // Solubilité
+            {
+                q: "On ajoute du sucre dans un verre d'eau. Au bout d'un moment, le sucre ne se dissout plus et s'accumule au fond. Comment appelle-t-on cet état ?",
+                ans: "Une solution saturée",
+                opts: ["Une solution aqueuse", "Une solution saturée", "Un mélange hétérogène", "Une solution concentrée"],
+                exp: "Lorsque la concentration atteint la solubilité maximale (la limite), on dit que la solution est saturée."
+            },
+            {
+                q: "Qu'est-ce que la solubilité d'un soluté ?",
+                ans: "La masse maximale de soluté qu'on peut dissoudre dans 1 L de solvant",
+                opts: ["La vitesse à laquelle le soluté se dissout", "La masse maximale de soluté qu'on peut dissoudre dans 1 L de solvant", "La température de fusion du soluté", "Le volume d'eau nécessaire pour dissoudre 1g de soluté"],
+                exp: "La solubilité est la concentration maximale. Au-delà, la solution est saturée et le soluté ne se dissout plus."
+            }
+        ];
+
+        // ==========================================
+        // --- LOGIQUE TDH (GÉNÉRATION INFINIE) ---
+        // ==========================================
+        let exercisesData = [];
+
+        // Fonction utilitaire pour un nombre aléatoire avec décimales
+        function rand(min, max, decimals = 1) {
+            let val = Math.random() * (max - min) + min;
+            return parseFloat(val.toFixed(decimals));
+        }
+
+        // Fonction pour mélanger un tableau (Fisher-Yates)
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function generateTDH() {
+            const container = document.getElementById('exercises-list');
+            container.innerHTML = ""; 
+            exercisesData = []; 
+
+            // On pioche 3 questions de calcul (parmi 3 générateurs) et 2 QCM
+            // 1. Générateurs de calculs aléatoires
+            let calcGenerators = [
+                // Calc 1 : Trouver Cm (Cm = m/V)
+                () => {
+                    let V_ml = [50, 100, 150, 200, 250, 500][Math.floor(Math.random()*6)];
+                    let V_L = V_ml / 1000;
+                    let m = rand(1, 25, 1);
+                    let ans = parseFloat((m / V_L).toFixed(2));
+                    return {
+                        title: "Calcul de concentration", unitDisplay: "g/L", correctAns: ans,
+                        question: `On dissout une masse <strong>m = ${m} g</strong> de soluté dans de l'eau pour obtenir un volume final de solution <strong>V = ${V_ml} mL</strong>.<br>Quelle est la concentration en masse Cm de cette solution ?`,
+                        explanation: `<strong>Méthode :</strong> Cm = m / V.<br>⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.<br>Calcul : Cm = ${m} / ${V_L} = <strong>${ans} g/L</strong>.`
+                    };
+                },
+                // Calc 2 : Trouver la masse (m = Cm * V)
+                () => {
+                    let Cm = [5, 10, 15, 20, 25, 40, 50][Math.floor(Math.random()*7)];
+                    let V_ml = [50, 100, 250, 500][Math.floor(Math.random()*4)];
+                    let V_L = V_ml / 1000;
+                    let ans = parseFloat((Cm * V_L).toFixed(2));
+                    return {
+                        title: "Préparation par dissolution", unitDisplay: "g", correctAns: ans,
+                        question: `On souhaite préparer <strong>${V_ml} mL</strong> d'une solution de concentration <strong>Cm = ${Cm} g/L</strong>.<br>Quelle masse m de soluté faut-il peser ?`,
+                        explanation: `<strong>Méthode :</strong> m = Cm × V.<br>⚠️ Conversion : V = ${V_ml} mL = ${V_L} L.<br>Calcul : m = ${Cm} × ${V_L} = <strong>${ans} g</strong>.`
+                    };
+                },
+                // Calc 3 : Trouver le Volume (V = m / Cm)
+                () => {
+                    let m = rand(2, 20, 1);
+                    let Cm = [10, 20, 25, 50][Math.floor(Math.random()*4)];
+                    let V_L = m / Cm;
+                    let V_ml = parseFloat((V_L * 1000).toFixed(0));
+                    return {
+                        title: "Calcul de Volume", unitDisplay: "mL", correctAns: V_ml,
+                        question: `On a pesé une masse <strong>m = ${m} g</strong> de soluté. On veut préparer une solution de concentration <strong>Cm = ${Cm} g/L</strong>.<br>Quel volume V de solution (en mL) doit-on préparer ?`,
+                        explanation: `<strong>Méthode :</strong> V = m / Cm.<br>Calcul en Litres : V = ${m} / ${Cm} = ${V_L} L.<br>⚠️ On demande des mL : ${V_L} L × 1000 = <strong>${V_ml} mL</strong>.`
+                    };
+                }
+            ];
+
+            // On choisit 3 générateurs de calculs au hasard
+            let selectedCalcs = shuffle([...calcGenerators]).slice(0, 3);
+            
+            // On choisit 2 QCM au hasard
+            let selectedQcms = shuffle([...qcmBank]).slice(0, 2);
+
+            // On fusionne le tout et on mélange pour que le TDH soit varié
+            let finalQuestions = shuffle([
+                ...selectedCalcs.map(fn => fn()),
+                ...selectedQcms.map(q => ({ ...q, isQcm: true }))
+            ]);
+
+            // Construction de l'interface
+            finalQuestions.forEach((exo, i) => {
+                const cardId = `exo-card-${i}`;
+                exo.id = cardId;
+                exercisesData.push(exo);
+
+                let html = `
+                <div class="card exercise-card" id="${cardId}">
+                    <div class="exo-header">
+                        <h2 style="border:none; margin:0; color:var(--text)">Q${i+1} : ${exo.title}</h2>
+                        <span class="exo-number">Q${i+1}</span>
+                    </div>
+                    <div class="question-text">${exo.question}</div>
+                `;
+
+                if(exo.isQcm) {
+                    html += `<div class="qcm-zone" id="qcm-${cardId}">`;
+                    // On mélange aussi les options de réponse
+                    shuffle(exo.opts).forEach((opt) => {
+                        html += `<button class="qcm-btn" onclick="checkQcm(${i}, '${opt}', this)">${opt}</button>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `
+                    <div class="answer-zone">
+                        <input type="number" id="input-${cardId}" step="any" placeholder="Ta réponse">
+                        <span class="unit-label">${exo.unitDisplay}</span>
+                        <button class="btn" onclick="checkInput(${i}, 'input-${cardId}')">Vérifier</button>
+                    </div>
+                    `;
+                }
+
+                html += `<div class="feedback" id="feedback-${cardId}"></div></div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function checkQcm(index, btnText, btnElement) {
+            let exo = exercisesData[index];
+            let fb = document.getElementById(`feedback-${exo.id}`);
+            document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => b.disabled = true);
+
+            let isCorrect = (btnText === exo.ans);
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                fb.innerHTML = `✅ <strong>Bonne réponse !</strong><br><br><div class="math-box">${exo.exp}</div>`;
+                fb.className = "feedback success show";
+            } else {
+                btnElement.classList.add('incorrect');
+                document.getElementById(`qcm-${exo.id}`).querySelectorAll('.qcm-btn').forEach(b => {
+                    if(b.textContent === exo.ans) b.classList.add('correct');
+                });
+                fb.innerHTML = `❌ <strong>Raté.</strong> La bonne réponse était : ${exo.ans}.<br><br><div class="math-box">${exo.exp}</div>`;
+                fb.className = "feedback error show";
+            }
+        }
+
+        function checkInput(index, inputId) {
+            let exo = exercisesData[index];
+            let input = document.getElementById(inputId);
+            let val = parseFloat(input.value);
+            let fb = document.getElementById(`feedback-${exo.id}`);
+
+            if (isNaN(val)) { fb.innerHTML = "Merci d'entrer un nombre valide."; fb.className = "feedback error show"; return; }
+            
+            // Tolérance de 0.1 pour absorber les petits arrondis (ex: 12.33 au lieu de 12.34)
+            let tol = 0.1; 
+
+            if (Math.abs(val - exo.correctAns) <= tol) {
+                fb.innerHTML = `✅ <strong>Parfait !</strong><br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback success show";
+                input.disabled = true;
+            } else {
+                let erreurClassique = "";
+                // Détection du piège des unités (mL vs L)
+                if (exo.unitDisplay === "g/L" && val >= exo.correctAns * 50) {
+                    erreurClassique = `<br><br>💡 <em>Indice : Il y a de fortes chances que tu aies oublié de convertir les millilitres (mL) en Litres (L) ! (Divise par 1000)</em>`;
+                }
+                if (exo.unitDisplay === "mL" && val < exo.correctAns / 50) {
+                    erreurClassique = `<br><br>💡 <em>Indice : Tu as trouvé le volume en Litres, mais on te demande des millilitres (mL) ! (Multiplie par 1000)</em>`;
+                }
+
+                fb.innerHTML = `❌ <strong>Raté.</strong> Ta réponse : ${val} ${exo.unitDisplay}.<br>La bonne réponse était <strong>${exo.correctAns} ${exo.unitDisplay}</strong>.${erreurClassique}<br><br><div class="math-box">${exo.explanation}</div>`;
+                fb.className = "feedback error show";
+            }
+        }
+    </script>
 </body>
 </html>
